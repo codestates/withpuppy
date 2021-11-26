@@ -28,22 +28,12 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //! Relation
-const { User, KakaoSocial } = db;
-User.hasMany(KakaoSocial, { onDelete: "CASCADE" }); //userId가 Social 테이블에 등록(foreign key 옵션으로 변경가능)
-KakaoSocial.belongsTo(User);
+const { User, Puppy } = db;
+//@ 1:1
+User.hasOne(Puppy, { onDelete: "CASCADE" });
 
-// const Customer_Product = sequelize.define(
-//   "customer_product",
-//   {
-//     customerProductId: {
-//       type: Sequelize.DataTypes.INTEGER,
-//       primaryKey: true,
-//       autoIncrement: true,
-//     },
-//   },
-//   { timestamps: false }
-// );
-// Customer.belongsToMany(Product, { through: Customer_Product });
-// Product.belongsToMany(Customer, { through: Customer_Product });
+//# 1:N
+
+//% 1:M
 
 module.exports = db;

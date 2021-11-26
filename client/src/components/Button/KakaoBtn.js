@@ -1,7 +1,6 @@
 import React from 'react';
 import KaKaoLogo from 'assets/img/logo/kakao.png';
 import { BaseOauthBtn } from './index';
-import styled from 'styled-components';
 
 const {
   REACT_APP_KAKAO_HOST_URL,
@@ -12,6 +11,7 @@ const {
 function Index() {
   const onHandleClick = () => {
     //만약 팝업창 형태로 처리하고 싶다면, javascript oauth를 이용한다
+
     const kakaoCodeEndpoint = REACT_APP_KAKAO_HOST_URL + '/oauth/authorize';
     const client_id = REACT_APP_KAKAO_REST_API_KEY;
     const redirect_uri =
@@ -24,7 +24,6 @@ function Index() {
     <>
       <BaseOauthBtn onClick={onHandleClick}>
         <img src={KaKaoLogo} alt="kakao" />
-        <div className="title">hello</div>
       </BaseOauthBtn>
     </>
   );

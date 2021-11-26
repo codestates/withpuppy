@@ -13,7 +13,7 @@ function Reject() {
 
   return (
     <RejectPage
-      title="앗!... 이미 가입된 계정이에요! 잠시 뒤 홈으로 갑니다!"
+      title="앗! 로그인에 실패했어요!.. 잠시 뒤 홈으로 갑니다"
       img={SadLienImg}
       styleOptions={{ rotate: false }}
     />

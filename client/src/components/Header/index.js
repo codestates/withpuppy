@@ -9,8 +9,7 @@ export const BaseHeader = styled.header`
   top: 0;
   left: 0;
   transition: opacity 0.5s, height 0.5s;
-  z-index: 1000;
-  background-color: #fff;
+  z-index: 100;
+  background-color: ${({ theme }) => theme.colors.mainColor};
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.mainColor};
 `;

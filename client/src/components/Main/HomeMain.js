@@ -2,15 +2,15 @@ import React from 'react';
 import { BaseMain } from './index';
 import { BaseSection } from 'components/Section';
 import styled from 'styled-components';
-import { BaseBtn, YellowBtn } from 'components/Button';
 import LienSection1 from 'assets/img/kakao/lien-section1.png';
 import LienSection2 from 'assets/img/kakao/lien-section2.jpeg';
 import LienSection3 from 'assets/img/kakao/lien-section3.png';
+import { Link } from 'react-router-dom';
 
 function Index() {
   return (
     <HomeMain>
-      <HomeSection className="lien-section">
+      {/* <HomeSection className="lien-section">
         <img src={LienSection1} alt="" />
         <h1>농부 라이언은 스벅러입니다..</h1>
       </HomeSection>
@@ -34,8 +34,8 @@ function Index() {
       </HomeSection>
 
       <HomeSection className="lien-section">
-        <HomeGoButton>느끼러가기</HomeGoButton>
-      </HomeSection>
+        <Link to="/map">런칭하기</Link>
+      </HomeSection> */}
     </HomeMain>
   );
 }
@@ -86,10 +86,6 @@ const HomeSection = styled(BaseSection)`
 
   transition: box-shadow 0.5s;
 
-  &:hover {
-    box-shadow: 0 5px 10px 1px ${({ theme }) => theme.colors.grayTwo};
-  }
-
   //@ media /////////////////////////
   ${({ theme }) => theme.mediaQuery.tablet} {
     & h1 {
@@ -100,13 +96,6 @@ const HomeSection = styled(BaseSection)`
       }
     }
   }
-`;
-
-const HomeGoButton = styled(BaseBtn)`
-  width: 50%;
-  height: 50%;
-  font-size: 2rem;
-  border-radius: 10px;
 `;
 
 export default Index;

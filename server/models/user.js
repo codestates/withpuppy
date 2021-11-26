@@ -9,17 +9,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      password: {
+      phone: {
         type: DataTypes.STRING,
         allowNull: true,
       },
       socialType: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      admin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
       },
     },
     {

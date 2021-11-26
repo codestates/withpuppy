@@ -1,3 +1,5 @@
+import styled, { keyframes } from 'styled-components';
+
 // @ CSS PART START ///////////////////////////////////////////////////////////////
 export const calcRem = (px: number) => `${px / 16}rem` as const;
 
@@ -12,6 +14,11 @@ export const renderMediaQuery = (
   }` as const;
 
 export const colors = {
+  mainColor: '#F7F1ED',
+  secondColor: '#FEBEB0',
+  thirdColor: '#E97676',
+  pointColor1: '#3D5A5B',
+  pointColor2: '#2F365F',
   black: '#2b2b2b',
   white: '#FFFFFF',
   indigo: '#181F38',
@@ -24,16 +31,9 @@ export const colors = {
   pointColorMint: '#19cdca',
   pointColorBlue: '#4e80e1',
   lightblue: '#C5E2EE',
-  footerColor: '#313131',
-  mainColor: 'rgba(92, 61, 224)',
-  subColor: 'rgba(245,240,253)',
   waringColor: '#ff0000',
   starColor: '#fd4',
   purple: '#7027A0',
-  gradient: 'linear-gradient(to right, #fa9e2c, #8f50fb)',
-  gradientAlt: 'linear-gradient(to right, #8f50fb, #350a4f)',
-  graidentTransparent:
-    'linear-gradient(to right, rgba(250, 158, 44,0.3), rgba(143, 80, 251,0.5))',
 } as const;
 
 export const fontSizes = {
@@ -89,6 +89,19 @@ export const mediaQuery = {
   tabletL: renderMediaQuery('screen', deviceSizeUnits.tabletL),
 } as const;
 
+export const animation = {
+  showDown: keyframes`
+  from {
+    opacity: 0;
+    top: 70%;
+  }
+  to{
+    opacity: 1;
+    top: 50%;
+  }
+`,
+};
+
 // @ CSS PART END ///////////////////////////////////////////////////////////////
 
 // # TYPE PART START ////////////////////////////////////////////////////////
@@ -99,6 +112,7 @@ export const theme = {
   margins,
   deviceSizeUnits,
   mediaQuery,
+  animation,
 };
 
 export type ThemeType = typeof theme;

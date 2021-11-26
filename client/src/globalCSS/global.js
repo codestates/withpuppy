@@ -15,7 +15,8 @@ const GlobalStyles = createGlobalStyle`
   body {
       font-size : 3rem;
       font-family: 'Noto Sans bold';
-      background-color:rgba(247,248,254);
+      background-color:${({ theme }) => theme.colors.secondColor};
+      /* overflow-y:scroll; */
   }
 
   a {
@@ -24,6 +25,28 @@ const GlobalStyles = createGlobalStyle`
 
   ul {
       list-style-type: none;
+  }
+
+  img{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .flex-center-R {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+  }
+
+  .flex-center-C {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
   }
 `;
 

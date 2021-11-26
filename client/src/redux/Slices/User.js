@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { afterKakoSignUp } from 'redux/Async/kakaoSignUp';
+import { afterKakoSignIn } from 'redux/Async/kakaoSignIn';
 
 //! extraReducers
 const extraReducers = (builder) => {
-  afterKakoSignUp(builder);
+  afterKakoSignIn(builder);
 };
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState: {},
+  initialState: {
+    socialData: {},
+  },
   reducers: {},
   extraReducers,
 });
