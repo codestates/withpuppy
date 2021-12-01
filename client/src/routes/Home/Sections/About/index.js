@@ -1,13 +1,10 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components/macro';
 import Lan1 from 'assets/LandingPage/랜딩1.png';
 
 const Contact = () => {
   return (
     <AboutSection id="about">
       <Main>
-        <div>
-          <CurvedLine />
-        </div>
         <Content>
           <AboutText>
             <Rectangle6>
@@ -18,6 +15,7 @@ const Contact = () => {
               주소지를 설정하고 내 주변의 반려견 친구들을 찾아주세요
             </SubText>
           </AboutText>
+
           <Rocket>
             <img src={Lan1} alt="" width="600" height="400" />
           </Rocket>
@@ -35,21 +33,13 @@ const move = keyframes`
 
 const AboutSection = styled.section`
   width: 100vw;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #febeb0;
 `;
 
 const Main = styled.div`
   margin: 0 15rem;
   margin-bottom: 50rem;
   margin-top: 30rem;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+
   @media only Screen and (max-width: 64em) {
     margin: 0 calc(5rem + 5vw);
     margin-top: 10rem;
@@ -68,14 +58,6 @@ const Title = styled.h1`
   color: white;
   width: 60%;
   font-family: 'Jua';
-`;
-
-const CurvedLine = styled.div`
-  width: 7rem;
-  height: 2rem;
-  border: solid 5px var(--purple);
-  border-color: var(--purple) transparent transparent transparent;
-  border-radius: 150%/60px 70px 0 0;
 `;
 
 const Rectangle6 = styled.div`

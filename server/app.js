@@ -28,6 +28,10 @@ app.use("/auth", authRoutes);
 app.use("/kakao", kakaoRoutes);
 app.use("/puppy", puppyRoutes);
 
+app.use("/", (req, res) => {
+  res.send("hellow world");
+});
+
 app.use((req, res, next) => {
   res.status(404).json({
     data: null,
@@ -40,10 +44,6 @@ app.use((err, req, res, next) => {
     data: null,
     message: "something wrong",
   });
-});
-
-app.use("/", (req, res) => {
-  res.send("hellow world");
 });
 
 //3. connection

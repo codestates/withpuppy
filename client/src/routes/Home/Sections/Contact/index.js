@@ -1,17 +1,15 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components/macro';
 import Lan2 from 'assets/LandingPage/랜딩2.png';
 
 const Contact = () => {
   return (
     <AboutSection id="about">
       <Main>
-        <div>
-          <CurvedLine />
-        </div>
         <Content>
           <Rocket>
             <img src={Lan2} alt="" width="600" height="600" />
           </Rocket>
+
           <AboutText>
             <Title>강아지 사회화의 중요성을 알고 계신가요?</Title>
             <SubText>
@@ -37,12 +35,9 @@ const AboutSection = styled.section`
 `;
 
 const Main = styled.div`
-  /* margin: 0 15rem; */
+  margin: 0 15rem;
   margin-top: 5rem;
   margin-bottom: 50rem;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
 
   @media only Screen and (max-width: 64em) {
     margin: 0 calc(5rem + 5vw);
@@ -57,26 +52,17 @@ const Main = styled.div`
 const Title = styled.h1`
   font-size: calc(2rem + 1vw);
   line-height: 1.5;
-  /* padding: 1rem 0; */
-
   color: white;
   width: 80%;
   font-family: 'Jua';
 `;
 
-const CurvedLine = styled.div`
-  width: 7rem;
-  height: 2rem;
-  border: solid 5px var(--purple);
-  border-color: var(--purple) transparent transparent transparent;
-  border-radius: 150%/60px 70px 0 0;
-`;
-
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
-
   align-items: center;
+  width: 100vw;
+
   @media only Screen and (max-width: 40em) {
     flex-direction: column;
   }
