@@ -12,6 +12,7 @@
   "author": "Anderson",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^6.4.0"
+    "concurrently": "^6.4.0",
+    "gsap": "^3.8.0"
   }
 }

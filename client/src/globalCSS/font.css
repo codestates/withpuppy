@@ -1,4 +1,13 @@
 @font-face {
+  font-family: 'Jua';
+  font-style: normal;
+  font-weight: 100;
+  src: url('../assets/fonts/Jua-Regular.ttf') format('woff2'),
+    url('../assets/fonts/NotoSansKR-Light.woff') format('woff'),
+    url('../assets/fonts/NotoSansKR-Light.otf') format('truetype');
+}
+
+@font-face {
   font-family: 'Noto Sans Light';
   font-style: normal;
   font-weight: 100;

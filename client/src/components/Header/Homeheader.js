@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BaseHeader } from './index';
 import styled from 'styled-components';
-import TestLogo from 'assets/img/logo/testLogo.png';
 import PuppyLogo from 'assets/img/logo/puppyLogo.png';
 import { Link } from 'react-router-dom';
 import { BaseBtn } from 'components/Button';
