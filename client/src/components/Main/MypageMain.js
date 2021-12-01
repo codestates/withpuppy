@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import MypageMain from './';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
@@ -9,7 +10,6 @@ import WhiteDog from 'assets/img/icons/whiteDog.png';
 
 function Index() {
   const navigate = useNavigate();
-  const [selectedPuppy, setSelectedPuppy] = useState();
 
   useEffect(() => {
     const userInfo = localStorage.getItem('persist:userInfo');
@@ -19,14 +19,8 @@ function Index() {
   });
 
   const {
-    socialData: {
-      data: { email, nickname, phone, profileImg, puppies },
-    },
+    userData: { email, nickname, phone, profileImg, puppy },
   } = useSelector(selectUser);
-
-  useEffect(() => {
-    setSelectedPuppy(puppies[0]);
-  }, []);
 
   return (
     <MypageMain>
@@ -60,11 +54,6 @@ function Index() {
     </MypageMain>
   );
 }
-
-const MypageMain = styled.main`
-  height: 100vh;
-  padding: 4rem 2rem;
-`;
 
 const MypageHeader = styled.header`
   text-align: center;

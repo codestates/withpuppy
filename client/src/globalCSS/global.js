@@ -16,6 +16,11 @@ const GlobalStyles = createGlobalStyle`
       font-size : 3rem;
       font-family: 'Jua';
       background-color:${({ theme }) => theme.colors.secondColor};
+      user-select: none;
+      -webkit-user-select: none;  /* Chrome all / Safari all */
+      -moz-user-select: none;     /* Firefox all */
+      -ms-user-select: none;      /* IE 10+ */
+      -o-user-select: none;
       /* overflow-y:scroll; */
   }
 

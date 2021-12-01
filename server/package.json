@@ -1,11 +1,8 @@
 {
-  "name": "myresume-server",
+  "name": "withpuppy-server",
   "version": "1.0.0",
   "main": "app.js",
   "author": "devAnderson",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "start": "nodemon app.js"
   },
