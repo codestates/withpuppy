@@ -17,8 +17,7 @@ function Kakao() {
       await dispatch(kakaoSignIn(code)).unwrap();
       navigate('/');
     } catch (rejected) {
-      console.log('it is rejected', rejected);
-      if (rejected.status === 409) {
+      if (rejected.status === 409 || rejected.status === 500) {
         setTimeout(() => {
           navigate('/oauth/rejectPage');
         }, 1000);

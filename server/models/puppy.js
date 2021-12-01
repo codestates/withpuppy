@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Puppy extends Model {}
   Puppy.init(
     {
-      name: {
+      puppyName: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -13,11 +13,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      gender: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       breed: {
         type: DataTypes.STRING,
         allowNull: true,
       },
       introcution: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      puppyProfile: {
         type: DataTypes.STRING,
         allowNull: true,
       },

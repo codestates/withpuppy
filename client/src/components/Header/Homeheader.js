@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BaseHeader } from './index';
 import styled from 'styled-components';
-import TestLogo from 'assets/img/logo/testLogo.png';
 import PuppyLogo from 'assets/img/logo/puppyLogo.png';
 import { Link } from 'react-router-dom';
 import { BaseBtn } from 'components/Button';
@@ -26,9 +25,7 @@ function Index() {
     onHandleLogoutOpen,
   };
 
-  const {
-    socialData: { data },
-  } = useSelector(selectUser);
+  const { loginState } = useSelector(selectUser);
 
   return (
     <>
@@ -41,11 +38,16 @@ function Index() {
           </Link>
 
           <div className="AuthContainer">
-            {data ? (
+            {loginState ? (
               <>
                 <BaseBtn onClick={onHandleLogoutOpen}>로그아웃</BaseBtn>
-                <BaseBtn>
-                  <Link to="/mypage">마이페이지</Link>
+                <BaseBtn
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/mypage';
+                  }}
+                >
+                  마이페이지
                 </BaseBtn>
               </>
             ) : (

@@ -1,10 +1,9 @@
 const { genAccess, genRefresh, verifyAccess, verifyRefresh } = require("../utils/token");
 const { User } = require("../../models");
 const { hashPassword, decodePassword } = require("../utils/bycript");
-const axios = require("axios");
 
 module.exports = {
-  login: async (req, res) => {
+  signIn: async (req, res) => {
     try {
       //1. user exist
       const { email, password } = req.body;
@@ -36,21 +35,10 @@ module.exports = {
       console.log(err);
     }
   },
-  logout: (req, res) => {
+  signOut: (req, res) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     return res.status(200).json({ message: "logout success" });
-    //1. accessToken check;
-    // const accessToken = req.cookies.accessToken;
-    // const refreshToken = req.cookies.refreshToken;
-
-    // if (verifyAccess(accessToken) || verifyRefresh(refreshToken)) {
-    //   res.clearCookie("accessToken");
-    //   res.clearCookie("refreshToken");
-    //   return res.status(200).json({ message: "logout success" });
-    // } else {
-    //   return res.status(401).json({ message: "no accessToken or expired" });
-    // }
   },
   signup: async (req, res) => {
     //1. email validation

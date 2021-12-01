@@ -28,12 +28,16 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //! Relation
-const { User, Puppy } = db;
+const { User, Puppy, Message, Pinpointer } = db;
 //@ 1:1
 User.hasOne(Puppy, { onDelete: "CASCADE" });
 
 //# 1:N
+User.hasMany(Message, { onDelete: "CASCADE" });
+User.hasMany(Pinpointer, { onDelete: "CASCADE" });
+Pinpointer.hasMany(Message, { onDelete: "CASCADE" });
 
-//% 1:M
+//% N:M
+User.belongsToMany(User, { as: "follower", through: "user_follower" });
 
 module.exports = db;

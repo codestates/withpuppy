@@ -9,13 +9,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      phone: {
+      nickname: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      socialType: {
+      thumbImg: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      profileImg: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      phone: {
+        type: DataTypes.STRING,
+        defaultValue: "000-000-0000",
       },
     },
     {
