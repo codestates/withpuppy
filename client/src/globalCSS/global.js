@@ -14,7 +14,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
       font-size : 3rem;
-      font-family: 'Noto Sans bold';
+      font-family: 'Jua';
       background-color:${({ theme }) => theme.colors.secondColor};
       /* overflow-y:scroll; */
   }

@@ -7,6 +7,7 @@ function Index() {
     <>
       <HomeHeader />
       <HomeMain />
+
     </>
   );
 }

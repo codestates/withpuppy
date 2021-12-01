@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import { BaseMain } from './index';
 import styled from 'styled-components';
+import About from 'Sections/About';
+import Contact from 'Sections/Contact';
+import Services from 'Sections/Services';
 
 function Index() {
-  return <HomeMain></HomeMain>;
+  return (
+    <HomeMain>
+      <About />
+      <Contact />
+      <Services />
+     </HomeMain>
+  );
 }
 
 const HomeMain = styled(BaseMain)`
