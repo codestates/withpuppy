@@ -1,34 +1,150 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { BaseMain } from './index';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
-import MypageHeader from 'components/Header/Homeheader';
+import { useNavigate } from 'react-router-dom';
+import MypageLogo from 'assets/img/logo/puppyLogo.png';
+import PatchingIcon from 'assets/img/icons/patching.png';
+import WhiteDog from 'assets/img/icons/whiteDog.png';
 
 function Index() {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [selectedPuppy, setSelectedPuppy] = useState();
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('persist:userInfo');
+    if (!userInfo) {
+      navigate('/');
+    }
+  });
+
   const {
     socialData: {
-      data: { email, nickname, thumbImg },
+      data: { email, nickname, phone, profileImg, puppies },
     },
   } = useSelector(selectUser);
 
+  useEffect(() => {
+    setSelectedPuppy(puppies[0]);
+  }, []);
+
   return (
     <MypageMain>
-      <h1>{nickname} 님 어서오세요~!</h1>
-      <p>email : {email}</p>
-      <img src={thumbImg} alt="" />
+      <MypageHeader>
+        <img src={MypageLogo} alt="" />
+      </MypageHeader>
+
+      <CardContainer className="flex-center-R">
+        <ProfileCard>
+          <span>내 정보</span>
+        </ProfileCard>
+        <ProfileCard className="puppyCard">
+          <span className="puppyCardTitle">내 강아지 정보</span>
+        </ProfileCard>
+      </CardContainer>
+
+      <MypageBottom>
+        <div
+          className="pachingContainer"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/map';
+          }}
+        >
+          <img src={PatchingIcon} alt="" />
+          <span>패칭하러가기</span>
+        </div>
+
+        <img src={WhiteDog} alt="" />
+      </MypageBottom>
     </MypageMain>
   );
 }
 
-const MypageMain = styled(BaseMain)`
+const MypageMain = styled.main`
+  height: 100vh;
+  padding: 4rem 2rem;
+`;
+
+const MypageHeader = styled.header`
+  text-align: center;
+  margin-bottom: 5.5rem;
+
   & img {
-    width: 30%;
-    border: 2px solid ${({ theme }) => theme.colors.indigo};
-    outline: 3px solid ${({ theme }) => theme.colors.mainColor};
-    outline-offset: 5px;
-    border-radius: 12px;
+    width: 30rem;
+  }
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const ProfileCard = styled.div`
+  width: 45%;
+  min-width: 40rem;
+  min-height: 55rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 2px 4px 20px 0 rgba(0, 0, 0, 0.2);
+  margin: 0 2rem 2rem 2rem;
+  position: relative;
+
+  & > span {
+    position: absolute;
+    top: -8%;
+    color: white;
+    font-size: 2.5rem;
+    &.puppyCardTitle {
+      right: 0;
+    }
+  }
+
+  @media screen and (max-width: 919px) {
+    min-width: 60rem;
+
+    &.puppyCard {
+      margin-top: 5rem;
+
+      & > span {
+        left: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    min-width: 45rem;
+  }
+`;
+
+const MypageBottom = styled.section`
+  margin-top: 2rem;
+  padding-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  & .pachingContainer {
+    display: flex;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+
+    & > span {
+      margin-left: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    & img {
+      width: 7rem;
+    }
+
+    & .pachingContainer {
+      & span {
+        margin-left: 1.5rem;
+        font-size: 2rem;
+      }
+    }
   }
 `;
 

@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { afterKakoSignIn } from 'redux/Async/kakaoSignIn';
-
-//! extraReducers
-const extraReducers = (builder) => {
-  afterKakoSignIn(builder);
-};
+import { afterSignOut } from 'redux/Async/signOut';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    socialData: {},
+    loginState: false,
+    userData: {},
   },
   reducers: {},
-  extraReducers,
+  extraReducers: (builder) => {
+    afterKakoSignIn(builder);
+    afterSignOut(builder);
+  },
 });
 
-export const { kakaoOauth } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

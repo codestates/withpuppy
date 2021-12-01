@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BaseMain } from './index';
 import styled from 'styled-components';
 import About from 'Sections/About';
 import Contact from 'Sections/Contact';
 import Services from 'Sections/Services';
-
 
 function Index() {
   return (
@@ -12,7 +11,6 @@ function Index() {
       <About />
       <Contact />
       <Services />
-
      </HomeMain>
   );
 }
@@ -32,7 +30,5 @@ const HomeMain = styled(BaseMain)`
     margin-bottom: 2rem;
   }
 `;
-
-
 
 export default Index;

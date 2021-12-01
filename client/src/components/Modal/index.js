@@ -1,16 +1,9 @@
 import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from 'assets/img/icons/x.svg';
 
-function Index({ onHandleOpenState, children }) {
+function Index({ className, onHandleOpenState, children }) {
   return (
     <>
-      <ModalContainer className="flex-center-C">
-        <CloseIcon
-          color="orange"
-          width="3rem"
-          className="closeIcon"
-          onClick={onHandleOpenState}
-        />
+      <ModalContainer className={`flex-center-C ${className}`}>
         {children}
       </ModalContainer>
 
@@ -22,10 +15,11 @@ function Index({ onHandleOpenState, children }) {
   );
 }
 
-const ModalContainer = styled.div`
-  width: 65%;
-  height: 65%;
-  background-color: white;
+export const ModalContainer = styled.div`
+  width: 57%;
+  min-width: 35rem;
+  height: 47%;
+  background-color: ${({ theme }) => theme.colors.secondColor};
   border-radius: 5rem;
   z-index: 10000;
   padding: 3rem;
@@ -35,7 +29,7 @@ const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   opacity: 0;
   animation: ${({ theme }) => theme.animation.showDown} 0.5s forwards;
-  outline: 5px dashed orange;
+  /* outline: 5px dashed orange; */
   outline-offset: -7px;
 
   & .closeIcon {
