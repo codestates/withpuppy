@@ -1,8 +1,6 @@
-## 🏡 art-Ground 🏡
+## 🏡 withPuppy 🏡
 
-<img width="824" src="https://user-images.githubusercontent.com/83934037/138430276-8d79c0cf-4d9e-4303-8879-3324c7b3c0b8.gif">
-
-### 누구나 예술가가 될 수 있는 공간, art-Ground.
+### 누구나 도그맘이 될 수 있는 공간, withPuppy.
 
 예술작품을 감상하는 것, 혹은 나의 작품을 다른 사람들과 공유하는 것. <br>
 더 이상 오프라인에서만 가능한 것들이 아닙니다. <br>
