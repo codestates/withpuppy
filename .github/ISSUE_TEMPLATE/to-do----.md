@@ -1,7 +1,7 @@
 ---
 name: To Do 템플릿
 about: 투두 템플릿!
-title: "[\U0001F4CC To do ] 이름 / 2021-00-00"
+title: "[\U0001F4CC To Do] 이름 / 2021-00-00"
 labels: todo
 assignees: ''
 
