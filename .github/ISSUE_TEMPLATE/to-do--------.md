@@ -1,20 +1,20 @@
 ---
 name: To Do 리스트 템플릿
 about: 프로젝트 진행에 필요한 To Do 리스트 템플릿입니다.
-title: ''
-labels: documentation, enhancement, In Progress
+title: "[12/3] 오늘 할 일 (작성자)"
+labels: todo
 assignees: ''
 
 ---
 
 구현에 따라 체크박스를 하나씩 체크해가면서, 프로젝트의 필수 혹은 권장할 만한 진행 상황을 확인할 수 있습니다.
 
-## 1. 시스템 아키텍처
+## 1. 
 
 - [ ] JWT를 이용한 로그인 구현 | 필수 | ★
 - [ ] OAuth 2.0을 이용한 소셜 로그인 | 권장 | ★
 
-## 2. UI/UX
+##  2. 
 
 - [ ] 라이브러리를 사용하지 않고 React 컴포넌트 직접 작성 (유어클래스에서 다룬 것) | 필수 | ★
 - [ ] 3rd-party API 호출 | 권장 | ★
