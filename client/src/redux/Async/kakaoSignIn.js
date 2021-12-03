@@ -4,10 +4,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 //! access token / refresh token
 export const kakaoSignIn = createAsyncThunk(
   'auth/kakaoSignIn',
-  async (code, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
+    const { code, social } = data;
     try {
       const response = await axios.post('/kakao/signIn', {
         code,
+        social,
       });
 
       return {

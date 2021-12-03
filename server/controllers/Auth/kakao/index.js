@@ -6,7 +6,7 @@ const { hash, decode } = require("../../utils/bycript");
 
 module.exports = {
   signIn: async (req, res) => {
-    const { code } = req.body;
+    const { code, social } = req.body;
 
     try {
       //1. get token from kakao
@@ -22,6 +22,7 @@ module.exports = {
 
       if (!user) {
         user = await User.create({
+          social,
           email: kakao_account.email,
           nickname: kakao_account.profile.nickname,
           thumbImg: kakao_account.profile.thumbnail_image_url,
@@ -49,6 +50,7 @@ module.exports = {
       res.cookie("accessToken", accessToken, { httpOnly: true });
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       res.status(200).json({
+        social,
         email: kakao_account.email,
         nickname: kakao_account.profile.nickname,
         thumbImg: kakao_account.profile.thumbnail_image_url,

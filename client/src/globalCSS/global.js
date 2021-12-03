@@ -42,6 +42,10 @@ const GlobalStyles = createGlobalStyle`
     user-select: none;
   }
 
+  .flex {
+    display:flex;
+  }
+
   .flex-center-R {
     display:flex;
     align-items:center;

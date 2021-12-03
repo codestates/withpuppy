@@ -12,9 +12,7 @@ function Kakao() {
 
   const kakaoSignUpAsync = async () => {
     try {
-      // const fullfilled = await dispatch(kakaoSignIn(code)).unwrap();
-      // console.log('It is fullfilled', fullfilled);
-      await dispatch(kakaoSignIn(code)).unwrap();
+      await dispatch(kakaoSignIn({ code, social: 'kakao' })).unwrap();
       navigate('/');
     } catch (rejected) {
       if (rejected.status === 409 || rejected.status === 500) {

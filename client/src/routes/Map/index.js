@@ -6,29 +6,19 @@ function Index() {
   const { kakao } = window;
 
   useEffect(() => {
-    const mapOptions = {
-      center: new kakao.maps.LatLng(37.566815192716994, 126.97865226139427),
-      level: 7,
-    };
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const mapOptions = {
+          center: new kakao.maps.LatLng(coords.latitude, coords.longitude),
+          level: 7,
+        };
 
-    new kakao.maps.Map(mapRef.current, mapOptions);
-    return () => {};
+        new kakao.maps.Map(mapRef.current, mapOptions);
+        return () => {};
+      },
+      () => console.log('cannot get Map!!!'),
+    );
   }, []);
-
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(
-  //     ({ coords }) => {
-  //       const mapOptions = {
-  //         center: new kakao.maps.LatLng(coords.latitude, coords.longitude),
-  //         level: 7,
-  //       };
-
-  //       new kakao.maps.Map(mapRef.current, mapOptions);
-  //       return () => {};
-  //     },
-  //     () => console.log('cannot get Map!!!'),
-  //   );
-  // }, []);
 
   const TestMapContainer = styled.div`
     width: 50vw;

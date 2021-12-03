@@ -5,9 +5,17 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {}
   User.init(
     {
+      social: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       nickname: {
         type: DataTypes.STRING,
@@ -23,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       phone: {
         type: DataTypes.STRING,
-        defaultValue: "000-000-0000",
+        allowNull: true,
       },
     },
     {

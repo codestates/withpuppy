@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
-function Index({ label, className, type }) {
+function Index({ label, className, type, placeholder }) {
   const inputRef = useRef(null);
 
   return (
@@ -12,7 +12,7 @@ function Index({ label, className, type }) {
     >
       <InputBarContainer className={className}>
         <span className="inputLabel">{label}</span>
-        <input ref={inputRef} type={type} />
+        <input ref={inputRef} type={type} placeholder={placeholder} />
       </InputBarContainer>
     </ErrorContainer>
   );
