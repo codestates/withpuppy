@@ -13,6 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
+      "http://withpuppy.s3-website.ap-northeast-2.amazonaws.com",
       "http://final-client.s3-website.ap-northeast-2.amazonaws.com",
     ],
     credentials: true,
