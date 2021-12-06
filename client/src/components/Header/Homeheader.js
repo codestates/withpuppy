@@ -4,19 +4,19 @@ import styled from 'styled-components';
 import PuppyLogo from 'assets/img/logo/puppyLogo.png';
 import { Link } from 'react-router-dom';
 import { BaseBtn } from 'components/Button';
-import LoginModal from 'components/Modal/LoginModal';
+import LoginSignUpModal from 'components/Modal/LoginSignUpModal';
 import LogoutModal from 'components/Modal/LogoutModal';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 
 function Index() {
-  const [loginOpen, setLoginOpen] = useState(false);
+  const [loginSingUpOpen, setLoginOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const onHandleLoginOpen = () => setLoginOpen((prev) => !prev);
   const onHandleLogoutOpen = () => setLogoutOpen((prev) => !prev);
 
-  const propForLoginModal = {
-    loginOpen,
+  const propForLoginSignUpModal = {
+    loginSingUpOpen,
     onHandleLoginOpen,
   };
 
@@ -29,7 +29,7 @@ function Index() {
 
   return (
     <>
-      {loginOpen && <LoginModal {...propForLoginModal} />}
+      {loginSingUpOpen && <LoginSignUpModal {...propForLoginSignUpModal} />}
       {logoutOpen && <LogoutModal {...propForLogoutModal} />}
       <BaseHeader>
         <HeaderNav>
