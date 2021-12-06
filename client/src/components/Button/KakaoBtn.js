@@ -8,7 +8,7 @@ const {
   REACT_APP_KAKAO_REDIRECT_URI,
 } = process.env;
 
-function Index() {
+function Index({ kakaoBtnWrapperClicked }) {
   const onHandleClick = () => {
     //만약 팝업창 형태로 처리하고 싶다면, javascript oauth를 이용한다
 
@@ -19,6 +19,11 @@ function Index() {
 
     window.location.href = `${kakaoCodeEndpoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code`;
   };
+
+  if (kakaoBtnWrapperClicked) {
+    onHandleClick();
+    return;
+  }
 
   return (
     <>

@@ -15,7 +15,11 @@ function Kakao() {
       await dispatch(kakaoSignIn({ code, social: 'kakao' })).unwrap();
       navigate('/');
     } catch (rejected) {
-      if (rejected.status === 409 || rejected.status === 500) {
+      if (
+        rejected.status === 404 ||
+        rejected.status === 409 ||
+        rejected.status === 500
+      ) {
         setTimeout(() => {
           navigate('/oauth/rejectPage');
         }, 1000);

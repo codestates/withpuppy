@@ -19,7 +19,7 @@ export const ModalContainer = styled.div`
   width: 57%;
   min-width: 35rem;
   height: 47%;
-  min-height: 50rem;
+  min-height: 45rem;
   background-color: ${({ theme }) => theme.colors.secondColor};
   border-radius: 5rem;
   z-index: 10000;
@@ -41,9 +41,9 @@ export const ModalContainer = styled.div`
   }
 `;
 
-const ModalBackground = styled.div`
-  width: 100vw;
-  height: 100vh;
+export const ModalBackground = styled.div`
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;

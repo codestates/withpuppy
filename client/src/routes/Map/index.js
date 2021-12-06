@@ -20,15 +20,15 @@ function Index() {
     );
   }, []);
 
-  const TestMapContainer = styled.div`
-    width: 50vw;
-    height: 50vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
-
   return <TestMapContainer ref={mapRef}>잠시만 기다려주세요~</TestMapContainer>;
 }
+
+const TestMapContainer = styled.div`
+  width: 50vw;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default Index;
