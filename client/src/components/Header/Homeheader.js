@@ -9,7 +9,7 @@ import LogoutModal from 'components/Modal/LogoutModal';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 
-function Index() {
+function Index({ className }) {
   const [loginSingUpOpen, setLoginOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const onHandleLoginOpen = () => setLoginOpen((prev) => !prev);
@@ -25,13 +25,14 @@ function Index() {
     onHandleLogoutOpen,
   };
 
+  //const userInfo = JSON.parse(localStorage.getItem('userData'));
   const { loginState } = useSelector(selectUser);
 
   return (
     <>
       {loginSingUpOpen && <LoginSignUpModal {...propForLoginSignUpModal} />}
       {logoutOpen && <LogoutModal {...propForLogoutModal} />}
-      <BaseHeader>
+      <BaseHeader className={className}>
         <HeaderNav>
           <Link to="/" className="Logo">
             <img src={PuppyLogo} alt="" className="header-logoImg" />
@@ -61,6 +62,8 @@ function Index() {
 }
 
 const HeaderNav = styled.nav`
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;

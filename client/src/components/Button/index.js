@@ -9,11 +9,11 @@ export const BaseBtn = styled.button`
   cursor: pointer;
   border-radius: 3px;
   color: #fff;
-  padding: 0.7rem;
+  padding: 1.05rem;
   transition: background-color 0.5s;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.subColor};
+    background-color: ${({ theme }) => theme.colors.secondColor};
     color: ${({ theme }) => theme.colors.mainColor};
   }
 

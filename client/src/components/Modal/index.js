@@ -30,8 +30,6 @@ export const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   opacity: 0;
   animation: ${({ theme }) => theme.animation.showDown} 0.5s forwards;
-  /* outline: 5px dashed orange; */
-  outline-offset: -7px;
 
   & .closeIcon {
     position: absolute;

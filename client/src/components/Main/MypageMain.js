@@ -12,7 +12,8 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('persist:userInfo');
+    // const userInfo = localStorage.getItem('userData');
+    const userInfo = localStorage.getItem('persist:persistData');
     if (!userInfo) {
       navigate('/');
     }

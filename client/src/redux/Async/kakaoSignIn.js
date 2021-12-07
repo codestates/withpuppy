@@ -28,6 +28,7 @@ export const afterKakoSignIn = (builder) => {
   builder.addCase(kakaoSignIn.fulfilled, (state, action) => {
     state.loginState = true;
     state.userData = action.payload.data;
+    //localStorage.setItem('userData', JSON.stringify(state.userData));
   });
   // <thunk 처리과정 중에 reject를 처리하여 바로 redux state에 반영하고 싶을 때
   builder.addCase(kakaoSignIn.rejected, (state, action) => {

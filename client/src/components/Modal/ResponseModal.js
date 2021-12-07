@@ -15,15 +15,14 @@ function Index({ children }) {
 }
 
 const ModalContainer = styled(BaseContainer)`
+  min-height: 30rem;
+  min-width: 30rem;
   background-color: white;
 
   & img {
     width: 100%;
   }
 `;
-const ModalBackground = styled(BaseModalBackground)`
-  width: 110%;
-  height: 110%;
-`;
+const ModalBackground = styled(BaseModalBackground)``;
 
 export default Index;

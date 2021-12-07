@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   validNickname,
   validEmail,
   validPassword,
   validConfirmPassword,
 } from 'utils/formValidator';
+import { debounce } from 'utils/debounce';
 
 function useForm({ initialValues }) {
   const [values, setValues] = useState(initialValues);
@@ -12,6 +13,10 @@ function useForm({ initialValues }) {
     status: 'ready',
     result: {},
   });
+
+  const debounceMomo = useMemo(() => debounce(800), []);
+
+  console.log(submitState);
 
   const onHandleChange = (key, value) => {
     setValues({
@@ -23,6 +28,7 @@ function useForm({ initialValues }) {
   const onHandleSignupSubmit = () => {
     let validationBeforeSubmit;
 
+    //하나라도 충족 안됬을 때 에러상태 저장
     validationBeforeSubmit = validNickname(values.nickname);
     validationBeforeSubmit = validEmail(values.email);
     validationBeforeSubmit = validPassword(values.password);
@@ -31,7 +37,20 @@ function useForm({ initialValues }) {
       values.password,
     );
 
+    //에러상태일시 reject 후 다시 ready
     if (Object.values(values).includes('') || !validationBeforeSubmit.state) {
+      setSubmitState({
+        status: 'reject',
+        result: {},
+      });
+
+      debounceMomo(() => {
+        setSubmitState({
+          status: 'ready',
+          result: {},
+        });
+      });
+
       return;
     }
 

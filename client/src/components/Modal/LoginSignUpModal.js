@@ -11,9 +11,8 @@ import { BaseBtn } from 'components/Button';
 import LoginBtn from 'components/Button/LoginBtn';
 import { SignUpBtn } from 'components/Button/SignUpBtn';
 import useForm from 'hooks/useForm';
-import ResponseModal from './ResponseModal';
-import { Spinner2 } from 'components/Spinner';
-import RunningDog from 'assets/img/icons/runningDog.gif';
+import LoadingModal from './LoadingModal';
+import Logs from './Logs';
 
 import {
   validNickname,
@@ -49,9 +48,7 @@ function Index({ onHandleLoginOpen }) {
             <LoginInput type="text" label="email" />
             <LoginInput type="password" label="password" />
           </loginCtx.Provider>
-
-          <LoginBtn>로그인</LoginBtn>
-
+          <LoginBtn className="loginBtn">로그인</LoginBtn>
           <OauthBtnContainer>
             <OauthBtnWrapper
               className="flex-center-C OauthBtnWrapper"
@@ -68,19 +65,13 @@ function Index({ onHandleLoginOpen }) {
               <span>구글로 로그인</span>
             </OauthBtnWrapper>
           </OauthBtnContainer>
-
           <GoToSignUpBtn onClick={onHandleFormToggle}>
             혹시 아직 계정이 없으신가요?
           </GoToSignUpBtn>
         </LoginFormContainer>
 
         <SignUpFormContainer toSignUp={toSignUp} className="flex-center-C">
-          {signUpForm.submitState.status === 'loading' && (
-            <ResponseModal>
-              <span>잠시만 기다려주세요</span>
-              <img src={RunningDog} alt="" />
-            </ResponseModal>
-          )}
+          {signUpForm.submitState.status === 'loading' && <LoadingModal />}
           <>
             <span className="formTitle">회원가입</span>
             <signUpCtx.Provider value={signUpForm}>
