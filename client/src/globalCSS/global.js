@@ -6,6 +6,7 @@ const GlobalStyles = createGlobalStyle`
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: "Jua";
   }
 
   html {
@@ -15,7 +16,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
       font-size : 3rem;
-      font-family: 'Jua';
+      height: 100%;
       background-color:${({ theme }) => theme.colors.secondColor};
       user-select: none;
       -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -24,6 +25,7 @@ const GlobalStyles = createGlobalStyle`
       -o-user-select: none;
       /* overflow-y:scroll; */
   }
+  
 
   a {
       text-decoration: none;

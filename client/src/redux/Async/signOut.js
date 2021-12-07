@@ -21,6 +21,7 @@ export const afterSignOut = (builder) => {
   builder.addCase(signOut.fulfilled, (state, action) => {
     state.loginState = false;
     state.userData = {};
+    //localStorage.clear();
   });
 };
 
