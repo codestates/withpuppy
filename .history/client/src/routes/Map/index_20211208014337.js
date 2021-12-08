@@ -1,12 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
+import styled from 'styled-components/macro';
 import MapHeader from 'components/Header/Homeheader';
 import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
+
 import UserInfo from './UserInfo';
-import CustomOverlayMap from 'components/CustomOverlay/CustomOverlayMap';
-import Walk from 'components/Overlay/Walk';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
@@ -31,30 +31,18 @@ function Index() {
     return () => {};
   }, []);
 
-  const [isWalkOpen, setIsWalkOpen] = useState(false);
-  const openWalkHandler = () => {
-    setIsWalkOpen(!isWalkOpen);
-    console.log('isWalkOpen', isWalkOpen);
-  };
-
   return (
     <>
       <MapHeader className="MapHeader" />
       <MapMain>
-        <MapContainer ref={mapRef} className="MapContainer">
-          {/* <CustomOverlayMap></CustomOverlayMap> */}
-          <Btn onClick={openWalkHandler} isWalkOpen={isWalkOpen}>
-            산책등록
-          </Btn>
-          {isWalkOpen === true ? <Walk></Walk> : null}
-        </MapContainer>
+        <MapContainer ref={mapRef} className="MapContainer"></MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
             <UserInfo
-              puppyName="강아지 이름 테스트 입니다"
-              userName="사람 이름 테스트 입니다"
-              puppyAge={12}
-              introduceTo="소개글 테스트 입니다"
+              puppyName="강아지이름테스트"
+              userName="사람이름테스트"
+              userAge={99}
+              introduceTo="소개글테스트입니다."
             ></UserInfo>
             <Reply className="flex-center-C Reply">hello</Reply>
           </UserCard>
@@ -73,8 +61,7 @@ const MapMain = styled.main`
   & .UserInfoContainer {
     flex: 0.35;
   }
-
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1000px) {
     flex-direction: column;
     height: 102rem;
     & .MapContainer {
@@ -114,22 +101,12 @@ const UserCard = styled.section`
 
   & .UserInfo {
     background-color: white;
-    flex: 0.2;
+    flex: 0.3;
   }
 
   & .Reply {
     background-color: red;
-    flex: 0.8;
-  }
-
-  @media screen and (min-width: 567px) and (max-width: 900px) {
-    & .UserInfo {
-      flex: 0.3;
-    }
-
-    & .Reply {
-      flex: 0.7;
-    }
+    flex: 0.7;
   }
 `;
 
