@@ -44,6 +44,12 @@ const GlobalStyles = createGlobalStyle`
     user-select: none;
   }
 
+  button{
+    &:focus{
+      outline:none;
+    }
+  }
+
   .flex {
     display:flex;
   }

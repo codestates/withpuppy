@@ -4,11 +4,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 //! access token / refresh token
 export const signIn = createAsyncThunk(
   'auth/signIn',
-  async (code, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/auth/signIn', {
-        code,
-      });
+      const response = await axios.post('/auth/signIn', data);
 
       return {
         data: response.data,
