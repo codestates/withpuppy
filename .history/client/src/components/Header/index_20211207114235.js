@@ -12,7 +12,7 @@ export const BaseHeader = styled.header`
   transition: opacity 0.5s, height 0.5s;
   z-index: 100;
   background-color: ${({ theme }) => theme.colors.mainColor};
-  &.MapHeader {
+  &.mapHeader {
     position: relative;
     background-color: white;
     box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.25);

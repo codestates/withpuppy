@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
-import UserInfo from './UserInfo';
 
-const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
+import UserInfo from './UserInfo';
 
 function Index() {
   const mapRef = useRef(null);
@@ -16,7 +15,7 @@ function Index() {
 
   useEffect(() => {
     const mapOptions = {
-      center: new kakao.maps.LatLng(...SEOUL_COORDINATION),
+      center: new kakao.maps.LatLng(37.529789809685475, 126.96470201104091),
       level: 7,
     };
 
@@ -37,12 +36,7 @@ function Index() {
         <MapContainer ref={mapRef} className="MapContainer"></MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
-            <UserInfo
-              puppyName="강아지 이름 테스트 입니다"
-              userName="사람 이름 테스트 입니다"
-              puppyAge={12}
-              introduceTo="소개글 테스트 입니다"
-            ></UserInfo>
+            <UserInfo></UserInfo>
             <Reply className="flex-center-C Reply">hello</Reply>
           </UserCard>
         </UserInfoContainer>

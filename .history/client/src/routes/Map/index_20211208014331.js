@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
+
 import UserInfo from './UserInfo';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
@@ -38,10 +39,10 @@ function Index() {
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
             <UserInfo
-              puppyName="강아지 이름 테스트 입니다"
-              userName="사람 이름 테스트 입니다"
-              puppyAge={12}
-              introduceTo="소개글 테스트 입니다"
+              puppyName="강아지이름테스트"
+              userName="사람이름테스트"
+              userAge={99}
+              introduceTo="소개글테스트입니다."
             ></UserInfo>
             <Reply className="flex-center-C Reply">hello</Reply>
           </UserCard>

@@ -40,6 +40,7 @@ export function validPassword(password) {
       };
 
     //1. 특수문자 1개이상
+    // eslint-disable-next-line
     const special = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]{1,}/g;
     if (!special.test(password))
       return {
