@@ -1,19 +1,29 @@
 const { genAccess, genRefresh, verifyAccess, verifyRefresh } = require("../utils/token");
-const { User } = require("../../models");
-const { hashPassword, decodePassword } = require("../utils/bycript");
+const { User, Puppy } = require("../../models");
+const { hash, decode } = require("../utils/bycript");
 
 module.exports = {
   signIn: async (req, res) => {
     try {
       //1. user exist
       const { email, password } = req.body;
-      const user = await User.findOne({ where: { email: email } });
+
+      const user = await User.findOne({ where: { email: email, social: null } });
       if (!user) return res.status(404).json({ message: "no user" });
 
       //2. password verification
-      decodePassword(password, user.password, (err, result) => {
+      decode(password, user.password, async (err, result) => {
         if (err) return res.status(500).json({ message: "decode failed" });
-        if (!result) return res.status(400).json({ message: "wrong password" });
+        if (!result) return res.status(409).json({ message: "wrong password" });
+
+        let puppy = await user.getPuppy();
+
+        if (!puppy) {
+          const createDefaultPuppy = await Puppy.create({});
+
+          await user.setPuppy(createDefaultPuppy);
+          puppy = await user.getPuppy();
+        }
 
         const accessToken = genAccess({
           email,
@@ -29,10 +39,18 @@ module.exports = {
           httpOnly: true,
         });
 
-        res.status(200).json({ message: "login success" });
+        delete user.dataValues.id;
+        delete user.dataValues.password;
+        delete user.dataValues.createdAt;
+        delete user.dataValues.updatedAt;
+
+        return res.status(200).json({
+          ...user.dataValues,
+          puppy,
+        });
       });
     } catch (err) {
-      console.log(err);
+      return res.status(503).json({ message: "unexpected server error" });
     }
   },
   signOut: (req, res) => {
@@ -42,17 +60,17 @@ module.exports = {
   },
   signup: async (req, res) => {
     //1. email validation
-    const { email, password } = req.body;
+    const { nickname, email, password } = req.body;
     const user = await User.findOne({ where: { email } });
 
-    if (user) return res.status(403).json({ message: "user already exist" });
+    if (user) return res.status(409).json({ message: "user already exist" });
 
     //2.add user
-    hashPassword(password, async (err, hashedPassword) => {
+    hash(password, async (err, hashedPassword) => {
       if (err) return res.status(500).json({ message: "password hashing failed" });
 
       try {
-        await User.create({ email, password: hashedPassword });
+        await User.create({ nickname, email, password: hashedPassword });
         const accessToken = genAccess({
           email,
         });
@@ -65,7 +83,7 @@ module.exports = {
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
         });
-        res.status(200).json({ message: "signup success" });
+        res.status(201).json({ message: "signup success" });
       } catch (err) {
         console.log(err);
         return res.status(500).json({ message: "add user to database failed" });

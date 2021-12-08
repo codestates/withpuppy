@@ -4,9 +4,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 //! access token / refresh token
 export const signUp = createAsyncThunk(
   'auth/signUp',
-  async (formData, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/auth/signUp', formData);
+      const response = await axios.post('/auth/signUp', data);
 
       return {
         data: response.data,
@@ -17,9 +17,9 @@ export const signUp = createAsyncThunk(
   },
 );
 
-export const afterSignIn = (builder) => {
+export const afterSignUp = (builder) => {
   builder.addCase(signUp.fulfilled, (state, action) => {
-    console.log(action.payload);
+    console.log('success', action.payload);
   });
 };
 
