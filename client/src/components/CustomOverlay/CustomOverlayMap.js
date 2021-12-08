@@ -29,11 +29,9 @@ function CustomOverlayMap() {
             <Info>성별</Info>
           </SectionSpan>
         </ModalContent>
-        <a href="http://localhost:3000">
-          <ReqBtn className="flex-center-C">
-            로그인해서 상대의 연락처를 보세요!
-          </ReqBtn>
-        </a>
+        <ReqBtn className="flex-center-C">
+          로그인해서 상대의 연락처를 보세요!
+        </ReqBtn>
         {/* <ContactBtn className="flex-center-C">
           사용자 카카오톡/연락처로 연락하기
         </ContactBtn> */}

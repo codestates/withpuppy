@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import React, { useRef, useEffect, useState } from 'react';
 import MapHeader from 'components/Header/Homeheader';
 import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
-import Example from './Example';
+import CustomOverlayMap from 'components/CustomOverlay/CustomOverlayMap';
+import Walk from 'components/Overlay/Walk';
 
 function Index() {
   const mapRef = useRef(null);
@@ -26,12 +26,23 @@ function Index() {
     return () => {};
   }, []);
 
+  const [isWalkOpen, setIsWalkOpen] = useState(false);
+  const openWalkHandler = () => {
+    setIsWalkOpen(!isWalkOpen);
+    console.log('isWalkOpen', isWalkOpen);
+  };
+
   return (
     <>
       <MapHeader className="mapHeader" />
       <MapMain>
-        <MapContainer ref={mapRef} className="MapContainer"></MapContainer>
-
+        <MapContainer ref={mapRef} className="MapContainer">
+          {/* <CustomOverlayMap></CustomOverlayMap> */}
+          <Btn onClick={openWalkHandler} isWalkOpen={isWalkOpen}>
+            산책등록
+          </Btn>
+          {isWalkOpen === true ? <Walk></Walk> : null}
+        </MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
             <UserInfo className="flex-center-R UserInfo">hi</UserInfo>
