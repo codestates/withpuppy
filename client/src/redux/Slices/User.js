@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { afterKakoSignIn } from 'redux/Async/kakaoSignIn';
+import { afterSignIn } from 'redux/Async/signIn';
 import { afterSignOut } from 'redux/Async/signOut';
 
 export const userSlice = createSlice({
@@ -11,6 +12,7 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     afterKakoSignIn(builder);
+    afterSignIn(builder);
     afterSignOut(builder);
   },
 });
