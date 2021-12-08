@@ -69,7 +69,6 @@ export function validPassword(password) {
 
 //confirm password
 export function validConfirmPassword(confirm, password) {
-  console.log(password);
   if (confirm) {
     if (!password)
       return {

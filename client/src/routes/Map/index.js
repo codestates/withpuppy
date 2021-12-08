@@ -55,7 +55,7 @@ const MapMain = styled.main`
     flex: 0.35;
   }
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 900px) {
     flex-direction: column;
     height: 102rem;
 
@@ -99,12 +99,22 @@ const UserCard = styled.section`
 
   & .UserInfo {
     background-color: white;
-    flex: 0.3;
+    flex: 0.2;
   }
 
   & .Reply {
     background-color: red;
-    flex: 0.7;
+    flex: 0.8;
+  }
+
+  @media screen and (min-width: 567px) and (max-width: 900px) {
+    & .UserInfo {
+      flex: 0.3;
+    }
+
+    & .Reply {
+      flex: 0.7;
+    }
   }
 `;
 
