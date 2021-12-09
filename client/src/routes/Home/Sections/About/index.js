@@ -3,7 +3,7 @@ import Lan1 from 'assets/LandingPage/랜딩1.png';
 
 const Contact = () => {
   return (
-    <AboutSection id="about">
+    <AboutSection className="flex-center-C">
       <Main>
         <Content>
           <AboutText>
@@ -17,7 +17,7 @@ const Contact = () => {
           </AboutText>
 
           <Rocket>
-            <img src={Lan1} alt="" width="600" height="400" />
+            <img src={Lan1} alt="" />
           </Rocket>
         </Content>
       </Main>
@@ -25,6 +25,8 @@ const Contact = () => {
   );
 };
 
+
+//애니메이션 무빙
 const move = keyframes`
 0% { transform: translateY(-5px)  }
     50% { transform: translateY(10px) }
@@ -32,32 +34,22 @@ const move = keyframes`
 `;
 
 const AboutSection = styled.section`
-  width: 100vw;
+  width: 100%;
 `;
 
 const Main = styled.div`
-  margin: 0 15rem;
-  margin-bottom: 50rem;
-  margin-top: 30rem;
-
-  @media only Screen and (max-width: 64em) {
-    margin: 0 calc(5rem + 5vw);
-    margin-top: 10rem;
-  }
-  @media only Screen and (max-width: 40em) {
-    align-items: center;
-    margin: 3rem calc(3rem + 3vw);
-  }
+  margin: 15rem;
+  align-items: center;
+  
 `;
 
 const Title = styled.h1`
   font-size: calc(2rem + 1vw);
   line-height: 1.5;
   padding: 1rem 0;
-
   color: white;
   width: 60%;
-  font-family: 'Jua';
+
 `;
 
 const Rectangle6 = styled.div`
@@ -79,7 +71,7 @@ const Content = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media only Screen and (max-width: 40em) {
+  @media only Screen and (max-width: 1200px) {
     flex-direction: column;
   }
 `;
@@ -90,7 +82,12 @@ const Rocket = styled.div`
   padding-bottom: 5rem;
   margin-right: 10rem;
   animation: ${move} 2.5s ease infinite;
-  @media only Screen and (max-width: 40em) {
+  
+  & img {
+   width: 100%;
+   min-width: 200px;
+  }
+  @media only Screen and (max-width: 1200px) {
     width: 50vw;
     padding-bottom: 0;
   }

@@ -27,6 +27,7 @@ export const signUpCtx = createContext({});
 function Index({ onHandleLoginOpen }) {
   const [toSignUp, setToSignUp] = useState(false);
   const [kakaoBtnWrapperClicked, setKakaoBtnWrapperClicked] = useState(false);
+  const [googleBtnWrapperClicked, setGoogleBtnWrapperClicked] = useState(false);
   const loginForm = useForm({ initialValues: { email: '', password: '' } });
   const signUpForm = useForm({
     initialValues: { nickname: '', email: '', password: '', confirm: '' },
@@ -79,8 +80,13 @@ function Index({ onHandleLoginOpen }) {
               <span>카카오로 로그인</span>
             </OauthBtnWrapper>
 
-            <OauthBtnWrapper className="flex-center-C OauthBtnWrapper">
-              <GoogleBtn />
+            <OauthBtnWrapper
+              className="flex-center-C OauthBtnWrapper"
+              onClick={() => {
+                setGoogleBtnWrapperClicked(true);
+              }}
+            >
+              <GoogleBtn googleBtnWrapperClicked={googleBtnWrapperClicked} />
               <span>구글로 로그인</span>
             </OauthBtnWrapper>
           </OauthBtnContainer>
