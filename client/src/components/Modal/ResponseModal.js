@@ -14,7 +14,7 @@ function Index({ children }) {
   );
 }
 
-const ModalContainer = styled(BaseContainer)`
+export const ModalContainer = styled(BaseContainer)`
   min-height: 30rem;
   min-width: 30rem;
   background-color: white;

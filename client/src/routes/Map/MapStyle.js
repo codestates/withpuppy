@@ -6,8 +6,8 @@ export const Btn = styled.button`
   background-color: #e97676;
   border-radius: 50%;
   z-index: 800;
-  position: fixed;
-  top: 80%;
+  position: absolute;
+  top: 70%;
   bottom: 20%;
   left: 5%;
   box-shadow: 0 3rem 2rem -1rem hsl(100 40% 10% / 90%);
