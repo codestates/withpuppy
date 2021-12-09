@@ -9,7 +9,7 @@ function Index() {
   return (
     <HomeMain>
       <About />
-      <Contact />
+      {/* <Contact /> */}
       <Services />
       <Footer />
     </HomeMain>
