@@ -12,7 +12,6 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // const userInfo = localStorage.getItem('userData');
     const userInfo = localStorage.getItem('persist:persistData');
     if (!userInfo) {
       navigate('/');
@@ -24,7 +23,7 @@ function Index() {
   } = useSelector(selectUser);
 
   return (
-    <MypageMain>
+    <MypageMain className="mypageMain">
       <MypageHeader>
         <img src={MypageLogo} alt="" />
       </MypageHeader>
@@ -50,7 +49,16 @@ function Index() {
           <span>패칭하러가기</span>
         </div>
 
-        <img src={WhiteDog} alt="" />
+        <div
+          className="goToHomeContainer"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/';
+          }}
+        >
+          <span>홈으로</span>
+          <img src={WhiteDog} alt="" />
+        </div>
       </MypageBottom>
     </MypageMain>
   );
@@ -124,9 +132,28 @@ const MypageBottom = styled.section`
     }
   }
 
+  & .goToHomeContainer {
+    display: flex;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+
+    & > span {
+      margin-right: 2rem;
+    }
+  }
+
   @media screen and (max-width: 700px) {
     & img {
       width: 7rem;
+    }
+
+    & .pachingContainer {
+      & span {
+        margin-left: 1.5rem;
+        font-size: 2rem;
+      }
     }
 
     & .pachingContainer {

@@ -4,7 +4,7 @@ import PuppyLogo from 'assets/img/logo/puppyLogo.png';
 
 const Services = () => {
   return (
-    <AboutSection id="about">
+    <AboutSection >
       <Main>
         <>
           <Logo>
@@ -15,7 +15,12 @@ const Services = () => {
             <img src={Lan3} alt="" width="600" height="400" />
           </Rocket>
           <Group2>
-            <Rectangle28>
+            <Rectangle28 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/map';
+                  }}
+                >
               <Text>페칭하러 가기</Text>
             </Rectangle28>
           </Group2>
@@ -44,28 +49,19 @@ const move = keyframes`
 `;
 
 const AboutSection = styled.section`
-  width: 100vw;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+
+
+
+
   justify-content: center;
-  align-items: center;
-  background-color: #febeb0;
+
+
 `;
 
 const Main = styled.div`
-  margin-top: 50rem;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  @media only Screen and (max-width: 64em) {
-    margin: 0 calc(5rem + 5vw);
-    margin-top: 10rem;
-  }
-  @media only Screen and (max-width: 40em) {
-    align-items: center;
-    margin: 3rem calc(3rem + 3vw);
-  }
+
+  display: inline;
+
 `;
 
 const Title = styled.h1`
@@ -80,7 +76,7 @@ const Title = styled.h1`
 
 const Rocket = styled.div`
   align-items: center;
-  min-height: 100vh;
+
   animation: ${move} 2.5s ease infinite;
   @media only Screen and (max-width: 40em) {
     width: 50vw;
@@ -98,8 +94,9 @@ const Rocket = styled.div`
 //   }
 
 const Group2 = styled.div`
-  height: 100px;
-  width: 590px;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 5rem;
 `;
 const Rectangle28 = styled.div`
   border-radius: 12px;
@@ -109,6 +106,7 @@ const Rectangle28 = styled.div`
   justify-content: center;
   background-color: #e87676;
   line-height: 100px;
+
 `;
 const Text = styled.div`
   text-align: center;

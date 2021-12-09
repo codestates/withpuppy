@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   Pinpointer.init(
     {
       location: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       lat: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT(25),
       },
       lng: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT(25),
       },
       iconType: {
         type: DataTypes.STRING,
