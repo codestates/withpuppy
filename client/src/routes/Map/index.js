@@ -58,7 +58,7 @@ function Index() {
             <UserInfo
               puppyName="강아지 이름 테스트 입니다"
               userName="사람 이름 테스트 입니다"
-              puppyAge={12}
+              puppyAge={7}
               introduceTo="소개글 테스트 입니다"
             ></UserInfo>
             <UserComment className="flex-center-C Reply"></UserComment>
@@ -68,7 +68,6 @@ function Index() {
     </>
   );
 }
-
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);

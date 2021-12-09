@@ -2,11 +2,13 @@ import profile from '../../assets/img/profile/profile.png';
 import pngwing1 from '../../assets/img/profile/pngwing/pngwing1.png';
 import pngwing2 from '../../assets/img/profile/pngwing/pngwing2.png';
 import styled from 'styled-components/macro';
+import Liked from './Liked';
+import { Column } from 'components/Footer/FooterStyle';
 
 const UserInfo = styled.div`
   display: flex;
-  padding-top: 20px;
   flex-direction: row;
+  padding-top: 15px;
 `;
 
 export default function Index({
@@ -19,35 +21,11 @@ export default function Index({
   return (
     <UserInfo className="UserInfo">
       <div className="imgContainer">
-        <img
-          src={profile}
-          alt=""
-          style={{ paddingBottom: '100px', width: '90px' }}
-        ></img>
+        <img src={profile} alt="" style={{ width: '90px' }}></img>
+        <Liked />
       </div>
-
       <div className="profileInfo" style={{ paddingLeft: '2rem' }}>
-        <div style={{ fontSize: '20px' }}>
-          {puppyName}
-          <span
-            className="stars"
-            style={{
-              float: 'right',
-              paddingRight: '20px',
-            }}
-          >
-            <div
-              className="numberOfStars"
-              style={{
-                width: '70px',
-                height: '33px',
-                boxShadow:
-                  '0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.17)',
-              }}
-            ></div>
-          </span>
-        </div>
-
+        <div style={{ fontSize: '20px' }}>{puppyName}</div>
         <div style={{ fontSize: '20px' }}>{userName}</div>
         <div style={{ fontSize: '20px' }}>{puppyAge}살</div>
         <div style={{ fontSize: '20px' }}>
@@ -73,7 +51,7 @@ export default function Index({
           <div className="introduceTo">
             <div
               style={{
-                width: '350px',
+                width: '390px',
                 height: '50px',
                 border: 'none',
                 borderRadius: '2rem',
