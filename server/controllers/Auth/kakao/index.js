@@ -1,8 +1,7 @@
 const getKakaoToken = require("./helpers/getToken");
 const getKakaoUserInfo = require("./helpers/getUserInfo");
 const { User, Puppy } = require("../../../models");
-const { genAccess, genRefresh, verifyAccess, verifyRefresh } = require("../../utils/token");
-const { hash, decode } = require("../../utils/bycript");
+const { genAccess, genRefresh } = require("../../utils/token");
 
 module.exports = {
   signIn: async (req, res) => {
@@ -60,7 +59,7 @@ module.exports = {
       });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ message: "kakao auth failed" });
+      return res.status(500).json({ message: "kakao oauth failed" });
     }
   },
 };

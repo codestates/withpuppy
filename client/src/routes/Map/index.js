@@ -10,6 +10,9 @@ import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import { Btn } from './MapStyle';
 import UserComment from './Reply';
+import { BaseIcon } from 'components/Icon';
+import Icon2 from '../../assets/img/icons/Icon.png';
+
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
@@ -136,17 +139,7 @@ const UserCard = styled.section`
   }
 `;
 
-//! 비로그인으로 댓글 작성 시 에러메세지 보내기 (Message : 로그인이 필요한 서비스입니다)
-
-//? 댓글 수정 기능 할것인지?
-
-//? 댓글 삭제 가능 할것인지?
-
 //# Before pin clicked
 // const DogCard = styled.section``;
 
-
-
 export default Index;
-
-
