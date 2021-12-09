@@ -5,12 +5,12 @@ import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
 import UserInfo from './UserInfo';
-import CustomOverlayMap from 'components/CustomOverlay/CustomOverlayMap';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
-import { Btn } from './MapStyle';
+import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import { BaseIcon } from 'components/Icon';
-import Icon2 from "../../assets/img/icons/Icon.png"
+import Icon2 from '../../assets/img/icons/Icon.png';
+
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
@@ -18,38 +18,101 @@ function Index() {
   const { kakao } = window;
   const dispatch = useDispatch();
 
+  const [isWalkOpen, setIsWalkOpen] = useState(false);
+  const openWalkHandler = () => {
+    // console.log(isWalkOpen);
+    setIsWalkOpen(!isWalkOpen);
+  };
+
+  const [inputText, setInputText] = useState('');
+  const [place, setPlace] = useState('');
+
+  const onChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPlace(inputText);
+    setInputText('');
+    console.log(inputText);
+  };
+
+  const [coordinate, setCoordinate] = useState([]);
+
   useEffect(() => {
     const mapOptions = {
       center: new kakao.maps.LatLng(...SEOUL_COORDINATION),
       level: 7,
     };
 
+    //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
       dispatch(addMap(map));
+
+      const ps = new kakao.maps.services.Places();
+      ps.keywordSearch(place, placesSearchCB);
+
+      // 주소-좌표 변환 객체를 생성
+      const geocoder = new kakao.maps.services.Geocoder();
+      // const callback = function (result, status) {
+      //   if (status === kakao.maps.services.Status.OK) {
+      // console.log(result[0].x, result[0].y);
+      //     coordinate.push(result[0].x, result[0].y); (내가 추가한 문장)
+      //     console.log(coordinate);
+      //   }
+      // };
+
+      geocoder.addressSearch(place, placesSearchCB);
+
+      function placesSearchCB(data, status, pagination) {
+        if (status === kakao.maps.services.Status.OK) {
+          let bounds = new kakao.maps.LatLngBounds();
+
+          for (let i = 0; i < data.length; i++) {
+            displayMarker(data[i]);
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+            //x랑 y좌표 얻어지게끔?
+            coordinate.push([data[i].x, data[i].y]);
+          }
+
+          map.setBounds(bounds);
+          console.log(coordinate);
+        }
+      }
+
+      function displayMarker(place) {
+        let marker = new kakao.maps.Marker({
+          map: map,
+          position: new kakao.maps.LatLng(place.y, place.x),
+        });
+      }
     } catch (err) {
       console.log(err);
     }
 
     return () => {};
-  }, []);
-
-  const [isWalkOpen, setIsWalkOpen] = useState(false);
-  const openWalkHandler = () => {
-    setIsWalkOpen(!isWalkOpen);
-    console.log('isWalkOpen', isWalkOpen);
-  };
+  }, [place]);
 
   return (
     <>
       <MapHeader className="MapHeader" />
       <MapMain>
-        <MapContainer ref={mapRef} className="MapContainer">
-          {/* <CustomOverlayMap></CustomOverlayMap> */}
-          <Btn onClick={openWalkHandler} isWalkOpen={isWalkOpen}>
-            산책등록
-          </Btn>
-          {isWalkOpen === true ? <Walk></Walk> : null}
+        <MapContainer ref={mapRef} searchPlace={place} className="MapContainer">
+          <SearchContainer className="inputForm" onSubmit={handleSubmit}>
+            <SearchBar
+              placeholder="장소 검색"
+              onChange={onChange}
+              value={inputText}
+            ></SearchBar>
+            <SearchBtn type="submit">검색</SearchBtn>
+          </SearchContainer>
+          <Btn onClick={openWalkHandler}>산책등록</Btn>
+          {isWalkOpen === true ? (
+            <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
+          ) : null}
+          {/* <SearchBar type="text" placeholder="장소 검색"></SearchBar> */}
         </MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
@@ -139,54 +202,53 @@ const UserCard = styled.section`
 const Comment = () => {
   return (
     <>
-    <CommentComponent>
-      <Chat>
-        <Frame2>
-        <Text1>댓글 작성자</Text1>
-        <Text2>댓글 내용</Text2>
-        <Liked>
-        <Rectangle11 >
-        <Text3>DELETE</Text3>
-        </Rectangle11>
-      </Liked>
-      <Liked>
-        <Rectangle11 >
-        <Text3>EDIT</Text3>
-        </Rectangle11>
-      </Liked>
-        </Frame2>
-      </Chat >
-      <Chat>
-        <Frame3>
-        <Text1>댓글 작성자</Text1>
-        <Text2>댓글 내용</Text2>
-        <Liked>
-        <Rectangle11 >
-        <Text3>DELETE</Text3>
-        </Rectangle11>
-      </Liked>
-        </Frame3>
-      </Chat >
-      <CommtentSend>
-        <Input >
-        <InputCon>    
-        <input 
-        // onChage={this.getValue}
-        type="text"
-        placeholder="Comment here !"
-        maxLength="100"
-        />
-        </InputCon>
-        </Input>
-        <BaseIcon>
-          <img src={Icon2} alt="" 
-          />
-        </BaseIcon>
-      </CommtentSend>
-    </CommentComponent>
+      <CommentComponent>
+        <Chat>
+          <Frame2>
+            <Text1>댓글 작성자</Text1>
+            <Text2>댓글 내용</Text2>
+            <Liked>
+              <Rectangle11>
+                <Text3>DELETE</Text3>
+              </Rectangle11>
+            </Liked>
+            <Liked>
+              <Rectangle11>
+                <Text3>EDIT</Text3>
+              </Rectangle11>
+            </Liked>
+          </Frame2>
+        </Chat>
+        <Chat>
+          <Frame3>
+            <Text1>댓글 작성자</Text1>
+            <Text2>댓글 내용</Text2>
+            <Liked>
+              <Rectangle11>
+                <Text3>DELETE</Text3>
+              </Rectangle11>
+            </Liked>
+          </Frame3>
+        </Chat>
+        <CommtentSend>
+          <Input>
+            <InputCon>
+              <input
+                // onChage={this.getValue}
+                type="text"
+                placeholder="Comment here !"
+                maxLength="100"
+              />
+            </InputCon>
+          </Input>
+          <BaseIcon>
+            <img src={Icon2} alt="" />
+          </BaseIcon>
+        </CommtentSend>
+      </CommentComponent>
     </>
-  )
-}
+  );
+};
 const Text1 = styled.div`
   text-align: left;
   vertical-align: top;
@@ -194,7 +256,7 @@ const Text1 = styled.div`
   font-family: Jua;
   line-height: auto;
   color: #7b7b7b;
-`
+`;
 const Text2 = styled.div`
   text-align: left;
   vertical-align: top;
@@ -202,21 +264,19 @@ const Text2 = styled.div`
   font-family: Jua;
   line-height: auto;
   color: #000000;
-`
+`;
 const Liked = styled.div`
   height: 20px;
-  width: 58px;  
+  width: 58px;
   float: right;
   margin: 0.5rem;
-
-`
+`;
 const Rectangle11 = styled.div`
-
   border-radius: 8px;
   height: 20px;
-  width: 58px;  
+  width: 58px;
   background-color: #e87676;
-`
+`;
 const Text3 = styled.div`
   text-align: center;
   vertical-align: top;
@@ -224,10 +284,10 @@ const Text3 = styled.div`
   align-items: center;
   line-height: 20px;
   color: #ffffff;
-`
+`;
 
 const CommentComponent = styled.div`
-  position:relative;
+  position: relative;
   display: flex;
   bottom: 0px;
   padding: 15px;
@@ -235,21 +295,21 @@ const CommentComponent = styled.div`
   height: 639px;
   width: 558px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   background-color: #f7f1ed;
-`
+`;
 const Chat = styled.div`
   display: flex;
   text-align: center;
-  flex-direction:column;
+  flex-direction: column;
   /* justify-content: flex-start;
   align-items: flex-end; */
   gap: 13px;
-`
+`;
 const Frame2 = styled.div`
   float: right;
   margin-bottom: 2rem;
-  flex-direction:column;
+  flex-direction: column;
   border-radius: 15px;
   height: 80px;
   width: 400px;
@@ -259,11 +319,11 @@ const Frame2 = styled.div`
   padding: 12px 16px;
   gap: 10px;
   background-color: white;
-`
+`;
 const Frame3 = styled.div`
   float: right;
   margin-bottom: 2rem;
-  flex-direction:column;
+  flex-direction: column;
   border-radius: 15px;
   height: 80px;
   width: 400px;
@@ -272,8 +332,8 @@ const Frame3 = styled.div`
   align-items: center;
   padding: 12px 16px;
   gap: 10px;
-  background-color: #FEBEB0;
-`
+  background-color: #febeb0;
+`;
 
 const CommtentSend = styled.div`
   border-radius: 20px;
@@ -287,7 +347,7 @@ const CommtentSend = styled.div`
   position: absolute;
   bottom: 0px;
   margin-bottom: 1.5rem;
-`
+`;
 const Input = styled.div`
   display: flex;
   flex-direction: column;
@@ -297,7 +357,7 @@ const Input = styled.div`
   gap: 10px;
   background-color: #ffffff;
   width: 455px;
-`
+`;
 const InputCon = styled.div`
   display: flex;
   width: 100%;
@@ -320,7 +380,7 @@ const InputCon = styled.div`
   & input {
     border: none;
     width: 70%;
-    height:50%;
+    height: 50%;
     background-color: transparent;
     font-size: 2rem;
     outline: none;
@@ -338,8 +398,4 @@ const InputCon = styled.div`
 //# Before pin clicked
 // const DogCard = styled.section``;
 
-
-
 export default Index;
-
-
