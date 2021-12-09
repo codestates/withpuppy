@@ -11,14 +11,20 @@ import {
   ImgContainer,
   MiniBtn,
   SelectBtn,
+  Address,
+  Icon,
+  Info,
 } from './WalkStyle';
 import { genPinIconType } from 'utils/genPinIconType';
+import DaumPostcode from 'react-daum-postcode';
 
-function Walk() {
+function Walk({ setIsWalkOpen }) {
   const [isOpen, setIsOpen] = useState(false);
   const openModalHandler = () => {
     setIsOpen(!isOpen);
-    console.log(isOpen);
+    if (isOpen === false) {
+      setIsWalkOpen(false);
+    }
   };
 
   const [popup, setPopup] = useState(false);
@@ -29,11 +35,36 @@ function Walk() {
   const [iconName, setIconName] = useState('');
   const iconNameHandler = (iconName) => {
     setIconName(iconName);
-    console.log(iconName);
   };
 
   const closeHandler = () => {
     setPopup(false);
+  };
+
+  const [searchopen, setSearchopen] = useState(false);
+  const searchopenHandler = () => {
+    setSearchopen(!searchopen);
+  };
+
+  const [address, setAddress] = useState('');
+
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+
+    // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    setAddress(fullAddress);
   };
 
   return (
@@ -42,15 +73,19 @@ function Walk() {
         <ModalContainer>
           <CloseIcon onClick={openModalHandler}>X</CloseIcon>
           <InputContainer>
-            <div className="input-location">
-              위치:
-              <Input placeholder="위치를 입력해주세요." />
-            </div>
-            <div className="kakao-nickname">닉네임: nickname - 끌어 오는거</div>
-            <div className="puppyName">강아지 이름: 멍멍이 - 끌어 오는거</div>
-            <SelectBtn onClick={openPopupHandler}>
-              사용할 아이콘을 선택해주세요.
+            <SelectBtn onClick={searchopenHandler}>
+              위치를 검색해주세요.
             </SelectBtn>
+            {searchopen === true ? (
+              <DaumPostcode onComplete={handleComplete} />
+            ) : null}
+            <Address>{address}</Address>
+            <Info>닉네임: nickname - 끌어 오는거</Info>
+            <Info>강아지 이름: 멍멍이 - 끌어 오는거</Info>
+            <SelectBtn onClick={openPopupHandler}>
+              아이콘을 선택해주세요.
+            </SelectBtn>
+            <Icon>당신의 선택은 {iconName}!</Icon>
             {popup === true ? (
               <MiniModalContainer>
                 <ImgContainer>

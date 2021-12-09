@@ -7,13 +7,64 @@ export const Btn = styled.button`
   border-radius: 50%;
   z-index: 800;
   position: absolute;
-  top: 70%;
-  bottom: 20%;
+  @media screen and (max-width: 900px) {
+    top: 50%;
+    bottom: 30%;
+  }
+  top: 80%;
+  bottom: 30%;
   left: 5%;
   box-shadow: 0 3rem 2rem -1rem hsl(100 40% 10% / 90%);
   border: none;
   cursor: pointer;
   color: white;
+`;
+
+export const SearchBar = styled.input`
+  width: 200px;
+  height: 40px;
+  background-color: white;
+  color: black;
+  border-radius: 4px;
+  border: none;
+  margin-right: 10px;
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const SearchBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  background-color: #e97676;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  color: white;
+`;
+
+export const SearchContainer = styled.form`
+  width: 270px;
+  height: 70px;
+  background-color: #febeb0;
+  margin: 10px;
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 1rem;
+  position: absolute;
+  @media screen and (max-width: 900px) {
+    top: 50%;
+    left: 60%;
+  }
+  @media screen and (max-width: 500px) {
+    top: 50%;
+    left: 40%;
+  }
+  top: 80%;
+  left: 55%;
+  outline-offset: -7px;
+  box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
+  border: none;
 `;
 
 export const MapMain = styled.main`
@@ -55,6 +106,7 @@ export const MapMain = styled.main`
 
 export const MapContainer = styled.div`
   min-height: 50rem;
+  position: relative;
 `;
 
 export const UserInfoContainer = styled.div`

@@ -5,10 +5,9 @@ import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
 import UserInfo from './UserInfo';
-import CustomOverlayMap from 'components/CustomOverlay/CustomOverlayMap';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
-import { Btn } from './MapStyle';
+import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import UserComment from './Reply';
 import { BaseIcon } from 'components/Icon';
 import Icon2 from '../../assets/img/icons/Icon.png';
@@ -20,38 +19,101 @@ function Index() {
   const { kakao } = window;
   const dispatch = useDispatch();
 
+  const [isWalkOpen, setIsWalkOpen] = useState(false);
+  const openWalkHandler = () => {
+    // console.log(isWalkOpen);
+    setIsWalkOpen(!isWalkOpen);
+  };
+
+  const [inputText, setInputText] = useState('');
+  const [place, setPlace] = useState('');
+
+  const onChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPlace(inputText);
+    setInputText('');
+    console.log(inputText);
+  };
+
+  const [coordinate, setCoordinate] = useState([]);
+
   useEffect(() => {
     const mapOptions = {
       center: new kakao.maps.LatLng(...SEOUL_COORDINATION),
       level: 7,
     };
 
+    //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
       dispatch(addMap(map));
+
+      const ps = new kakao.maps.services.Places();
+      ps.keywordSearch(place, placesSearchCB);
+
+      // 주소-좌표 변환 객체를 생성
+      const geocoder = new kakao.maps.services.Geocoder();
+      // const callback = function (result, status) {
+      //   if (status === kakao.maps.services.Status.OK) {
+      // console.log(result[0].x, result[0].y);
+      //     coordinate.push(result[0].x, result[0].y); (내가 추가한 문장)
+      //     console.log(coordinate);
+      //   }
+      // };
+
+      geocoder.addressSearch(place, placesSearchCB);
+
+      function placesSearchCB(data, status, pagination) {
+        if (status === kakao.maps.services.Status.OK) {
+          let bounds = new kakao.maps.LatLngBounds();
+
+          for (let i = 0; i < data.length; i++) {
+            displayMarker(data[i]);
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+            //x랑 y좌표 얻어지게끔?
+            coordinate.push([data[i].x, data[i].y]);
+          }
+
+          map.setBounds(bounds);
+          console.log(coordinate);
+        }
+      }
+
+      function displayMarker(place) {
+        let marker = new kakao.maps.Marker({
+          map: map,
+          position: new kakao.maps.LatLng(place.y, place.x),
+        });
+      }
     } catch (err) {
       console.log(err);
     }
 
     return () => {};
-  }, []);
-
-  const [isWalkOpen, setIsWalkOpen] = useState(false);
-  const openWalkHandler = () => {
-    setIsWalkOpen(!isWalkOpen);
-    console.log('isWalkOpen', isWalkOpen);
-  };
+  }, [place]);
 
   return (
     <>
       <MapHeader className="MapHeader" />
       <MapMain>
-        <MapContainer ref={mapRef} className="MapContainer">
-          {/* <CustomOverlayMap></CustomOverlayMap> */}
-          <Btn onClick={openWalkHandler} isWalkOpen={isWalkOpen}>
-            산책등록
-          </Btn>
-          {isWalkOpen === true ? <Walk></Walk> : null}
+        <MapContainer ref={mapRef} searchPlace={place} className="MapContainer">
+          <SearchContainer className="inputForm" onSubmit={handleSubmit}>
+            <SearchBar
+              placeholder="장소 검색"
+              onChange={onChange}
+              value={inputText}
+            ></SearchBar>
+            <SearchBtn type="submit">검색</SearchBtn>
+          </SearchContainer>
+          <Btn onClick={openWalkHandler}>산책등록</Btn>
+          {isWalkOpen === true ? (
+            <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
+          ) : null}
+          {/* <SearchBar type="text" placeholder="장소 검색"></SearchBar> */}
         </MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">

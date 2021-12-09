@@ -2,11 +2,16 @@ import styled from 'styled-components';
 
 export const ModalContainer = styled.div`
   width: 556px;
-  height: 383px;
+  height: 340px;
+  @media screen and (max-width: 500px) {
+    width: 480px;
+    height: 300px;
+    padding: 1rem;
+  }
   background-color: #ffffff;
   border-radius: 12px;
   z-index: 1000;
-  padding: 3rem;
+  padding: 1rem;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -19,7 +24,18 @@ export const ModalContainer = styled.div`
 `;
 
 export const InputContainer = styled.div`
-  margin: 30px;
+  margin: 10px;
+  padding: 2px;
+`;
+
+export const Info = styled.div`
+  font-size: 24px;
+  margin-left: 10px;
+  margin-bottom: 2px;
+  @media screen and (max-width: 500px) {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
 `;
 
 export const CloseIcon = styled.button`
@@ -37,7 +53,12 @@ export const CloseIcon = styled.button`
 
 export const EnrollBtn = styled.button`
   border-radius: 8px;
-  height: 64px;
+  @media screen and (max-width: 500px) {
+    width: 130px;
+    height: 40px;
+    font-size: 16px;
+  }
+  height: 60px;
   width: 200px;
   background-color: #e87676;
   border: none;
@@ -62,16 +83,29 @@ export const SelectBtn = styled.button`
   border-radius: 8px;
   height: 40px;
   width: 200px;
+  @media screen and (max-width: 500px) {
+    width: 150px;
+    height: 30px;
+    font-size: 16px;
+    margin: 5px;
+  }
   border: none;
   cursor: pointer;
   font-size: 16px;
   background-color: #3d5a5b;
   color: white;
+  margin: 10px;
 `;
 
 export const MiniModalContainer = styled.div`
   width: 556px;
   height: 200px;
+  @media screen and (max-width: 500px) {
+    width: 400px;
+    height: 180px;
+    font-size: 16px;
+    margin: 5px;
+  }
   background-color: #febeb0;
   margin: 10px;
   border-radius: 12px;
@@ -123,4 +157,21 @@ export const Modal = styled.button`
   box-shadow: 0 3rem 2rem -1rem hsl(100 40% 10% / 90%);
   border: none;
   cursor: pointer;
+`;
+
+export const Address = styled.div`
+  font-size: 16px;
+  @media screen and (max-width: 500px) {
+    font-size: 10px;
+  }
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+`;
+
+export const Icon = styled.span`
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
 `;
