@@ -1,7 +1,50 @@
+//! 댓글창 입니다
+
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { BaseIcon } from 'components/Icon';
-import Icon2 from "../../assets/img/icons/Icon.png";
+import Icon2 from "../../../assets/img/icons/Icon.png";
+import UserModal from './UserModal';
+import { ModalStyle } from './ModalStyle';
+
+
+//! 상태보내기로 모달 보내기 : prop
+
+
+function IModal() {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(prev => !prev);
+  };
+
+  return (
+    <>
+      <Container className="flex-center-C">
+        <Button onClick={openModal}>로그인</Button>
+        <ModalStyle showModal={showModal} setShowModal={setShowModal} />
+      </Container>
+    </>
+  );
+}
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+`;
+
+const Button = styled.button`
+  min-width: 100px;
+  padding: 16px 32px;
+  border-radius: 4px;
+  border: none;
+  background: #141414;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+`;
 
 const UserComment = () => {
     return (
@@ -9,7 +52,8 @@ const UserComment = () => {
       <CommentComponent>
         <Summary>
         <Chat1  >
-          <Frame2 >
+          <Frame2 onClick={IModal}>
+          
           <Text1>댓글 작성자</Text1>
           {/* <Text1>{commentUser}</Text1> */}
           <Text2>hihi</Text2>
@@ -37,72 +81,7 @@ const UserComment = () => {
  
           </Frame3>
         </Chat2 >
-        <Chat1  >
-          <Frame2 >
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>댓글 내용</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-          </Frame2>
-        </Chat1 ><Chat1  >
-          <Frame2 >
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>댓글 내용</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-          </Frame2>
-        </Chat1 ><Chat1  >
-          <Frame2 >
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>댓글 내용</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-          </Frame2>
-        </Chat1 ><Chat1  >
-          <Frame2 >
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>댓글 내용</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-          </Frame2>
-        </Chat1 ><Chat1  >
-          <Frame2 >
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>댓글 내용</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-          </Frame2>
-        </Chat1 >
+        
         <Chat2>
           <Frame3>
           <Text1>댓글 작성자</Text1>
@@ -131,6 +110,7 @@ const UserComment = () => {
           </InputCon>
           </Input>
           <BaseIcon
+          onClick={IModal}
           type="submit">
             <img src={Icon2} alt="" 
             />

@@ -3,15 +3,17 @@ import MapHeader from 'components/Header/Homeheader';
 import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
-import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
+import { faBlackTie, faUber } from '@fortawesome/free-brands-svg-icons';
 import UserInfo from './UserInfo';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import UserComment from './Reply';
+import UserComment from './COMMENT/Reply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import Icon2 from '../../assets/img/icons/Icon.png';
+import IModal from './COMMENT/Modal';
+import UserModal from './COMMENT/UserModal';
 // import makeMarker from './utils';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
@@ -202,6 +204,8 @@ function Index() {
     } catch (err) {
       console.log(err);
     }
+
+    
 
     return () => {};
   }, [place]);
