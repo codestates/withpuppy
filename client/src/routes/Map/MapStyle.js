@@ -12,8 +12,8 @@ export const Btn = styled.button`
     top: 50%;
     bottom: 30%;
   }
-  top: 80%;
-  bottom: 30%;
+  /* top: 80%; */
+  bottom: 3rem;
   left: 5%;
   box-shadow: 0 3rem 2rem -1rem hsl(100 40% 10% / 90%);
   border: none;
