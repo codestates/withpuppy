@@ -4,7 +4,6 @@ import Home from 'routes/Home';
 import Oauth from 'routes/Oauth';
 import Map from 'routes/Map';
 import Mypage from 'routes/Mypage';
-import axios from 'redux/Async/axios';
 
 function App() {
   return (

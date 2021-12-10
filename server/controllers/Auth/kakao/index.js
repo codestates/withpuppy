@@ -32,7 +32,15 @@ module.exports = {
       let puppy = await user.getPuppy();
 
       if (!puppy) {
-        const createDefaultPuppy = await Puppy.create({});
+        const createDefaultPuppy = await Puppy.create({
+          puppyName: "wang",
+          age: 1,
+          gender: "female",
+          breed: "푸들",
+          introduction: "왕왕!",
+          puppyProfile:
+            "https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg",
+        });
 
         await user.setPuppy(createDefaultPuppy);
         puppy = await user.getPuppy();
@@ -49,10 +57,11 @@ module.exports = {
       res.cookie("accessToken", accessToken, { httpOnly: true });
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       res.status(200).json({
+        id: user.dataValues.id,
         social,
         email: kakao_account.email,
         nickname: kakao_account.profile.nickname,
-        thumbImg: kakao_account.profile.thumbnail_image_url,
+        thumbImg: user.dataValues.thumbImg,
         profileImg: kakao_account.profile.profile_image_url,
         phone: user.dataValues.phone,
         puppy,
