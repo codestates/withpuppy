@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { createGlobalStyle } from 'styled-components';
 
 export const Btn = styled.button`
   width: 80px;
