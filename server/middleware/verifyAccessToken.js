@@ -1,7 +1,7 @@
 const { genAccess, verifyAccess, verifyRefresh } = require("../controllers/utils/token");
 const { User } = require("../models");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     //1. if access token valid
     const accessToken = req.cookies.accessToken;
@@ -12,18 +12,18 @@ module.exports = (req, res, next) => {
       const { email } = verifyAccess(accessToken);
 
       //if no user
-      const user = User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ message: "no user" });
 
       //else
-      //req.accessToken = accessToken;
+      // req.userId = user.id;
       next();
     } else if (verifyRefresh(refreshToken)) {
       //! 엑세스 토큰이 만료되었으나 리프레시 토큰이 만료되지 않았으면
       const { email } = verifyRefresh(refreshToken);
 
       //if no user
-      const user = User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ message: "no user" });
 
       //else
@@ -31,7 +31,8 @@ module.exports = (req, res, next) => {
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
       });
-      // req.accessToken = newAccessToken;
+
+      // req.userId = user.id;
       next();
     } else {
       //! 리프레시 토큰마저 만료되었을 때

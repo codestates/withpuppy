@@ -10,7 +10,15 @@ export const userSlice = createSlice({
     loginState: false,
     userData: {},
   },
-  reducers: {},
+  reducers: {
+    changeProfile: (state, { payload: { type, newUrl } }) => {
+      if (type === 'user') {
+        state.userData.thumbImg = newUrl;
+      } else if (type === 'puppy') {
+        state.userData.puppy.puppyProfile = newUrl;
+      }
+    },
+  },
   extraReducers: (builder) => {
     afterKakoSignIn(builder);
     afterGoogleSignIn(builder);
@@ -19,5 +27,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { changeProfile } = userSlice.actions;
 export default userSlice.reducer;

@@ -21,7 +21,7 @@ function Kakao() {
         rejected.status === 500
       ) {
         setTimeout(() => {
-          navigate('/oauth/rejectPage');
+          navigate('/oauth/rejectPage', { state: { type: 'googleReject' } });
         }, 1000);
       }
     }

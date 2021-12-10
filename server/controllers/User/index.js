@@ -41,4 +41,9 @@ module.exports = {
       return res.status(500).json({ message: "cannot delete user from database" });
     }
   },
+  editUserProfile: async (req, res) => {
+    const targetData = req.file.transforms.find((transform) => transform.id === "resized");
+    await User.update({ thumbImg: targetData.location }, { where: { id: req.body.userId } });
+    res.status(200).json(targetData.location);
+  },
 };

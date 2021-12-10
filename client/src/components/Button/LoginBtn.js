@@ -63,22 +63,6 @@ export const LoginBtn = styled(BaseBtn)`
       `}
   }
 
-  /* &:before {
-    top: -4rem;
-    right: 2.5rem;
-    border-width: 15px 5px 0px 5px;
-    border-style: solid;
-    border-color: ${({ theme }) => theme.colors.thirdColor} transparent
-      transparent;
-
-    transform: translateY(20px);
-
-    @media screen and (max-width: 950px) {
-      right: 1rem;
-      top: -3rem;
-    }
-  } */
-
   &:after {
     content: '${({ status }) => status === 'reject' && '칸을 다 채워주세요!'}';
     background-color: ${({ theme }) => theme.colors.thirdColor};
