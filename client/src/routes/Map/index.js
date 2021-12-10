@@ -10,7 +10,9 @@ import styled from 'styled-components';
 import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import UserComment from './Reply';
 import { BaseIcon } from 'components/Icon';
+import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import Icon2 from '../../assets/img/icons/Icon.png';
+// import makeMarker from './utils';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
@@ -39,6 +41,8 @@ function Index() {
     console.log(inputText);
   };
 
+  const [isMarkerSelected, setIsMarkerSelected] = useState(false);
+
   const [coordinate, setCoordinate] = useState([]);
 
   useEffect(() => {
@@ -50,6 +54,7 @@ function Index() {
     //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
+
       dispatch(addMap(map));
 
       const ps = new kakao.maps.services.Places();
@@ -87,7 +92,13 @@ function Index() {
         let marker = new kakao.maps.Marker({
           map: map,
           position: new kakao.maps.LatLng(place.y, place.x),
+          clickable: true,
         });
+
+        kakao.maps.event.addListener(marker, 'click', () => {
+          setIsMarkerSelected(true);
+        });
+        marker.setMap(map);
       }
     } catch (err) {
       console.log(err);
@@ -115,16 +126,28 @@ function Index() {
           ) : null}
           {/* <SearchBar type="text" placeholder="장소 검색"></SearchBar> */}
         </MapContainer>
-        <UserInfoContainer className="UserInfoContainer">
-          <UserCard className="UserCard">
-            <UserInfo
-              puppyName="강아지 이름 테스트 입니다"
-              userName="사람 이름 테스트 입니다"
-              puppyAge={7}
-              introduceTo="소개글 테스트 입니다"
-            ></UserInfo>
-            <UserComment className="flex-center-C Reply"></UserComment>
-          </UserCard>
+        <UserInfoContainer>
+          <UserContainer>
+            {isMarkerSelected ? (
+              <UserCard>
+                <UserInfo
+                  puppyName="강아지 이름 테스트 입니다"
+                  userName="사람 이름 테스트 입니다"
+                  puppyAge={7}
+                  introduceTo="소개글 테스트 입니다"
+                ></UserInfo>
+                <UserComment className="flex-center-C Reply"></UserComment>
+              </UserCard>
+            ) : (
+              <div
+                className="titleContent"
+                style={{ textAlign: 'center', paddingTop: '80%' }}
+              >
+                <Title>핀을 클릭해서 친구들을 만나보세요</Title>
+                <MainImg src={petchingPuppyImg}></MainImg>
+              </div>
+            )}
+          </UserContainer>
         </UserInfoContainer>
       </MapMain>
     </>
@@ -170,13 +193,46 @@ const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
 `;
 
+const UserContainer = styled.div`
+  /* @media screen and (max-width: px) {
+  } */
+  align-items: center;
+  width: 30%;
+  height: 100%;
+  background: #febeb0;
+  position: absolute;
+  top: 10;
+  right: 0;
+  z-index: 100;
+  /* display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr; */
+`;
+
+const Title = styled.div`
+  color: #f7f1ed;
+  font-size: 30px;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 20%;
+  bottom: 3rem; */
+`;
+
+const MainImg = styled.img`
+  width: 230px;
+  height: 230px;
+
+  /* FIXME: 수평 가운데 맞추기 */
+`;
+
 //# When pin clicked
 const UserCard = styled.section`
   display: flex;
   flex-direction: column;
+
+  position: fixed;
   height: 100%;
   min-height: 50rem;
-  padding: 1.3rem;
   background-color: white;
 
   & .UserInfo {
@@ -185,7 +241,6 @@ const UserCard = styled.section`
   }
 
   & .Reply {
-    background-color: red;
     flex: 0.8;
   }
 
@@ -199,8 +254,5 @@ const UserCard = styled.section`
     }
   }
 `;
-
-//# Before pin clicked
-// const DogCard = styled.section``;
 
 export default Index;
