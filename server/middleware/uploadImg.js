@@ -1,5 +1,6 @@
 const multer = require("multer");
-const multerS3 = require("multer-s3");
+const multerS3 = require("multer-s3-transform");
+const sharp = require("sharp");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -15,35 +16,38 @@ const storage = multerS3({
   bucket: process.env.MULTER_S3_URL,
   contentType: multerS3.AUTO_CONTENT_TYPE,
   acl: "public-read-write",
-  // metadata: function (req, file, cb) {
-  //   console.log(req.body);
-  //   cb(null, Object.assign({}, req.body));
-  // },
-  key: function (req, file, cb) {
-    const { puppyId, userId } = req.body;
+  shouldTransform: true,
+  transforms: [
+    {
+      id: "resized",
+      key: function (req, file, cb) {
+        const { puppyId, userId } = req.body;
 
-    if (puppyId) {
-      s3.deleteObject(
-        { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/puppyId=${puppyId}` },
-        (err, data) => {
-          console.log(err, data);
-          if (!err) {
-            cb(null, `profileImg/puppyId=${puppyId}`);
-          }
+        if (puppyId) {
+          s3.deleteObject(
+            { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/puppyId=${puppyId}` },
+            (err, data) => {
+              if (!err) {
+                cb(null, `profileImg/puppyId=${puppyId}`);
+              }
+            }
+          );
+        } else if (userId) {
+          s3.deleteObject(
+            { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/userId=${userId}` },
+            (err, data) => {
+              if (!err) {
+                cb(null, `profileImg/userId=${userId}`);
+              }
+            }
+          );
         }
-      );
-    } else if (userId) {
-      s3.deleteObject(
-        { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/userId=${userId}` },
-        (err, data) => {
-          console.log(err, data);
-          if (!err) {
-            cb(null, `profileImg/puppyId=${userId}`);
-          }
-        }
-      );
-    }
-  },
+      },
+      transform: function (req, file, cb) {
+        cb(null, sharp().resize(110, 110).jpeg());
+      },
+    },
+  ],
 });
 
 module.exports = multer({ storage });

@@ -19,7 +19,15 @@ module.exports = {
         let puppy = await user.getPuppy();
 
         if (!puppy) {
-          const createDefaultPuppy = await Puppy.create({});
+          const createDefaultPuppy = await Puppy.create({
+            puppyName: "wang",
+            age: 1,
+            gender: "female",
+            breed: "푸들",
+            introduction: "왕왕!",
+            puppyProfile:
+              "https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg",
+          });
 
           await user.setPuppy(createDefaultPuppy);
           puppy = await user.getPuppy();
@@ -39,7 +47,7 @@ module.exports = {
           httpOnly: true,
         });
 
-        delete user.dataValues.id;
+        // delete user.dataValues.id;
         delete user.dataValues.password;
         delete user.dataValues.createdAt;
         delete user.dataValues.updatedAt;
@@ -70,7 +78,13 @@ module.exports = {
       if (err) return res.status(500).json({ message: "password hashing failed" });
 
       try {
-        await User.create({ nickname, email, password: hashedPassword });
+        await User.create({
+          nickname,
+          email,
+          password: hashedPassword,
+          thumbImg:
+            "https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/defaultImg.jpeg",
+        });
         const accessToken = genAccess({
           email,
         });

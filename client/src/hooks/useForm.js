@@ -18,7 +18,6 @@ function useForm({ initialValues }) {
     status: 'ready',
     result: {},
   });
-  console.log(submitState);
 
   const debounceMomo = useMemo(() => debounce(900), []);
 
