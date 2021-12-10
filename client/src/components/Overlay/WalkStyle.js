@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 export const ModalContainer = styled.div`
   width: 556px;
@@ -8,7 +9,7 @@ export const ModalContainer = styled.div`
     height: 300px;
     padding: 1rem;
   }
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.white};
   border-radius: 12px;
   z-index: 1000;
   padding: 1rem;
@@ -31,7 +32,8 @@ export const InputContainer = styled.div`
 export const Info = styled.div`
   font-size: 24px;
   margin-left: 10px;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
+  margin-top: 5px;
   @media screen and (max-width: 500px) {
     font-size: 20px;
     margin-bottom: 5px;
@@ -58,15 +60,15 @@ export const EnrollBtn = styled.button`
     height: 40px;
     font-size: 16px;
   }
-  height: 60px;
-  width: 200px;
+  height: 45px;
+  width: 180px;
   background-color: #e87676;
   border: none;
   vertical-align: top;
-  font-size: 30px;
+  font-size: 24px;
   font-family: 'Jua';
   line-height: auto;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
 `;
 
@@ -85,16 +87,16 @@ export const SelectBtn = styled.button`
   width: 200px;
   @media screen and (max-width: 500px) {
     width: 150px;
-    height: 30px;
-    font-size: 16px;
-    margin: 5px;
+    height: 34px;
+    font-size: 14px;
+    margin: 10px 10px 5px 10px;
   }
   border: none;
   cursor: pointer;
   font-size: 16px;
   background-color: #3d5a5b;
   color: white;
-  margin: 10px;
+  margin: 10px 10px 6px 10px;
 `;
 
 export const MiniModalContainer = styled.div`
@@ -139,7 +141,7 @@ export const SaveBtn = styled.button`
   font-size: 16px;
   font-family: 'Jua';
   line-height: auto;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
   float: right;
 `;
@@ -174,4 +176,17 @@ export const Icon = styled.span`
   margin-bottom: 10px;
   margin-top: 10px;
   margin-left: 10px;
+`;
+
+export const ExtendOptions = styled.select`
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.grayTwo};
+  margin-left: 5px;
+  margin-right: 5px;
+  border: none;
+  &:focus {
+    outline: none;
+  }
 `;

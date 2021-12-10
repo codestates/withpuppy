@@ -4,7 +4,6 @@ import {
   ModalContainer,
   CloseIcon,
   InputContainer,
-  Input,
   EnrollBtn,
   MiniModalContainer,
   SaveBtn,
@@ -14,6 +13,7 @@ import {
   Address,
   Icon,
   Info,
+  ExtendOptions,
 } from './WalkStyle';
 import { genPinIconType } from 'utils/genPinIconType';
 import DaumPostcode from 'react-daum-postcode';
@@ -47,6 +47,11 @@ function Walk({ setIsWalkOpen }) {
   };
 
   const [address, setAddress] = useState('');
+
+  const [extend, setExtend] = useState(0);
+  const extendHandler = (e) => {
+    setExtend(e.target.value);
+  };
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -112,6 +117,19 @@ function Walk({ setIsWalkOpen }) {
                 <SaveBtn onClick={closeHandler}>저장</SaveBtn>
               </MiniModalContainer>
             ) : null}
+            <Info>
+              연장 기간을
+              <ExtendOptions onChange={extendHandler} value={extend}>
+                <option value="choose" disabled>
+                  --기간을 선택해주세요!--
+                </option>
+                <option value="0">연장 없음</option>
+                <option value="1">하루 연장</option>
+                <option value="3">3일 연장</option>
+                <option value="7">일주일 연장</option>
+              </ExtendOptions>
+              <span>{extend}일 연장 합니다!</span>
+            </Info>
           </InputContainer>
           <div className="flex-center-C">
             <EnrollBtn onClick={openModalHandler}>등록하기</EnrollBtn>

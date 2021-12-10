@@ -21,7 +21,6 @@ function Index() {
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const openWalkHandler = () => {
-    // console.log(isWalkOpen);
     setIsWalkOpen(!isWalkOpen);
   };
 
@@ -57,24 +56,118 @@ function Index() {
 
       // 주소-좌표 변환 객체를 생성
       const geocoder = new kakao.maps.services.Geocoder();
-      // const callback = function (result, status) {
-      //   if (status === kakao.maps.services.Status.OK) {
-      // console.log(result[0].x, result[0].y);
-      //     coordinate.push(result[0].x, result[0].y); (내가 추가한 문장)
-      //     console.log(coordinate);
-      //   }
-      // };
 
       geocoder.addressSearch(place, placesSearchCB);
+
+      let iwContent = document.createElement('div');
+      iwContent.style.width = '282px';
+      iwContent.style.height = '187px';
+      iwContent.style.padding = '1rem';
+
+      let iwContainer = document.createElement('div');
+      iwContainer.style.display = 'flex';
+
+      let imgSpan = document.createElement('span');
+      imgSpan.style.marginRight = '5px';
+      let sectionSpan1 = document.createElement('span');
+      sectionSpan1.style.marginRight = '5px';
+      let sectionSpan2 = document.createElement('span');
+      sectionSpan2.style.marginRight = '5px';
+
+      let profileImg = document.createElement('img');
+      profileImg.src =
+        'https://t1.daumcdn.net/cfile/tistory/21221F4258E793521D';
+      profileImg.style.width = '79px';
+      profileImg.style.height = '112px';
+
+      let ownerName = document.createElement('div');
+      ownerName.textContent = `보호자 이름`;
+      ownerName.style.fontFamily = 'Jua';
+      ownerName.style.fontSize = '14px';
+      ownerName.style.marginBottom = '0.5em';
+      ownerName.style.marginRight = '2em';
+
+      let puppyName = document.createElement('div');
+      puppyName.textContent = `강아지 이름`;
+      puppyName.style.fontFamily = 'Jua';
+      puppyName.style.fontSize = '14px';
+      puppyName.style.marginBottom = '0.5em';
+      puppyName.style.marginRight = '2em';
+
+      let puppyInfo = document.createElement('div');
+      puppyInfo.textContent = `소개글`;
+      puppyInfo.style.fontFamily = 'Jua';
+      puppyInfo.style.fontSize = '14px';
+      puppyInfo.style.marginBottom = '0.5em';
+      puppyInfo.style.marginRight = '2em';
+
+      let breed = document.createElement('div');
+      breed.textContent = `견종`;
+      breed.style.fontFamily = 'Jua';
+      breed.style.fontSize = '14px';
+      breed.style.marginBottom = '0.5em';
+      breed.style.marginRight = '2em';
+
+      let age = document.createElement('div');
+      age.textContent = `나이`;
+      age.style.fontFamily = 'Jua';
+      age.style.fontSize = '14px';
+      age.style.marginBottom = '0.5em';
+      age.style.marginRight = '2em';
+
+      let gender = document.createElement('div');
+      gender.textContent = `성별`;
+      gender.style.fontFamily = 'Jua';
+      gender.style.fontSize = '14px';
+      gender.style.marginBottom = '0.5em';
+      gender.style.marginRight = '2em';
+
+      let btn = document.createElement('button');
+      btn.textContent = `상대에게 연락하기`;
+      btn.style.backgroundColor = '#e97676';
+      btn.style.width = '250px';
+      btn.style.height = '44px';
+      btn.style.borderRadius = '8px';
+      btn.style.border = 'none';
+      btn.style.fontSize = '14px';
+      btn.style.color = 'white';
+      btn.style.fontFamily = 'Jua';
+      btn.style.cursor = 'pointer';
+      const event_handler = function () {
+        console.log(btn.textContent);
+      };
+      btn.addEventListener('click', event_handler);
+
+      let fakebtn = document.createElement('button');
+      fakebtn.textContent = `로그인해서 상대의 정보를 확인해보세요!`;
+      fakebtn.style.backgroundColor = '#e97676';
+      fakebtn.style.width = '250px';
+      fakebtn.style.height = '44px';
+      fakebtn.style.borderRadius = '8px';
+      fakebtn.style.border = 'none';
+      fakebtn.style.fontSize = '14px';
+      fakebtn.style.color = 'white';
+      fakebtn.style.fontFamily = 'Jua';
+
+      iwContent.append(iwContainer, btn);
+      iwContainer.append(imgSpan, sectionSpan1, sectionSpan2);
+      imgSpan.append(profileImg);
+      sectionSpan1.append(ownerName, puppyName, breed, puppyInfo);
+      sectionSpan2.append(age, gender);
+
+      const infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+        removable: true,
+      });
 
       function placesSearchCB(data, status, pagination) {
         if (status === kakao.maps.services.Status.OK) {
           let bounds = new kakao.maps.LatLngBounds();
+          // setCoordinate([]);
 
           for (let i = 0; i < data.length; i++) {
-            displayMarker(data[i]);
+            displayMarkerandOverlay(data[i]);
             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-            //x랑 y좌표 얻어지게끔?
             coordinate.push([data[i].x, data[i].y]);
           }
 
@@ -83,10 +176,18 @@ function Index() {
         }
       }
 
-      function displayMarker(place) {
+      function displayMarkerandOverlay(place) {
+        const position = new kakao.maps.LatLng(place.y, place.x);
         let marker = new kakao.maps.Marker({
           map: map,
-          position: new kakao.maps.LatLng(place.y, place.x),
+          position: position,
+          clickable: true,
+        });
+
+        // 마커에 클릭이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, 'click', function () {
+          // 마커 위에 인포윈도우를 표시합니다
+          infowindow.open(map, marker);
         });
       }
     } catch (err) {
