@@ -35,21 +35,23 @@ const move = keyframes`
 
 const AboutSection = styled.section`
   width: 100%;
+  padding-left: 10px;
+  background-color: yellowgreen;
 `;
 
 const Main = styled.div`
   margin: 15rem;
   align-items: center;
-  
+  background-color: yellow;
 `;
 
 const Title = styled.h1`
-  font-size: calc(2rem + 1vw);
+  font-size: 100%;
   line-height: 1.5;
   padding: 1rem 0;
   color: white;
   width: 60%;
-
+  background-color: silver;
 `;
 
 const Rectangle6 = styled.div`
@@ -71,9 +73,7 @@ const Content = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media only Screen and (max-width: 1200px) {
-    flex-direction: column;
-  }
+  width: 150rem;
 `;
 
 const Rocket = styled.div`
@@ -82,15 +82,13 @@ const Rocket = styled.div`
   padding-bottom: 5rem;
   margin-right: 10rem;
   animation: ${move} 2.5s ease infinite;
-  
+  background-color: tomato;
+
   & img {
    width: 100%;
    min-width: 200px;
   }
-  @media only Screen and (max-width: 1200px) {
-    width: 50vw;
-    padding-bottom: 0;
-  }
+
 `;
 const SubText = styled.h5`
   font-size: 20px;
@@ -106,9 +104,7 @@ const AboutText = styled.div`
   width: 50%;
   position: relative;
   margin-bottom: 100px;
-  @media only Screen and (max-width: 40em) {
-    width: 100%;
-  }
+
 `;
 
 export default Contact;

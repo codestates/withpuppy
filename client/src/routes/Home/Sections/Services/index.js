@@ -1,12 +1,13 @@
 import styled, { keyframes } from 'styled-components';
 import Lan3 from 'assets/LandingPage/랜딩3.png';
 import PuppyLogo from 'assets/img/logo/puppyLogo.png';
+import { BaseBtn } from 'components/Button';
 
 const Services = () => {
   return (
-    <AboutSection >
+    <AboutSection className="flex-center-C" >
       <Main>
-        <>
+       
           <Logo>
             <img src={PuppyLogo} />
           </Logo>
@@ -24,7 +25,7 @@ const Services = () => {
               <Text>페칭하러 가기</Text>
             </Rectangle28>
           </Group2>
-        </>
+
       </Main>
     </AboutSection>
   );
@@ -36,8 +37,8 @@ const Logo = styled.div`
   font-size: calc(2rem + 1vw);
   line-height: 1.5;
   padding: 1rem 0;
-  margin-left: 8rem;
-  margin-top: 55rem;
+  margin-bottom: 3rem;
+  margin-top: 10rem;
   color: white;
   width: 100%;
 `;
@@ -49,17 +50,12 @@ const move = keyframes`
 `;
 
 const AboutSection = styled.section`
-
-
-
-
-  justify-content: center;
-
-
+  text-align: center; 
+  justify-content: center;  
+  margin-bottom: 3rem;
 `;
 
 const Main = styled.div`
-
   display: inline;
 
 `;
@@ -68,7 +64,7 @@ const Title = styled.h1`
   font-size: calc(2rem + 1vw);
   line-height: 1.5;
   padding: 1rem 0;
-
+  margin-bottom: 3rem;
   color: white;
   width: 100%;
   font-family: 'Jua';
@@ -76,27 +72,31 @@ const Title = styled.h1`
 
 const Rocket = styled.div`
   align-items: center;
-
   animation: ${move} 2.5s ease infinite;
+  margin-bottom: 10rem;
+
   @media only Screen and (max-width: 40em) {
     width: 50vw;
     padding-bottom: 0;
   }
 `;
 
-// const Group2: React.VFC = () => {
-//     return (
-//       <Group2>
-//         <Rectangle28 />
-//         <Text>페칭하러 가기</Text>
-//       </Group2>
-//     )
-//   }
-
-const Group2 = styled.div`
-  height: 100%;
-  width: 100%;
+const Group2 = styled(BaseBtn)`
+  /* height: 100%;
+  width: 100%; */
   margin-bottom: 5rem;
+  text-align: center; 
+  justify-content: center;
+  margin-bottom: 5rem;
+  border-radius: 30px;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    background-color: #e87676;
+  }
+
+  &:active {
+    transform: translateY(2px);
+  }
 `;
 const Rectangle28 = styled.div`
   border-radius: 12px;
@@ -104,16 +104,17 @@ const Rectangle28 = styled.div`
   width: 590px;
   text-align: center;
   justify-content: center;
-  background-color: #e87676;
   line-height: 100px;
-
+  text-align: center; 
+  justify-content: center;
 `;
 const Text = styled.div`
   text-align: center;
   vertical-align: top;
-  font-size: 4rem;
+  font-size: 3rem;
   user-select: none;
-
+  text-align: center; 
+  justify-content: center;
   color: ${({ theme }) => theme.colors.white};
 `;
 

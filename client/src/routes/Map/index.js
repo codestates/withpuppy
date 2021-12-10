@@ -3,14 +3,16 @@ import MapHeader from 'components/Header/Homeheader';
 import { useDispatch } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
-import { faBlackTie } from '@fortawesome/free-brands-svg-icons';
+import { faBlackTie, faUber } from '@fortawesome/free-brands-svg-icons';
 import UserInfo from './UserInfo';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import UserComment from './Reply';
+import UserComment from './COMMENT/Reply';
 import { BaseIcon } from 'components/Icon';
 import Icon2 from '../../assets/img/icons/Icon.png';
+import IModal from './COMMENT/Modal';
+import UserModal from './COMMENT/UserModal';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
@@ -93,6 +95,8 @@ function Index() {
       console.log(err);
     }
 
+    
+
     return () => {};
   }, [place]);
 
@@ -115,6 +119,7 @@ function Index() {
           ) : null}
           {/* <SearchBar type="text" placeholder="장소 검색"></SearchBar> */}
         </MapContainer>
+  
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
             <UserInfo
@@ -122,8 +127,13 @@ function Index() {
               userName="사람 이름 테스트 입니다"
               puppyAge={7}
               introduceTo="소개글 테스트 입니다"
-            ></UserInfo>
-            <UserComment className="flex-center-C Reply"></UserComment>
+            ></UserInfo>            
+           <IModal />
+           <UserModal />
+            <UserComment className="flex-center-C Reply">
+           
+            </UserComment>
+
           </UserCard>
         </UserInfoContainer>
       </MapMain>

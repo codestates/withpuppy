@@ -17,7 +17,9 @@ export default function Index() {
 
   return (
     <StarBox>
-      <LikeBtn onClick={Toggle}>⭐️ {counter}</LikeBtn>
+      <LikeBtn 
+      className="flex-center-R"
+      onClick={Toggle}>⭐️ {counter}</LikeBtn>
     </StarBox>
   );
 }
@@ -42,4 +44,9 @@ const LikeBtn = styled.button`
   transform: translate(-50%, -50%);
   border-radius: 10px;
   box-shadow: 2px 4px 20px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
