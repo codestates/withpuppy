@@ -1,3 +1,7 @@
+import 보브 from '../../assets/img/icons/보브.png';
+import 유나 from '../../assets/img/icons/유나.png';
+import 이코 from '../../assets/img/icons/이코.png';
+import 카덴 from '../../assets/img/icons/카덴.png';
 import React, { useRef, useEffect, useState } from 'react';
 import MapHeader from 'components/Header/Homeheader';
 import { useDispatch } from 'react-redux';
@@ -14,6 +18,7 @@ import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import Icon2 from '../../assets/img/icons/Icon.png';
 import IModal from './COMMENT/Modal';
 import UserModal from './COMMENT/UserModal';
+import { Row } from 'components/Footer/FooterStyle';
 // import makeMarker from './utils';
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
@@ -29,7 +34,6 @@ function Index() {
   const openWalkHandler = () => {
     setIsWalkOpen(!isWalkOpen);
   };
-
   const [inputText, setInputText] = useState('');
   const [place, setPlace] = useState('');
 
@@ -85,24 +89,39 @@ function Index() {
         }
       }
 
+      const imageCandidates = [보브, 이코, 유나, 카덴];
+      const imageSrc =
+        imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
+        imageSize = new kakao.maps.Size(40, 40),
+        imageOption = { offset: new kakao.maps.Point(22, 69) };
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption,
+      );
+
       function displayMarkerandOverlay(place) {
         const position = new kakao.maps.LatLng(place.y, place.x);
         let marker = new kakao.maps.Marker({
           map: map,
           position: position,
+          image: markerImage,
           clickable: true,
         });
 
         let wrapper = document.createElement('div');
         wrapper.innerHTML = customOverlay;
         // console.log(wrapper.firstChild);
+        
         let closeBtn = wrapper.firstChild.querySelector('.close-button');
         // let doc = new DOMParser().parseFromString(customOverlay, 'text/html');
         // let closeBtn = doc.getElementsByClassName('close-button')[0];
+       
         closeBtn.addEventListener('click', function () {
           console.log('hello world');
           overlay.setMap(null);
         });
+        
         let contactBtn = wrapper.firstChild.querySelector('.contact-btn');
         contactBtn.addEventListener('click', function () {
           console.log('you clicked this!');
@@ -118,9 +137,7 @@ function Index() {
 
         // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function () {
-          // 마커 클릭시, 유저 인포 화면 전환
           setIsMarkerSelected(true);
-          // 마커 위에 인포윈도우를 표시합니다
           overlay.setMap(map);
         });
 
@@ -134,7 +151,6 @@ function Index() {
     } catch (err) {
       console.log(err);
     }
-
     return () => {};
   }, [place]);
 
@@ -156,29 +172,25 @@ function Index() {
             <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
           ) : null}
         </MapContainer>
-        <UserInfoContainer>
-          <UserContainer>
-            {isMarkerSelected ? (
-              <UserCard>
-                <UserInfo
-                  puppyName="강아지 이름 테스트 입니다"
-                  userName="사람 이름 테스트 입니다"
-                  puppyAge={7}
-                  introduceTo="소개글 테스트 입니다"
-                ></UserInfo>
-                <UserComment className="flex-center-C Reply"></UserComment>
-              </UserCard>
-            ) : (
-              <div
-                className="titleContent"
-                style={{ textAlign: 'center', paddingTop: '80%' }}
-              >
-                <Title>핀을 클릭해서 친구들을 만나보세요</Title>
-                <MainImg src={petchingPuppyImg}></MainImg>
-              </div>
-            )}
-          </UserContainer>
-        </UserInfoContainer>
+        <UserContainer>
+          {isMarkerSelected ? (
+            <UserCard>
+              <UserInfo
+                puppyName="강아지 이름 테스트 입니다"
+                userName="사람 이름 테스트 입니다"
+                puppyAge={7}
+                introduceTo="소개글 테스트 입니다"
+              ></UserInfo>
+              <UserComment className="flex-center-C Reply"></UserComment>
+            </UserCard>
+          ) : (
+            <ContentTitle>
+              <MainText>핀을 클릭해서 친구들을 만나보세요
+              </MainText>
+              <MainImg src={petchingPuppyImg} />
+            </ContentTitle>
+          )}
+        </UserContainer>
       </MapMain>
     </>
   );
@@ -189,9 +201,6 @@ const MapMain = styled.main`
   & .MapContainer {
     flex: 0.65;
   }
-  & .UserInfoContainer {
-    flex: 0.35;
-  }
 
   @media screen and (max-width: 900px) {
     flex-direction: column;
@@ -200,71 +209,57 @@ const MapMain = styled.main`
       min-height: 20rem;
       max-height: 35rem;
     }
-    & .UserInfoContainer {
-      flex: 1;
-    }
   }
   @media screen and (min-width: 1400px) {
     & .MapContainer {
       flex: 0.75;
     }
-    & .UserInfoContainer {
-      flex: 0.25;
-    }
   }
 `;
-
 const MapContainer = styled.div`
   min-height: 50rem;
   position: relative;
 `;
-
-const UserInfoContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondColor};
-`;
-
 const UserContainer = styled.div`
-  /* @media screen and (max-width: px) {
-  } */
-  align-items: center;
-  width: 30%;
-  height: 100%;
-  background: #febeb0;
+  z-index: 4;
   position: absolute;
-  top: 10;
+  padding: 0;
+  margin: 0;
   right: 0;
-  z-index: 100;
-  /* display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr; */
+  width: 35%;
+  @media screen and (max-width: 850px) {
+    display: none;
+  }
+  @media screen and (min-width: 1400px) {
+    width: 25%;
+  }
 `;
 
-const Title = styled.div`
-  color: #f7f1ed;
-  font-size: 30px;
-  justify-content: center;
-  align-items: center;
-  /* margin-top: 20%;
-  bottom: 3rem; */
+const ContentTitle = styled.div`
+text-align: center;
+ padding-top: 75%; 
+ padding-bottom: 25%;
+`
+
+const MainText = styled.div`
+  font-size: 2.3rem;
+  color:white;
 `;
 
 const MainImg = styled.img`
-  width: 230px;
-  height: 230px;
-
-  /* FIXME: 수평 가운데 맞추기 */
+width: 70%;
+height: 70%;
 `;
 
-//# When pin clicked
 const UserCard = styled.section`
-  display: flex;
-  flex-direction: column;
-
-  position: fixed;
-  height: 100%;
-  min-height: 50rem;
+  display: flex
+  flex-direction: row;
+  position: absolute;
+  padding-left: 3%;
+  height: calc(100vh - 7rem);
+  width: 100%;
   background-color: white;
-
+  
   & .UserInfo {
     background-color: white;
     flex: 0.2;
@@ -284,5 +279,4 @@ const UserCard = styled.section`
     }
   }
 `;
-
 export default Index;
