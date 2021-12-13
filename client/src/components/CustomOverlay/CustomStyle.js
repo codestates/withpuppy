@@ -1,21 +1,16 @@
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 export const ModalContainer = styled.div`
   width: 282px;
   height: 187px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.white};
   border-radius: 12px;
   z-index: 100;
   padding: 1rem;
   position: fixed;
-  /* top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  animation: ${({ theme }) => theme.animation.showDown} 0.5s forwards;
-  outline-offset: -7px; */
   box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
-  border: 0.05px solid #2f365f;
+  border: 0.05px solid ${({ theme }) => theme.colors.pointColor2};
 `;
 
 export const ModalContent = styled.div`
@@ -40,7 +35,7 @@ export const Info = styled.div`
 export const ReqBtn = styled.button`
   width: 250px;
   height: 44px;
-  background-color: #3d5a5b;
+  background-color: ${({ theme }) => theme.colors.pointColor1};
   border-radius: 8px;
   font-size: 14px;
   border: none;
@@ -52,7 +47,7 @@ export const ReqBtn = styled.button`
 export const ContactBtn = styled.button`
   width: 250px;
   height: 44px;
-  background-color: #e97676;
+  background-color: ${({ theme }) => theme.colors.thirdColor};
   border-radius: 8px;
   font-size: 14px;
   border: none;

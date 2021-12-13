@@ -154,7 +154,7 @@ const UserComment = () => {
 // 스크롤바 영역 구하기
   const Summary = styled.div`
   overflow: scroll;
-  height: 600px;
+  min-height: 62vh;
   /* border: 1px solid black; */
   `
   const EditBtn = styled.div`
@@ -202,7 +202,6 @@ const UserComment = () => {
     bottom: 0px;
     padding: 15px;
     border-radius: 20px;
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction:column;

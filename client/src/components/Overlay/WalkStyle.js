@@ -94,7 +94,7 @@ export const SelectBtn = styled.button`
   border: none;
   cursor: pointer;
   font-size: 16px;
-  background-color: #3d5a5b;
+  background-color: ${({ theme }) => theme.colors.pointColor1};
   color: white;
   margin: 10px 10px 6px 10px;
 `;
@@ -108,7 +108,7 @@ export const MiniModalContainer = styled.div`
     font-size: 16px;
     margin: 5px;
   }
-  background-color: #febeb0;
+  background-color: ${({ theme }) => theme.colors.secondColor};
   margin: 10px;
   border-radius: 12px;
   z-index: 1000;
@@ -149,7 +149,7 @@ export const SaveBtn = styled.button`
 export const Modal = styled.button`
   width: 80px;
   height: 80px;
-  background-color: #e97676;
+  background-color: ${({ theme }) => theme.colors.thirdColor};
   border-radius: 50%;
   z-index: 800;
   position: fixed;
