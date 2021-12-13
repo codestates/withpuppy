@@ -55,8 +55,8 @@ export const ModalStyle = ({showModal, setShowModal}) => {
 const Background = styled.div`
   width: 100vw;
   height: 100vh;
-  top:0;
-  left: 0;
+  top: 0;
+  left: 100;
   background: rgba(0, 0, 0, 0.8);
   position: absolute;
   display: flex;

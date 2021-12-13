@@ -7,7 +7,7 @@ const Services = () => {
   return (
     <AboutSection className="flex-center-C" >
       <Main>
-       
+       <Content>
           <Logo>
             <img src={PuppyLogo} />
           </Logo>
@@ -25,22 +25,33 @@ const Services = () => {
               <Text>페칭하러 가기</Text>
             </Rectangle28>
           </Group2>
-
+        </Content>
       </Main>
     </AboutSection>
   );
 };
+const Content = styled.div`
+   justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 1300px) {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
+    }
+`
 
 const Logo = styled.div`
   width: 100px;
   height: 100px;
-  font-size: calc(2rem + 1vw);
   line-height: 1.5;
   padding: 1rem 0;
-  margin-bottom: 3rem;
-  margin-top: 10rem;
+  margin-bottom: 5rem;
+  margin-top: 18rem;
   color: white;
   width: 100%;
+
 `;
 
 const move = keyframes`
@@ -61,13 +72,18 @@ const Main = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: calc(2rem + 1vw);
+  font-size: 35px;
   line-height: 1.5;
-  padding: 1rem 0;
-  margin-bottom: 3rem;
   color: white;
   width: 100%;
-  font-family: 'Jua';
+  padding: 1rem 0;
+  align-items: center;
+  margin-bottom: 5rem;
+  word-break: keep-all;
+
+  @media screen and (max-width: 1300px) {
+      font-size: 30px;
+    }
 `;
 
 const Rocket = styled.div`
@@ -75,15 +91,21 @@ const Rocket = styled.div`
   animation: ${move} 2.5s ease infinite;
   margin-bottom: 10rem;
 
-  @media only Screen and (max-width: 40em) {
-    width: 50vw;
-    padding-bottom: 0;
+  & img {
+   width: 100%;
+   min-width: 200px;
   }
+  @media screen and (max-width: 1300px) {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
+    width: 400px;
+    height: 300px;
+    }
 `;
 
 const Group2 = styled(BaseBtn)`
-  /* height: 100%;
-  width: 100%; */
   margin-bottom: 5rem;
   text-align: center; 
   justify-content: center;
@@ -97,6 +119,15 @@ const Group2 = styled(BaseBtn)`
   &:active {
     transform: translateY(2px);
   }
+
+  @media screen and (max-width: 1300px) {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
+    width: 250px;
+    height: 80px;
+    }
 `;
 const Rectangle28 = styled.div`
   border-radius: 12px;
@@ -116,6 +147,9 @@ const Text = styled.div`
   text-align: center; 
   justify-content: center;
   color: ${({ theme }) => theme.colors.white};
+  @media screen and (max-width: 1300px) {
+      font-size: 20px;
+    }
 `;
 
 export default Services;
