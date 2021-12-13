@@ -5,20 +5,20 @@ const Contact = () => {
   return (
     <AboutSection className="flex-center-C">
       <Main>
-        <Content>
+        <Content>          
+          <Rocket>
+            <img src={Lan2} alt="" />
+          </Rocket>
           <AboutText>
             <Rectangle6>
               <Text>퍼피매칭</Text>
             </Rectangle6>
-            <Title>우리집 반려견에게 소중한 산책친구를 만들어주세요</Title>
+            <Title>강아지 사회화의 중요성을 알고 계신가요 ?</Title>
             <SubText>            
            사회화는 강아지를 새로운 장소, 소리, 경험에 노출시키는 과정을 말합니다. 강아지가 이 세상에 익숙해지도록 돕고 새로운 상황을 자신감있게 대하도록 가르치는 것입니다.
             </SubText>
           </AboutText>
 
-          <Rocket>
-            <img src={Lan2} alt="" />
-          </Rocket>
         </Content>
       </Main>
     </AboutSection>
@@ -36,22 +36,20 @@ const move = keyframes`
 const AboutSection = styled.section`
   width: 100%;
   padding-left: 10px;
-  background-color: yellowgreen;
 `;
 
 const Main = styled.div`
   margin: 15rem;
   align-items: center;
-  background-color: yellow;
 `;
 
 const Title = styled.h1`
-  font-size: calc(2rem + 1vw);
+  font-size: 35px;
   line-height: 1.5;
   padding: 1rem 0;
   color: white;
-  width: 60%;
-
+  width: 150%;
+  word-break: keep-all;
 `;
 
 const Rectangle6 = styled.div`
@@ -60,50 +58,63 @@ const Rectangle6 = styled.div`
   width: 148px;
   padding: 11px;
   background-color: #3d5a5b;
+  margin-bottom: 1rem;
 `;
 const Text = styled.div`
   text-align: center;
   vertical-align: top;
   font-size: 24px;
-  /* font-family: 'Jua'; */
-  /* line-height: auto; */
   color: ${({ theme }) => theme.colors.white};
 `;
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: red;
   width: 150rem;
+
+  flex-direction: row-reverse;
+  @media screen and (max-width: 1300px) {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
+    }
 `;
 
 const Rocket = styled.div`
-  display: flex;
+ display: flex;
   width: 50%;
   padding-bottom: 5rem;
-  margin-right: 10rem;
   animation: ${move} 2.5s ease infinite;
-  background-color: tomato;
-
+  max-width:100%;
+  height:auto;
   & img {
    width: 100%;
    min-width: 200px;
   }
-
+  @media screen and (max-width: 1300px) {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction:column;
+    width: 500px;
+    }
 `;
+
 const SubText = styled.h5`
   font-size: 20px;
   line-height: 1.5;
   padding: 1rem 0;
   color: ${({ theme }) => theme.colors.pointColor2};
-  width: 60%;
+  width:100%; 
+  word-break: keep-all;
 `;
 
 const AboutText = styled.div`
   width: 50%;
   position: relative;
-  margin-bottom: 100px;
-  background-color: salmon;
+  margin-bottom: 50px; 
+  width: 500px;
 `;
 
 export default Contact;

@@ -1,153 +1,119 @@
-//! 댓글창 입니다
+import React, { useState, useEffect } from "react";
+import WriteReply from "./WriteReply";
+import axios from "axios";
+import styled from "styled-components";
+import { CreateReplyBox } from "./ReplysStyled";
 
-import React, { useRef, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { BaseIcon } from 'components/Icon';
-import Icon2 from "../../../assets/img/icons/Icon.png";
-import UserModal from './UserModal';
-import { ModalStyle } from './ModalStyle';
+import {
+  ReplysUl,
+  ReplyLi,
+  ReplysSection,
+  ReplyDeleteBtn,
+} from "./ReplysStyled"
 
+// import deleteBtn from "../image/x-mark.png";
+// axios.defaults.withCredentials = true;
 
-//! 상태보내기로 모달 보내기 : prop
+function Replys({
+  isLogin,
+  userInfo,
+  selectedContent,
+  replyList,
+  replyListHandler,
+}) {
+  const [selectedReplyId, setselectedReplyId] = useState("");
 
+  useEffect(() => {
+    if (selectedReplyId) {
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/deletecomment`, {
+          postId: selectedContent.id,
+          userId: userInfo.id,
+          id: selectedReplyId,
+        }, {withCredentials: true})
+        .then((res) => {
+          // console.log("댓글 삭제 요청 응답", res.data);
+          if (res.data.message === "delete!") {
+            replyListHandler(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [selectedReplyId]);
 
-function IModal() {
-  const [showModal, setShowModal] = useState(false);
-
-  const openModal = () => {
-    setShowModal(prev => !prev);
+  const deleteReply = (e) => {
+    e.preventDefault();
+    // console.log(e.target.parentElement.getAttribute("id"));
+    setselectedReplyId(e.target.parentElement.getAttribute("id"));
   };
 
   return (
     <>
-      <Container className="flex-center-C">
-        <Button onClick={openModal}>로그인</Button>
-        <ModalStyle showModal={showModal} setShowModal={setShowModal} />
-      </Container>
+      <ReplysSection>
+        <A11yHidden>댓글</A11yHidden>
+        <ReplysUl>
+          {replyList
+            ? replyList.map((el) => {
+                return (
+                  <ReplyLi key={el.id} id={el.id}>
+                    <p>&#64;{el.user.nickname}</p>
+                    <p style={{ marginTop: "-10px" }}>{el.contents}</p>
+                    {isLogin && el.user.nickname === userInfo.nickname ? (
+                      <ReplyDeleteBtn
+                        // src={deleteBtn}
+                        // onClick={(e) => deleteReply(e)}
+                      />
+                    ) : null}
+                  </ReplyLi>
+                );
+              })
+            : null}
+        </ReplysUl>      
+        <WriteReply
+        isLogin={isLogin}
+        userInfo={userInfo}
+        selectedContent={selectedContent}
+        replyListHandler={replyListHandler}
+      />
+
+      </ReplysSection>
+
     </>
   );
 }
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  
+
+export const A11yHidden = styled.h2`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  -webkit-clip-path: polygon(0 0, 0 0, 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
 `;
 
-const Button = styled.button`
-  min-width: 100px;
-  padding: 16px 32px;
-  border-radius: 4px;
-  border: none;
-  background: #141414;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
+
+export const Btn = styled.button`
+  font-size: 16px;
+  border: 0;
+  background-color: transparent;
+  margin-left: 25px;
+  width: 30px;
+  height: 30px;
 `;
 
-const UserComment = () => {
-    return (
-      <>
-      <CommentComponent>
-        <Summary>
-        <Chat1  >
-          <Frame2 onClick={IModal}>
-          
-          <Text1>댓글 작성자</Text1>
-          {/* <Text1>{commentUser}</Text1> */}
-          <Text2>hihi</Text2>
-          {/* <Text2>{comment}</Text2> */}
-          {/* <EditBtn >
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn  >
-                 <Text3>EDIT</Text3>
-              </EditBtn> */}
-          </Frame2>
-        </Chat1 >
-        <Chat2>
-          <Frame3>
-          <Text1>댓글 작성자</Text1>
-          <Text2>댓글 내용</Text2>
-
-              <EditBtn>
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn>
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-   
- 
-          </Frame3>
-        </Chat2 >
-        
-        <Chat2>
-          <Frame3>
-          <Text1>댓글 작성자</Text1>
-          <Text2>댓글 내용</Text2>
-
-              <EditBtn>
-                 <Text3>DELETE</Text3>
-              </EditBtn>
-              <EditBtn>
-                 <Text3>EDIT</Text3>
-              </EditBtn>
-   
- 
-          </Frame3>
-        </Chat2 >
-        </Summary>
-        <CommtentSend>
-          <Input >
-          <InputCon>    
-          <input 
-          // onChage={this.getValue}
-          type="text"
-          placeholder="Comment here !"
-          maxLength="100"
-          />
-          </InputCon>
-          </Input>
-          <BaseIcon
-          onClick={IModal}
-          type="submit">
-            <img src={Icon2} alt="" 
-            />
-          </BaseIcon>
-        </CommtentSend>
-      </CommentComponent>
-      </>
-    )
-  }
-//! 댓글 수정 기능 
-// const onEdit = event => {
-//   event.preventDefault();
-//   axios
-//         .patch()
-//         .then()
-//         .catch(() => {
-//           dispatch({ type: '' });
-//           dispatch({
-//             type: '',
-//             payload: '서버 요청에 실패했습니다.',
-//           });
-//         });
-//     } else if (!result) {
-//       dispatch({ type: '' });
-//       dispatch({
-//         type: '',
-//         payload: '로그인이 필요한 서비스입니다!',
-//       });
-    
-
-//! 댓글 삭제 기능
-// const onDelete = event => {
-
-// }
-
-
-
+export const Legend = styled.legend`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  -webkit-clip-path: polygon(0 0, 0 0, 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+`
+export default Replys;
 
 //! styled 수정
 
@@ -309,4 +275,3 @@ const UserComment = () => {
     }
   `;
 
-  export default UserComment;
