@@ -8,13 +8,15 @@ import UserInfo from './UserInfo';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import UserComment from './COMMENT/Reply';
+import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import Icon2 from '../../assets/img/icons/Icon.png';
 import IModal from './COMMENT/Modal';
 import UserModal from './COMMENT/UserModal';
+import { CreateReplyBox } from './COMMENT/ReplysStyled';
 // import makeMarker from './utils';
+import Replys from './COMMENT/Replys';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
@@ -22,6 +24,10 @@ function Index() {
   const mapRef = useRef(null);
   const { kakao } = window;
   const dispatch = useDispatch();
+  const [CommentLists,setCommentLists] = useState([]);
+  const updateComment = (newComment) => {
+        setCommentLists(CommentLists.concat(newComment))
+  }
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const openWalkHandler = () => {
@@ -237,9 +243,12 @@ function Index() {
                   puppyName="강아지 이름 테스트 입니다"
                   userName="사람 이름 테스트 입니다"
                   puppyAge={7}
-                  introduceTo="소개글 테스트 입니다"
-                ></UserInfo>
-                <UserComment className="flex-center-C Reply"></UserComment>
+                  introduceTo="소개글 테스트 입니다">
+                    </UserInfo>   
+                {/* <IModal />
+                <UserModal/>  */}
+                <Replys></Replys>
+
               </UserCard>
             ) : (
               <div
@@ -256,6 +265,11 @@ function Index() {
     </>
   );
 }
+// const [CommentLists,setCommentLists] = useState([]);
+// const updateComment = (newComment) => {
+//       setCommentLists(newComment)
+// }
+
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);
@@ -294,6 +308,7 @@ const MapContainer = styled.div`
 
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
+
 `;
 
 const UserContainer = styled.div`
@@ -303,7 +318,7 @@ const UserContainer = styled.div`
   width: 30%;
   height: 100%;
   background: #febeb0;
-  position: absolute;
+  position: fixed;
   top: 10;
   right: 0;
   z-index: 100;
@@ -333,7 +348,7 @@ const UserCard = styled.section`
   display: flex;
   flex-direction: column;
 
-  position: fixed;
+  position: fixed; 
   height: 100%;
   min-height: 50rem;
   background-color: white;
