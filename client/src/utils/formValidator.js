@@ -86,3 +86,18 @@ export function validConfirmPassword(confirm, password) {
 
   return { state: true, reason: '' };
 }
+
+//confirm phone
+export function validPhone(phonNumber) {
+  // if no "-"
+  const regex = /(\d){2,3}-(\d){3,4}-(\d){4}/g;
+
+  if (!regex.test(phonNumber)) {
+    return { state: false, reason: '전화번호 형식이 아닙니다' };
+  }
+
+  return {
+    state: true,
+    reason: '',
+  };
+}

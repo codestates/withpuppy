@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 export const Box = styled.div`
   padding: 40px 40px;
-  background: #3d5a5b;
+  background: ${({ theme }) => theme.colors.pointColor1};
   position: relative;
   bottom: 0;
   width: 100%;
@@ -23,14 +24,14 @@ export const Row = styled.div`
 `;
 
 export const Logo = styled.a`
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   margin-left: 40px;
   margin-right: 40px;
   text-decoration: none;
 `;
 
 export const BottomLogo = styled.a`
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   text-decoration: none;
 `;
 

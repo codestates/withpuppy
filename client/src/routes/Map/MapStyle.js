@@ -9,8 +9,7 @@ export const Btn = styled.button`
   z-index: 800;
   position: absolute;
   @media screen and (max-width: 900px) {
-    top: 50%;
-    bottom: 30%;
+    bottom: 3rem;
   }
   /* top: 80%; */
   bottom: 3rem;
@@ -54,15 +53,15 @@ export const SearchContainer = styled.form`
   padding: 1rem;
   position: absolute;
   @media screen and (max-width: 900px) {
-    top: 50%;
-    left: 60%;
+    bottom: 2rem;
+    right: 2rem;
   }
   @media screen and (max-width: 500px) {
-    top: 50%;
-    left: 40%;
+    bottom: 2rem;
+    right: 2rem;
   }
-  top: 80%;
-  left: 55%;
+  bottom: 2rem;
+  right: 2rem;
   outline-offset: -7px;
   box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
   border: none;

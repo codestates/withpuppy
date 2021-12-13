@@ -64,7 +64,13 @@ module.exports = {
   signOut: (req, res) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    return res.status(200).json({ message: "logout success" });
+    try {
+      return res.status(200).json({ message: "logout success" });
+    } catch (err) {
+      return res.status(500).json({
+        message: "logout failed",
+      });
+    }
   },
   signup: async (req, res) => {
     //1. email validation

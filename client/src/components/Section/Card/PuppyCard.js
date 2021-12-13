@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import BaseCard from './BaseCard';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -10,20 +10,26 @@ import {
 } from 'components/Section';
 import { BaseBtn } from 'components/Button';
 import Tumbnail from 'components/Icon/Tumbnail';
+import useForm from 'hooks/useMypageForm';
 
 function PuppyCard() {
   const { userData } = useSelector(selectUser);
-  const [puppyInfo, setPuppyInfo] = useState({
-    puppyName: '',
-    gender: '',
-    age: '',
-    breed: '',
-  });
-  const [infoChange, setInfoChange] = useState(false);
+  const { values, infoChange, onHandleChange, onHandleEdit, onHandleSubmit } =
+    useForm({
+      puppyName: '',
+      gender: '',
+      age: '',
+      breed: '',
+      introduction: '',
+    });
 
-  const onHandleEdit = () => {
-    setInfoChange((prev) => !prev);
-  };
+  const numberInputRef = useRef(null);
+
+  function maxLengthCheck(element) {
+    if (element.value > element.maxLength) {
+      element.value = element.value.slice(0, element.maxLength);
+    }
+  }
 
   return (
     <BaseCard className="puppyCard">
@@ -32,32 +38,93 @@ function PuppyCard() {
       <PuppyInfoContainer className="flex-center-C">
         <Tumbnail imgUrl={userData.puppy.puppyProfile} type="puppy" />
 
-        <CardInputForm>
+        <CardInputForm onSubmit={(e) => e.preventDefault()}>
           <CardInputContainer>
             <div className="title">강아지 이름</div>
-            <div className="value">{userData.puppy.puppyName}</div>
+            {infoChange ? (
+              <input
+                type="text"
+                value={values.puppyName}
+                className="card-input"
+                name="puppyName"
+                maxLength="12"
+                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
+              />
+            ) : (
+              <div className="value">{userData.puppy.puppyName}</div>
+            )}
           </CardInputContainer>
 
           <CardInputContainer>
             <div className="title">강아지 성별</div>
-            <div className="value">{userData.puppy.gender}</div>
+            {infoChange ? (
+              <input
+                type="text"
+                value={values.gender}
+                className="card-input"
+                name="gender"
+                maxLength="5"
+                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
+              />
+            ) : (
+              <div className="value">{userData.puppy.gender}</div>
+            )}
           </CardInputContainer>
 
           <CardInputContainer>
             <div className="title">강아지 나이</div>
-            <div className="value">{userData.puppy.age}</div>
+            {infoChange ? (
+              <input
+                type="number"
+                value={values.age}
+                className="card-input"
+                name="age"
+                max="100"
+                placeholder="0"
+                maxLength="3"
+                ref={numberInputRef}
+                onInput={(e) => {
+                  maxLengthCheck(numberInputRef.current);
+                }}
+                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
+              />
+            ) : (
+              <div className="value">{userData.puppy.age}</div>
+            )}
           </CardInputContainer>
 
           <CardInputContainer>
             <div className="title">강아지 견종</div>
-            <div className="value">{userData.puppy.breed}</div>
+            {infoChange ? (
+              <input
+                type="text"
+                value={values.breed}
+                className="card-input"
+                name="breed"
+                maxLength="5"
+                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
+              />
+            ) : (
+              <div className="value">{userData.puppy.breed}</div>
+            )}
           </CardInputContainer>
 
           <CardInputContainer>
             <div className="title">소개글</div>
-            <div className="value">
-              {userData.puppy.introduction || '왕 왕!'}
-            </div>
+            {infoChange ? (
+              <input
+                type="text"
+                value={values.introduction}
+                className="card-input puppy-introduction"
+                name="introduction"
+                maxLength="20"
+                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
+              />
+            ) : (
+              <div className="value puppy-value">
+                {userData.puppy.introduction || '왕 왕!'}
+              </div>
+            )}
           </CardInputContainer>
         </CardInputForm>
 
@@ -67,7 +134,9 @@ function PuppyCard() {
               <EditBtn onClick={onHandleEdit} className="cancel-btn">
                 취소하기
               </EditBtn>
-              <EditBtn>완료하기</EditBtn>
+              <EditBtn onClick={() => onHandleSubmit('puppy')}>
+                완료하기
+              </EditBtn>
             </>
           ) : (
             <EditBtn onClick={onHandleEdit}>수정하기</EditBtn>
@@ -82,6 +151,7 @@ const PuppyInfoContainer = styled.article`
   width: 100%;
   height: 100%;
   position: relative;
+  padding: 2rem;
 `;
 
 const EditBtn = styled(BaseBtn)`

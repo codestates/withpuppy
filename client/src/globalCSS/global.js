@@ -50,6 +50,13 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  input {
+    outline:none;
+    &:focus::placeholder{
+      color:transparent;
+    }
+  }
+
   .flex {
     display:flex;
   }

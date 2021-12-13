@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      introcution: {
+      introduction: {
         type: DataTypes.STRING,
         allowNull: true,
       },

@@ -26,6 +26,8 @@ app.use(
 //2. routes
 const userRoutes = require("./routes/userRoutes");
 const puppyRoutes = require("./routes/puppyRoutes");
+const mypageRoutes = require("./routes/mypageRoutes");
+const pinRoutes = require("./routes/pinRoutes");
 
 const authRoutes = require("./routes/authRoutes");
 const kakaoRoutes = require("./routes/kakaoRoutes");
@@ -33,6 +35,8 @@ const googleRoutes = require("./routes/googleRoutes");
 
 app.use("/user", userRoutes);
 app.use("/puppy", puppyRoutes);
+app.use("/mypage", mypageRoutes);
+app.use("/pin", pinRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/kakao", kakaoRoutes);
@@ -103,7 +107,7 @@ db.sequelize
           lng: 126.96470201104091 + 0.01,
           iconType: "히로",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
         {
@@ -112,7 +116,7 @@ db.sequelize
           lng: 126.96470201104091 + 0.01,
           iconType: "유나",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
         {
@@ -121,7 +125,7 @@ db.sequelize
           lng: 126.96470201104091 + 0.02,
           iconType: "카덴",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
         {
@@ -130,7 +134,7 @@ db.sequelize
           lng: 126.96470201104091 + 0.02,
           iconType: "펠릭스",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
         {
@@ -139,7 +143,7 @@ db.sequelize
           lng: 126.96470201104091 - 0.013,
           iconType: "펠릭스",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
         {
@@ -148,12 +152,71 @@ db.sequelize
           lng: 126.96470201104091 + 0.011,
           iconType: "펠릭스",
           expire: future,
-          puppyId: 1,
+          PuppyId: 1,
           UserId: 1,
         },
       ]);
     }
 
+    const testUser = await db.User.findOne({ where: { email: "chltjdrhd777@gmail.com" } });
+    const testPinpointer = await db.Pinpointer.findOne({ where: { UserId: 2 } });
+    if (testUser && !testPinpointer) {
+      const future = String(Date.parse(new Date("2100/12/12")));
+      const puppy = await testUser.getPuppy();
+
+      const pinpointer = await db.Pinpointer.create({
+        location: "서울 용산구",
+        lat: 37.529789809685475 + 0.01,
+        lng: 126.96470201104091 + 0.01,
+        iconType: "히로",
+        expire: future,
+        PuppyId: puppy.id,
+        UserId: testUser.id,
+      });
+
+      await db.Message.bulkCreate([
+        {
+          text: "hello",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "hi",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "what's up",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "hey",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "buddy?",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "...?",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+      ]);
+    }
+
+    // db.Pinpointer.create({
+    //   location: "테스트",
+    //   lat: 37.529789809685475 - 0.021,
+    //   lng: 126.96470201104091 + 0.011,
+    //   iconType: "펠릭스",
+    //   expire: 300,
+    //   PuppyId: 1,
+    //   UserId: 1,
+    // });
     console.log("successfully initialized sequelize");
   })
   .catch((err) => console.log(err));

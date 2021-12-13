@@ -17,6 +17,7 @@ module.exports = async (req, res, next) => {
 
       //else
       // req.userId = user.id;
+      req.user = user.dataValues;
       next();
     } else if (verifyRefresh(refreshToken)) {
       //! 엑세스 토큰이 만료되었으나 리프레시 토큰이 만료되지 않았으면
@@ -33,13 +34,18 @@ module.exports = async (req, res, next) => {
       });
 
       // req.userId = user.id;
+      req.user = user.dataValues;
       next();
     } else {
       //! 리프레시 토큰마저 만료되었을 때
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
       return res.status(401).json({ message: "no valid authorization. please login again" });
     }
   } catch (err) {
     console.log(err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     res.status(500).json({ message: "token validation process failed" });
   }
 };
