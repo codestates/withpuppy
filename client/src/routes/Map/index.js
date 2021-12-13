@@ -19,10 +19,11 @@ import Icon2 from '../../assets/img/icons/Icon.png';
 import IModal from './COMMENT/Modal';
 import UserModal from './COMMENT/UserModal';
 import { Row } from 'components/Footer/FooterStyle';
+// import makeMarker from './utils';
+import { customOverlay } from './customOverlay';
+import ReactDOMServer from 'react-dom/server';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
-
-
 
 function Index() {
   const mapRef = useRef(null);
@@ -52,6 +53,8 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
 
   useEffect(() => {
+    //console.log(new DOMParser().parseFromString(customOverlay, 'text/xml'));
+
     const mapOptions = {
       center: new kakao.maps.LatLng(...SEOUL_COORDINATION),
       level: 7,
@@ -71,116 +74,14 @@ function Index() {
 
       geocoder.addressSearch(place, placesSearchCB);
 
-      let iwContent = document.createElement('div');
-      iwContent.style.width = '282px';
-      iwContent.style.height = '187px';
-      iwContent.style.padding = '1rem';
-
-      let iwContainer = document.createElement('div');
-      iwContainer.style.display = 'flex';
-
-      let imgSpan = document.createElement('span');
-      imgSpan.style.marginRight = '5px';
-      let sectionSpan1 = document.createElement('span');
-      sectionSpan1.style.marginRight = '5px';
-      let sectionSpan2 = document.createElement('span');
-      sectionSpan2.style.marginRight = '5px';
-
-      let profileImg = document.createElement('img');
-      profileImg.src =
-        'https://t1.daumcdn.net/cfile/tistory/21221F4258E793521D';
-      profileImg.style.width = '79px';
-      profileImg.style.height = '112px';
-
-      let ownerName = document.createElement('div');
-      ownerName.textContent = `보호자 이름`;
-      ownerName.style.fontFamily = 'Jua';
-      ownerName.style.fontSize = '14px';
-      ownerName.style.marginBottom = '0.5em';
-      ownerName.style.marginRight = '2em';
-
-      let puppyName = document.createElement('div');
-      puppyName.textContent = `강아지 이름`;
-      puppyName.style.fontFamily = 'Jua';
-      puppyName.style.fontSize = '14px';
-      puppyName.style.marginBottom = '0.5em';
-      puppyName.style.marginRight = '2em';
-
-      let puppyInfo = document.createElement('div');
-      puppyInfo.textContent = `소개글`;
-      puppyInfo.style.fontFamily = 'Jua';
-      puppyInfo.style.fontSize = '14px';
-      puppyInfo.style.marginBottom = '0.5em';
-      puppyInfo.style.marginRight = '2em';
-
-      let breed = document.createElement('div');
-      breed.textContent = `견종`;
-      breed.style.fontFamily = 'Jua';
-      breed.style.fontSize = '14px';
-      breed.style.marginBottom = '0.5em';
-      breed.style.marginRight = '2em';
-
-      let age = document.createElement('div');
-      age.textContent = `나이`;
-      age.style.fontFamily = 'Jua';
-      age.style.fontSize = '14px';
-      age.style.marginBottom = '0.5em';
-      age.style.marginRight = '2em';
-
-      let gender = document.createElement('div');
-      gender.textContent = `성별`;
-      gender.style.fontFamily = 'Jua';
-      gender.style.fontSize = '14px';
-      gender.style.marginBottom = '0.5em';
-      gender.style.marginRight = '2em';
-
-      let btn = document.createElement('button');
-      btn.textContent = `상대에게 연락하기`;
-      btn.style.backgroundColor = '#e97676';
-      btn.style.width = '250px';
-      btn.style.height = '44px';
-      btn.style.borderRadius = '8px';
-      btn.style.border = 'none';
-      btn.style.fontSize = '14px';
-      btn.style.color = 'white';
-      btn.style.fontFamily = 'Jua';
-      btn.style.cursor = 'pointer';
-      const event_handler = function () {
-        console.log(btn.textContent);
-      };
-      btn.addEventListener('click', event_handler);
-
-      let fakebtn = document.createElement('button');
-      fakebtn.textContent = `로그인해서 상대의 정보를 확인해보세요!`;
-      fakebtn.style.backgroundColor = '#e97676';
-      fakebtn.style.width = '250px';
-      fakebtn.style.height = '44px';
-      fakebtn.style.borderRadius = '8px';
-      fakebtn.style.border = 'none';
-      fakebtn.style.fontSize = '14px';
-      fakebtn.style.color = 'white';
-      fakebtn.style.fontFamily = 'Jua';
-
-      iwContent.append(iwContainer, btn);
-      iwContainer.append(imgSpan, sectionSpan1, sectionSpan2);
-      imgSpan.append(profileImg);
-      sectionSpan1.append(ownerName, puppyName, breed, puppyInfo);
-      sectionSpan2.append(age, gender);
-
-      const infowindow = new kakao.maps.InfoWindow({
-        content: iwContent,
-        removable: true,
-      });
-
       function placesSearchCB(data, status, pagination) {
         if (status === kakao.maps.services.Status.OK) {
           let bounds = new kakao.maps.LatLngBounds();
-          // setCoordinate([]);
 
           for (let i = 0; i < data.length; i++) {
-            displayMarkerandOverlay(data[i]);
             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-            coordinate.push([data[i].x, data[i].y]);
+            displayMarkerandOverlay(data[i]);
+            coordinate.push([data[i].y, data[i].x]);
           }
 
           map.setBounds(bounds);
@@ -208,18 +109,49 @@ function Index() {
           clickable: true,
         });
 
+        let wrapper = document.createElement('div');
+        wrapper.innerHTML = customOverlay;
+        // console.log(wrapper.firstChild);
+        
+        let closeBtn = wrapper.firstChild.querySelector('.close-button');
+        // let doc = new DOMParser().parseFromString(customOverlay, 'text/html');
+        // let closeBtn = doc.getElementsByClassName('close-button')[0];
+       
+        closeBtn.addEventListener('click', function () {
+          console.log('hello world');
+          overlay.setMap(null);
+        });
+        
+        let contactBtn = wrapper.firstChild.querySelector('.contact-btn');
+        contactBtn.addEventListener('click', function () {
+          console.log('you clicked this!');
+        });
+
+        let overlay = new kakao.maps.CustomOverlay({
+          content: wrapper.firstChild,
+          map: map,
+          position: marker.getPosition(),
+          xAnchor: 1,
+          yAnchor: 1,
+        });
+
+        // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function () {
           setIsMarkerSelected(true);
-          infowindow.open(map, marker);
+          overlay.setMap(map);
         });
-        marker.setMap(map);
 
+        //장소가 바뀔 떄마다, 좌표들이 무한대로 늘어남을 방지하기 위해 비워준다.
+        setCoordinate([]);
+
+        marker.setMap(map);
+        //오버레이들이 화면에 한방에 안뜨게 아예 마커만 보이게 설정
+        overlay.setMap(null);
       }
     } catch (err) {
       console.log(err);
     }
-
-    return () => { };
+    return () => {};
   }, [place]);
 
   return (
@@ -239,7 +171,6 @@ function Index() {
           {isWalkOpen === true ? (
             <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
           ) : null}
-          {/* <SearchBar type="text" placeholder="장소 검색"></SearchBar> */}
         </MapContainer>
         <UserContainer>
           {isMarkerSelected ? (

@@ -17,8 +17,12 @@ import {
 } from './WalkStyle';
 import { genPinIconType } from 'utils/genPinIconType';
 import DaumPostcode from 'react-daum-postcode';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/store';
 
 function Walk({ setIsWalkOpen }) {
+  const { userData } = useSelector(selectUser);
+
   const [isOpen, setIsOpen] = useState(false);
   const openModalHandler = () => {
     setIsOpen(!isOpen);
@@ -53,6 +57,14 @@ function Walk({ setIsWalkOpen }) {
     setExtend(e.target.value);
   };
 
+  // const [userInfo, setUserInfo] = useState({
+  //   location: address,
+  //   nickname: userData.nickName,
+  //   puppyName: userData.puppy.puppyName,
+  //   icon: iconName,
+  //   extend: extend,
+  // });
+
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = '';
@@ -85,8 +97,8 @@ function Walk({ setIsWalkOpen }) {
               <DaumPostcode onComplete={handleComplete} />
             ) : null}
             <Address>{address}</Address>
-            <Info>닉네임: nickname - 끌어 오는거</Info>
-            <Info>강아지 이름: 멍멍이 - 끌어 오는거</Info>
+            <Info>{userData.nickname} 님</Info>
+            <Info>귀여운 {userData.puppy.puppyName}</Info>
             <SelectBtn onClick={openPopupHandler}>
               아이콘을 선택해주세요.
             </SelectBtn>
