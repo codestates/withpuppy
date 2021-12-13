@@ -26,6 +26,7 @@ app.use(
 //2. routes
 const userRoutes = require("./routes/userRoutes");
 const puppyRoutes = require("./routes/puppyRoutes");
+const pinRoutes = require("./routes/pinRoutes");
 
 const authRoutes = require("./routes/authRoutes");
 const kakaoRoutes = require("./routes/kakaoRoutes");
@@ -33,6 +34,7 @@ const googleRoutes = require("./routes/googleRoutes");
 
 app.use("/user", userRoutes);
 app.use("/puppy", puppyRoutes);
+app.use("/pin", pinRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/kakao", kakaoRoutes);
