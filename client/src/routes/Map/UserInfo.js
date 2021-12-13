@@ -1,15 +1,9 @@
-import profile from '../../assets/img/profile/profile.png';
 import pngwing1 from '../../assets/img/profile/pngwing/pngwing1.png';
 import pngwing2 from '../../assets/img/profile/pngwing/pngwing2.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';
 import { Column } from 'components/Footer/FooterStyle';
 
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding-top: 15px;
-`;
 
 export default function Index({
   profileImg,
@@ -21,10 +15,10 @@ export default function Index({
   return (
     <UserInfo className="UserInfo">
       <div className="imgContainer">
-        <img src={profile} alt="" style={{ width: '90px' }}></img>
+        <img src={profileImg} alt="" style={{ width: '90px' }}></img>
         <Liked />
       </div>
-      <div className="profileInfo" style={{ paddingLeft: '2rem' }}>
+      <div className="profileInfo" style={{ paddingLeft: '2rem', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ fontSize: '20px' }}>{puppyName}</div>
         <div style={{ fontSize: '20px' }}>{userName}</div>
         <div style={{ fontSize: '20px' }}>{puppyAge}살</div>
@@ -51,7 +45,7 @@ export default function Index({
           <div className="introduceTo">
             <div
               style={{
-                width: '390px',
+                boxSizing: 'border-box',
                 height: '50px',
                 border: 'none',
                 borderRadius: '2rem',
@@ -70,3 +64,10 @@ export default function Index({
     </UserInfo>
   );
 }
+
+
+const UserInfo = styled.div`
+  display: flex;
+
+  padding-top: 15px;
+`;
