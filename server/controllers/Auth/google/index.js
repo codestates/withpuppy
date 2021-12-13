@@ -32,7 +32,15 @@ module.exports = {
 
       let puppy = await user.getPuppy();
       if (!puppy) {
-        const createDefaultPuppy = await Puppy.create({});
+        const createDefaultPuppy = await Puppy.create({
+          puppyName: "wang",
+          age: 1,
+          gender: "female",
+          breed: "푸들",
+          introduction: "왕왕!",
+          puppyProfile:
+            "https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg",
+        });
         await user.setPuppy(createDefaultPuppy);
         puppy = await user.getPuppy();
       }
@@ -47,6 +55,7 @@ module.exports = {
       res.cookie("accessToken", accessToken, { httpOnly: true });
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       res.status(200).json({
+        id: user.dataValues.id,
         social,
         email,
         nickname,

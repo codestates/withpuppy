@@ -29,13 +29,17 @@ db.Sequelize = Sequelize;
 
 //! Relation
 const { User, Puppy, Message, Pinpointer } = db;
+
 //@ 1:1
 User.hasOne(Puppy, { onDelete: "CASCADE" });
+Puppy.hasOne(Pinpointer);
 
 //# 1:N
 User.hasMany(Message, { onDelete: "CASCADE" });
+Message.belongsTo(User);
 User.hasMany(Pinpointer, { onDelete: "CASCADE" });
 Pinpointer.hasMany(Message, { onDelete: "CASCADE" });
+Message.belongsTo(Pinpointer);
 
 //% N:M
 User.belongsToMany(User, { as: "follower", through: "user_follower" });

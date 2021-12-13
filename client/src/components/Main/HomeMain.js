@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import HomeMain from './index';
 import About from 'routes/Home/Sections/About';
 import Contact from 'routes/Home/Sections/Contact';

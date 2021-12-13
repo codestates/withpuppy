@@ -58,7 +58,7 @@ function Tumbnail({ imgUrl, type }) {
     formData.append(selectType.imageType, file);
 
     try {
-      const response = await axios.post(`/${type}/${type}Profile`, formData);
+      const response = await axios.put(`/${type}/${type}Profile`, formData);
       // console.log(response);
       e.target.value = null;
 
@@ -123,16 +123,14 @@ const ThumbnailContainer = styled.div`
   }
 
   & > input {
-    transition: all 0.4s;
+    transition: border 0.4s;
     ${({ validSize }) =>
       validSize.status === 'reject'
         ? css`
             border: 3px solid ${({ theme }) => theme.colors.thirdColor};
-
-            &: before;
           `
         : css`
-            border: 1px solid gray;
+            border: 1px solid transparent;
           `}
 
     border-radius: 50%;
@@ -166,10 +164,14 @@ const ThumbnailContainer = styled.div`
     }
   }
 
-  & svg {
+  & .cog {
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 6px;
+    background: white;
+    border-radius: 50%;
+    padding: 3px;
+    border: 1px solid ${({ theme }) => theme.colors.pointColor2};
 
     color: ${({ theme }) => theme.colors.pointColor2};
   }
