@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 
 export const BaseSection = styled.section`
   width: 100%;
@@ -27,82 +27,151 @@ export const CardSection = styled.section`
     }
   }
 
-  @media screen and (max-width: 919px) {
-    min-width: 60rem;
-
-    &.puppyCard {
-      margin-top: 5rem;
-
-      & > span {
-        left: 0;
-      }
-    }
-  }
-
-  @media screen and (max-width: 700px) {
-    min-width: 45rem;
-  }
+  font-size: 2rem;
 `;
 
 export const CardInputForm = styled.form`
-  width: 80%;
-  flex: 0.7;
+  width: 90%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  margin-bottom: 2rem;
-  text-align: center;
-  margin-top: 3rem;
 `;
+
 export const CardInputContainer = styled.div`
-  font-size: 2.2rem;
   display: flex;
-  align-items: center;
-  line-height: 1;
+  height: 5rem;
   border-bottom: 1px solid gray;
-  padding-bottom: 1rem;
+  position: relative;
+
+  & input {
+    border: none;
+    height: 4rem;
+    margin: auto 0;
+    outline: 2px solid ${({ theme }) => theme.colors.secondColor};
+    &[type='number']::-webkit-outer-spin-button,
+    &[type='number']::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  ${({ validPhone }) =>
+    validPhone &&
+    validPhone.status === 'reject' &&
+    validPhone.reason === '전화번호 형식이 아닙니다' &&
+    css`
+      & input {
+        color: ${({ theme }) => theme.colors.thirdColor};
+      }
+
+      &:before {
+        content: '${validPhone.reason}';
+        position: absolute;
+        font-size: 1.5rem;
+        top: 5.5rem;
+        right: 0;
+        color: ${({ theme }) => theme.colors.thirdColor};
+      }
+    `};
 
   & .title {
     flex: 0.4;
-  }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  & .value {
-    flex: 0.6;
-    font-size: 3rem;
-    color: ${({ theme }) => theme.colors.pointColor1};
+    @media screen and (max-width: 1000px) {
+      font-size: 2.5rem;
+    }
 
-    &.email,
-    &.phone {
+    @media screen and (max-width: 680px) {
       font-size: 2rem;
     }
   }
 
-  & span {
-    display: inline-block;
-    width: 6rem;
+  & .value {
+    flex: 0.6;
+    color: ${({ theme }) => theme.colors.pointColor1};
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @media screen and (min-width: 1400px) {
-      width: 8rem;
       font-size: 3rem;
+
+      &.puppy-value {
+        font-size: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 2rem;
+
+      &.puppy-value {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media screen and (max-width: 680px) {
+      font-size: 1.5rem;
+
+      &.puppy-value {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  & .card-input {
+    flex: 0.6;
+    /* font-size: 75%; */
+    width: 80%;
+    border: none;
+    text-align: center;
+
+    @media screen and (min-width: 1400px) {
+      font-size: 3rem;
+
+      &.puppy-introduction {
+        font-size: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 2rem;
+
+      &.puppy-introduction {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media screen and (max-width: 680px) {
+      font-size: 1.5rem;
+
+      &.puppy-introduction {
+        font-size: 1.2rem;
+      }
     }
   }
 `;
 
 export const CardButtonContainer = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
+  display: flex;
 
   & > .cancel-btn {
     background-color: white;
     color: ${({ theme }) => theme.colors.pointColor1};
-    border: 1px solid ${({ theme }) => theme.colors.pointColor1};
-
-    &:hover {
-    }
+    outline: 1px solid ${({ theme }) => theme.colors.pointColor1};
   }
 
   & > *:last-child {
     margin-left: 1rem;
+  }
+
+  @media screen and (max-width: 520px) {
+    & button {
+      width: 10rem;
+      font-size: 1.5rem;
+    }
   }
 `;

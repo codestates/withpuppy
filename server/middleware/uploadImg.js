@@ -3,6 +3,7 @@ const multerS3 = require("multer-s3-transform");
 const sharp = require("sharp");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv");
+const resetProfile = require("../controllers/utils/resetBucketFolder");
 dotenv.config();
 
 const s3 = new AWS.S3({
@@ -24,23 +25,9 @@ const storage = multerS3({
         const { puppyId, userId } = req.body;
 
         if (puppyId) {
-          s3.deleteObject(
-            { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/puppyId=${puppyId}` },
-            (err, data) => {
-              if (!err) {
-                cb(null, `profileImg/puppyId=${puppyId}`);
-              }
-            }
-          );
+          resetProfile("puppyId", puppyId, s3, cb, file);
         } else if (userId) {
-          s3.deleteObject(
-            { Bucket: process.env.MULTER_S3_URL, Key: `profileImg/userId=${userId}` },
-            (err, data) => {
-              if (!err) {
-                cb(null, `profileImg/userId=${userId}`);
-              }
-            }
-          );
+          resetProfile("userId", userId, s3, cb, file);
         }
       },
       transform: function (req, file, cb) {

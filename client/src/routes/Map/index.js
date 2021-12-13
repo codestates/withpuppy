@@ -198,14 +198,12 @@ function Index() {
           // 마커 위에 인포윈도우를 표시합니다
           infowindow.open(map, marker);
         });
-        
+
         marker.setMap(map);
       }
     } catch (err) {
       console.log(err);
     }
-
-    
 
     return () => {};
   }, [place]);

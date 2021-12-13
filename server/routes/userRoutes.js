@@ -11,5 +11,5 @@ router
   .put(verifyAceess, editUserInfo)
   .delete(verifyAceess, deleteUserInfo);
 
-router.post("/userProfile", verifyAceess, upload.single("userImg"), editUserProfile);
+router.put("/userProfile", verifyAceess, upload.single("userImg"), editUserProfile);
 module.exports = router;
