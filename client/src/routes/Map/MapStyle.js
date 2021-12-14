@@ -133,7 +133,7 @@ export const UserCard = styled.section`
   }
 `;
 
-export const UserInfo = styled.div``;
+// export const UserInfo = styled.div``;
 
 export const Reply = styled.div``;
 

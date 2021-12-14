@@ -98,7 +98,7 @@ function Walk({ setIsWalkOpen }) {
             ) : null}
             <Address>{address}</Address>
             <Info>{userData.nickname} 님</Info>
-            <Info>귀여운 {userData.puppy.puppyName}</Info>
+            {/* <Info>귀여운 {userData.puppy.puppyName}</Info> */}
             <SelectBtn onClick={openPopupHandler}>
               아이콘을 선택해주세요.
             </SelectBtn>
