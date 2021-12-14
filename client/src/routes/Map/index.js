@@ -2,37 +2,63 @@ import 보브 from '../../assets/img/icons/보브.png';
 import 유나 from '../../assets/img/icons/유나.png';
 import 이코 from '../../assets/img/icons/이코.png';
 import 카덴 from '../../assets/img/icons/카덴.png';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import MapHeader from 'components/Header/Homeheader';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie, faUber } from '@fortawesome/free-brands-svg-icons';
-import UserInfo from './UserInfo';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
+import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import Icon2 from '../../assets/img/icons/Icon.png';
-import IModal from './COMMENT/Modal';
-import UserModal from './COMMENT/UserModal';
-import Replys from './COMMENT/Reply';
 import { Row } from 'components/Footer/FooterStyle';
-// import makeMarker from './utils';
 import { customOverlay } from './customOverlay';
+import ReactDOMServer from 'react-dom/server';
+import CommentInput from './commentInput';
+import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
 import axios from 'redux/Async/axios';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
+  const [comments, setComments] = useState([
+    { id: 1, name: 'Minjoo Park', content: 'I like it!' },
+  ]);
+
+  const [like, setLike] = useState(0); //좋아요 버튼구현
+
+  const nextId = useRef(1);
+
+  const onInsert = useCallback(
+    (name, content) => {
+      const comment = {
+        id: nextId.current,
+        name,
+        content,
+      };
+      console.log(name);
+      console.log(content);
+      setComments((comments) => comments.concat(comment));
+      nextId.current += 1; //nextId 1씩 더하기
+    },
+    [comments],
+  );
+
   const mapRef = useRef(null);
   const { kakao } = window;
   const dispatch = useDispatch();
 
   const [CommentLists, setCommentLists] = useState([]);
+  const updateComment = (newComment) => {
+    setCommentLists(CommentLists.concat(newComment));
+  };
+
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [place, setPlace] = useState('');
@@ -202,7 +228,7 @@ function Index() {
 
   return (
     <>
-      <MapHeader className="MapHeader" />
+      <MapHeader className="mapHeader" />
       <MapMain>
         {isWalkOpen === true ? (
           <Walk
@@ -230,65 +256,120 @@ function Index() {
             <SearchBtn type="submit">검색</SearchBtn>
           </SearchContainer>
         </MapContainer>
-        <UserInfoContainer>
-          <UserContainer>
-            {isMarkerSelected ? (
-              <UserCard>
-                <UserInfo
-                  puppyName="강아지 이름 테스트 입니다"
-                  userName="사람 이름 테스트 입니다"
-                  puppyAge={7}
-                  introduceTo="소개글 테스트 입니다"
-                ></UserInfo>
-                <Replys></Replys>
-              </UserCard>
-            ) : (
-              <div
-                className="titleContent"
-                style={{ textAlign: 'center', paddingTop: '80%' }}
-              >
-                <Title>핀을 클릭해서 친구들을 만나보세요</Title>
-                <MainImg src={petchingPuppyImg}></MainImg>
-              </div>
-            )}
-          </UserContainer>
+        <UserInfoContainer className="UserInfoContainer">
+          <UserCard className="UserCard">
+            <UserContainer>
+              {isMarkerSelected ? (
+                <>
+                  <UserInfoWrapper>
+                    <UserInfo />
+                  </UserInfoWrapper>
+                  <ReplyCon>
+                    {/* <div style={{ marginBottom: '4rem' }}> */}
+                    {comments.map((comment) => {
+                      return (
+                        <Comment
+                          key={comment.id}
+                          id={comment.id}
+                          name={comment.name}
+                          content={comment.content}
+                        />
+                      );
+                    })}
+                    {/* </div>{' '} */}
+                    <CommentInput onInsert={onInsert} />
+                  </ReplyCon>
+                </>
+              ) : (
+                <ContentTitle>
+                  <MainText>핀을 클릭해서 친구들을 만나보세요!</MainText>
+                  <MainImg src={petchingPuppyImg}></MainImg>
+                </ContentTitle>
+              )}
+            </UserContainer>
+          </UserCard>
+
         </UserInfoContainer>
       </MapMain>
     </>
   );
 }
 
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+  width: 100%;
+`;
+
+const ReplyCon = styled.div`
+  background-color: #f7f1ed;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContentTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  background-color: #febeb0;
+`;
+
+const MainText = styled.div`
+  text-align: center;
+  color: white;
+`;
+
+const MainImg = styled.img`
+  width: 70%;
+  height: 70%;
+  margin-left: 15px;
+  justify-content: center;
+`;
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);
+  transform: translateY(7rem);
   & .MapContainer {
     flex: 0.65;
   }
-
-  @media screen and (max-width: 900px) {
+  & .UserInfoContainer {
+    flex: 0.35;
+  }
+  @media screen and (max-width: 1000px) {
     flex-direction: column;
     height: 102rem;
     & .MapContainer {
       min-height: 20rem;
       max-height: 35rem;
     }
+    & .UserInfoContainer {
+      flex: 1;
+    }
   }
   @media screen and (min-width: 1400px) {
     & .MapContainer {
       flex: 0.75;
     }
+    & .UserInfoContainer {
+      flex: 0.25;
+    }
   }
 `;
 
-const Title = styled.div``;
-
 const MapContainer = styled.div`
   min-height: 50rem;
-  position: relative;
 `;
 
 const UserInfoContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondColor};
+  background-color: white;
 `;
 
 const UserContainer = styled.div`
@@ -326,32 +407,44 @@ const MainImg = styled.img`
   height: 70%;
 `;
 
+//# When pin clicked
 const UserCard = styled.section`
   display: flex;
   flex-direction: column;
-
-  position: fixed;
   height: 100%;
   min-height: 50rem;
+  padding: 3rem;
   background-color: white;
 
   & .UserInfo {
     background-color: white;
-    flex: 0.2;
+    flex: 0.3;
   }
-
   & .Reply {
-    flex: 0.8;
+    background-color: red;
+    flex: 0.7;
   }
+`;
 
-  @media screen and (min-width: 567px) and (max-width: 900px) {
-    & .UserInfo {
-      flex: 0.3;
-    }
+const UserContainer = styled.div`
+  box-sizing: border-box;
+  word-break: keep-all;
+  /* padding: 1.3rem; */
+  align-items: center;
+  /* width: 500px;  */
+  /* background-color: white; */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 
-    & .Reply {
-      flex: 0.7;
-    }
+  & .UserInfo {
+    background-color: white;
+    flex: 0.3;
+  }
+  & .Reply {
+    background-color: yellow;
+    flex: 0.7;
   }
 `;
 
