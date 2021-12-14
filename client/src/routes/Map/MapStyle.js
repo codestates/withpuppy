@@ -49,7 +49,7 @@ export const SearchContainer = styled.form`
   background-color: #febeb0;
   margin: 10px;
   border-radius: 12px;
-  z-index: 1000;
+  z-index: 800;
   padding: 1rem;
   position: absolute;
   @media screen and (max-width: 900px) {
