@@ -15,12 +15,11 @@ import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-import Icon2 from '../../assets/img/icons/Icon.png';
-import IModal from './COMMENT/Modal';
+// import Icon2 from '../../assetsodal';
 import UserModal from './COMMENT/UserModal';
-import Replys from './COMMENT/Reply';
+import Reply from './COMMENT/Reply';
 import { Row } from 'components/Footer/FooterStyle';
-// import makeMarker from './utils';
+
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
 
@@ -30,10 +29,10 @@ function Index() {
   const mapRef = useRef(null);
   const { kakao } = window;
   const dispatch = useDispatch();
-  const [CommentLists,setCommentLists] = useState([]);
+  const [CommentLists, setCommentLists] = useState([]);
   const updateComment = (newComment) => {
-        setCommentLists(CommentLists.concat(newComment))
-  }
+    setCommentLists(CommentLists.concat(newComment));
+  };
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const openWalkHandler = () => {
@@ -58,14 +57,11 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
 
   useEffect(() => {
-    //console.log(new DOMParser().parseFromString(customOverlay, 'text/xml'));
-
     const mapOptions = {
       center: new kakao.maps.LatLng(...SEOUL_COORDINATION),
       level: 7,
     };
 
-    //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
 
@@ -74,7 +70,6 @@ function Index() {
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(place, placesSearchCB);
 
-      // 주소-좌표 변환 객체를 생성
       const geocoder = new kakao.maps.services.Geocoder();
 
       geocoder.addressSearch(place, placesSearchCB);
@@ -96,7 +91,7 @@ function Index() {
 
       const imageCandidates = [보브, 이코, 유나, 카덴];
       const imageSrc =
-        imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
+          imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
         imageSize = new kakao.maps.Size(40, 40),
         imageOption = { offset: new kakao.maps.Point(22, 69) };
       const markerImage = new kakao.maps.MarkerImage(
@@ -116,17 +111,14 @@ function Index() {
 
         let wrapper = document.createElement('div');
         wrapper.innerHTML = customOverlay;
-        // console.log(wrapper.firstChild);
-        
+
         let closeBtn = wrapper.firstChild.querySelector('.close-button');
-        // let doc = new DOMParser().parseFromString(customOverlay, 'text/html');
-        // let closeBtn = doc.getElementsByClassName('close-button')[0];
-       
+
         closeBtn.addEventListener('click', function () {
           console.log('hello world');
           overlay.setMap(null);
         });
-        
+
         let contactBtn = wrapper.firstChild.querySelector('.contact-btn');
         contactBtn.addEventListener('click', function () {
           console.log('you clicked this!');
@@ -140,17 +132,14 @@ function Index() {
           yAnchor: 1,
         });
 
-        // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function () {
           setIsMarkerSelected(true);
           overlay.setMap(map);
         });
 
-        //장소가 바뀔 떄마다, 좌표들이 무한대로 늘어남을 방지하기 위해 비워준다.
         setCoordinate([]);
 
         marker.setMap(map);
-        //오버레이들이 화면에 한방에 안뜨게 아예 마커만 보이게 설정
         overlay.setMap(null);
       }
     } catch (err) {
@@ -161,7 +150,7 @@ function Index() {
 
   return (
     <>
-      <MapHeader className="MapHeader" />
+      <MapHeader className="mapHeader" />
       <MapMain>
         <MapContainer ref={mapRef} searchPlace={place} className="MapContainer">
           <SearchContainer className="inputForm" onSubmit={handleSubmit}>
@@ -177,130 +166,135 @@ function Index() {
             <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
           ) : null}
         </MapContainer>
-        <UserInfoContainer>
-          <UserContainer>
-            {isMarkerSelected ? (
-              <UserCard>
-                <UserInfo
-                  puppyName="강아지 이름 테스트 입니다"
-                  userName="사람 이름 테스트 입니다"
-                  puppyAge={7}
-                  introduceTo="소개글 테스트 입니다">
-                    </UserInfo>   
-                <Replys></Replys>
-              </UserCard>
-            ) : (
-              <div
-                className="titleContent"
-                style={{ textAlign: 'center', paddingTop: '80%' }}
-              >
-                <Title>핀을 클릭해서 친구들을 만나보세요</Title>
-                <MainImg src={petchingPuppyImg}></MainImg>
-              </div>
-            )}
-          </UserContainer>
+        <UserInfoContainer className="UserInfoContainer">
+          <UserCard className="UserCard">
+            <UserContainer>
+              {isMarkerSelected ? (
+                <>
+                  <UserInfoWrapper>
+                    <UserInfo />
+                  </UserInfoWrapper>
+                  <Reply>
+                    내꺼
+                    <ReplySection></ReplySection>
+                  </Reply>
+                </>
+              ) : (
+                <ContentTitle>
+                  <MainText>핀을 클릭해서 친구들을 만나보세요!</MainText>
+                  <MainImg src={petchingPuppyImg}></MainImg>
+                </ContentTitle>
+              )}
+            </UserContainer>
+          </UserCard>
         </UserInfoContainer>
       </MapMain>
     </>
   );
 }
-// const [CommentLists,setCommentLists] = useState([]);
-// const updateComment = (newComment) => {
-//       setCommentLists(newComment)
-// }
+const ReplySection = styled.div`
+  width: 80px;
+  height: 50px;
+  background-color: yellow;
+`;
 
+const ContentTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 30%;
+`;
+
+const MainText = styled.div`
+  text-align: center;
+  color: white;
+`;
+
+const MainImg = styled.img`
+  width: 70%;
+  height: 70%;
+  margin-left: 15px;
+  justify-content: center;
+`;
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);
+  transform: translateY(7rem);
   & .MapContainer {
     flex: 0.65;
   }
-
-  @media screen and (max-width: 900px) {
+  & .UserInfoContainer {
+    flex: 0.35;
+  }
+  @media screen and (max-width: 1000px) {
     flex-direction: column;
     height: 102rem;
     & .MapContainer {
       min-height: 20rem;
       max-height: 35rem;
     }
+    & .UserInfoContainer {
+      flex: 1;
+    }
   }
   @media screen and (min-width: 1400px) {
     & .MapContainer {
       flex: 0.75;
     }
+    & .UserInfoContainer {
+      flex: 0.25;
+    }
   }
 `;
+
 const MapContainer = styled.div`
   min-height: 50rem;
-  position: relative;
 `;
 
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
-
 `;
 
-const UserContainer = styled.div`
-  /* @media screen and (max-width: px) {
-  } */
-  align-items: center;
-  width: 30%;
-  height: 100%;
-  background: #febeb0;
-  position: fixed;
-  top: 10;
-  right: 0;
-  width: 35%;
-  @media screen and (max-width: 850px) {
-    display: none;
-  }
-  @media screen and (min-width: 1400px) {
-    width: 25%;
-  }
-`;
-
-const ContentTitle = styled.div`
-text-align: center;
- padding-top: 75%; 
- padding-bottom: 25%;
-`
-
-const MainText = styled.div`
-  font-size: 2.3rem;
-  color:white;
-`;
-
-const MainImg = styled.img`
-width: 70%;
-height: 70%;
-`;
-
+//# When pin clicked
 const UserCard = styled.section`
   display: flex;
   flex-direction: column;
-
-  position: fixed; 
   height: 100%;
   min-height: 50rem;
   background-color: white;
-  
   & .UserInfo {
     background-color: white;
-    flex: 0.2;
+    flex: 0.3;
   }
-
   & .Reply {
-    flex: 0.8;
-  }
-
-  @media screen and (min-width: 567px) and (max-width: 900px) {
-    & .UserInfo {
-      flex: 0.3;
-    }
-
-    & .Reply {
-      flex: 0.7;
-    }
+    background-color: red;
+    flex: 0.7;
   }
 `;
+
+const UserContainer = styled.div`
+  background: pink;
+  box-sizing: border-box;
+  word-break: keep-all;
+  height: 100%;
+  backg & .UserInfo {
+    background-color: white;
+    flex: 0.3;
+  }
+  & .Reply {
+    background-color: yellow;
+    flex: 0.7;
+  }
+`;
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+`;
+
+// const Reply = styled.div``;
+
+//# Before pin clicked
+// const DogCard = styled.section``;
+
 export default Index;

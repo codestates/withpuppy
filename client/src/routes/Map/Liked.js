@@ -17,7 +17,13 @@ export default function Index() {
 
   return (
     <StarBox>
-      <LikeBtn className="flex-center-R" onClick={Toggle}>
+      <LikeBtn
+        style={{
+          boxSizing: 'borderBox',
+        }}
+        className="flex-center-R"
+        onClick={Toggle}
+      >
         ⭐️ {counter}
       </LikeBtn>
     </StarBox>
@@ -26,26 +32,24 @@ export default function Index() {
 
 const StarBox = styled.div`
   position: relative;
-  margin-top: 18px;
+  margin-top: 15px;
 `;
 
 const LikeBtn = styled.button`
-  cursor: pointer;
-  border: none;
-  background-color: white;
-  font-size: 15px;
   position: absolute;
-  width: 75px;
-  height: 30px;
-  margin: 0;
-  top: 50%;
-  left: 53%;
-  transform: translate(-50%, -50%);
-  border-radius: 10px;
-  box-shadow: 2px 4px 20px 0 rgba(0, 0, 0, 0.2);
-  text-align: center;
-  margin: 0;
-  display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  margin: 0;
+  background-color: white;
+  font-size: ${({ theme }) => theme.fontSizes.xxl};
+  cursor: pointer;
+  left: 50%;
+  border-radius: 20px;
+  box-sizing: border-box;
+  border: none;
+  transform: translate(-50%, -50%);
+  box-shadow: 2px 8px 25px 0 rgba(0, 0, 0, 0.2);
 `;
