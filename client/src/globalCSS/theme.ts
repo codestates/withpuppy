@@ -26,6 +26,8 @@ export const colors = {
   grayTwo: '#E5E5E5',
   grayThree: '#999999',
   grayFour: '#111',
+  gray5: '#F6F6F6',
+  gray6: '#E8E8E8',
   pointColorYello: '#ffc114',
   pointColorCarrot: '#ff5248',
   pointColorMint: '#19cdca',
@@ -90,7 +92,7 @@ export const mediaQuery = {
 } as const;
 
 export const animation = {
-  showDown: keyframes`
+  showUp: keyframes`
   from {
     opacity: 0;
     top: 70%;
@@ -100,6 +102,16 @@ export const animation = {
     top: 50%;
   }
 `,
+  showLeft: keyframes`
+    from{
+      opacity:0;
+      left: 30%;
+    }
+    to{
+      opacity:1;
+      left: 50%;
+    }
+  `,
 };
 
 // @ CSS PART END ///////////////////////////////////////////////////////////////

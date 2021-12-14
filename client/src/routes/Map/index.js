@@ -30,10 +30,10 @@ function Index() {
   const mapRef = useRef(null);
   const { kakao } = window;
   const dispatch = useDispatch();
-  const [CommentLists,setCommentLists] = useState([]);
+  const [CommentLists, setCommentLists] = useState([]);
   const updateComment = (newComment) => {
-        setCommentLists(CommentLists.concat(newComment))
-  }
+    setCommentLists(CommentLists.concat(newComment));
+  };
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const openWalkHandler = () => {
@@ -96,7 +96,7 @@ function Index() {
 
       const imageCandidates = [보브, 이코, 유나, 카덴];
       const imageSrc =
-        imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
+          imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
         imageSize = new kakao.maps.Size(40, 40),
         imageOption = { offset: new kakao.maps.Point(22, 69) };
       const markerImage = new kakao.maps.MarkerImage(
@@ -117,16 +117,17 @@ function Index() {
         let wrapper = document.createElement('div');
         wrapper.innerHTML = customOverlay;
         // console.log(wrapper.firstChild);
-        
+
         let closeBtn = wrapper.firstChild.querySelector('.close-button');
         // let doc = new DOMParser().parseFromString(customOverlay, 'text/html');
         // let closeBtn = doc.getElementsByClassName('close-button')[0];
-       
+
         closeBtn.addEventListener('click', function () {
           console.log('hello world');
           overlay.setMap(null);
+          setIsMarkerSelected(false);
         });
-        
+
         let contactBtn = wrapper.firstChild.querySelector('.contact-btn');
         contactBtn.addEventListener('click', function () {
           console.log('you clicked this!');
@@ -185,8 +186,8 @@ function Index() {
                   puppyName="강아지 이름 테스트 입니다"
                   userName="사람 이름 테스트 입니다"
                   puppyAge={7}
-                  introduceTo="소개글 테스트 입니다">
-                    </UserInfo>   
+                  introduceTo="소개글 테스트 입니다"
+                ></UserInfo>
                 <Replys></Replys>
               </UserCard>
             ) : (
@@ -194,7 +195,7 @@ function Index() {
                 className="titleContent"
                 style={{ textAlign: 'center', paddingTop: '80%' }}
               >
-                <Title>핀을 클릭해서 친구들을 만나보세요</Title>
+                <ContentTitle>핀을 클릭해서 친구들을 만나보세요</ContentTitle>
                 <MainImg src={petchingPuppyImg}></MainImg>
               </div>
             )}
@@ -237,7 +238,6 @@ const MapContainer = styled.div`
 
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
-
 `;
 
 const UserContainer = styled.div`
@@ -260,30 +260,30 @@ const UserContainer = styled.div`
 `;
 
 const ContentTitle = styled.div`
-text-align: center;
- padding-top: 75%; 
- padding-bottom: 25%;
-`
+  text-align: center;
+  /* padding-top: 75%;
+  padding-bottom: 25%; */
+`;
 
 const MainText = styled.div`
   font-size: 2.3rem;
-  color:white;
+  color: white;
 `;
 
 const MainImg = styled.img`
-width: 70%;
-height: 70%;
+  width: 70%;
+  height: 70%;
 `;
 
 const UserCard = styled.section`
   display: flex;
   flex-direction: column;
 
-  position: fixed; 
+  position: fixed;
   height: 100%;
   min-height: 50rem;
   background-color: white;
-  
+
   & .UserInfo {
     background-color: white;
     flex: 0.2;

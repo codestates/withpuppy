@@ -22,14 +22,14 @@ export const ModalContainer = styled.div`
   min-height: 45rem;
   background-color: ${({ theme }) => theme.colors.secondColor};
   border-radius: 5rem;
-  z-index: 10000;
+  z-index: 100000;
   padding: 3rem;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  animation: ${({ theme }) => theme.animation.showDown} 0.5s forwards;
+  animation: ${({ theme }) => theme.animation.showUp} 0.5s forwards;
 
   & .closeIcon {
     position: absolute;
@@ -48,7 +48,7 @@ export const ModalBackground = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  z-index: 1500;
+  z-index: 15000;
 `;
 
 export default Index;
