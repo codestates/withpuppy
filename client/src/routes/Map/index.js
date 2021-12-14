@@ -288,7 +288,6 @@ function Index() {
               )}
             </UserContainer>
           </UserCard>
-
         </UserInfoContainer>
       </MapMain>
     </>

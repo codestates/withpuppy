@@ -70,7 +70,7 @@ app.listen(PORT, () => {
 db.sequelize
   .sync({ force: false, alter: true })
   .then(async () => {
-    //default user for test
+    //@@default user for test
     let user = await db.User.findOne({ where: { email: "test@test.com" } });
     if (!user) {
       user = await db.User.create({
