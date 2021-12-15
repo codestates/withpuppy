@@ -36,7 +36,7 @@ const googleRoutes = require("./routes/googleRoutes");
 app.use("/user", userRoutes);
 app.use("/puppy", puppyRoutes);
 app.use("/mypage", mypageRoutes);
-app.use("/pin", pinRoutes);
+app.use("/map", pinRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/kakao", kakaoRoutes);
@@ -70,7 +70,7 @@ app.listen(PORT, () => {
 db.sequelize
   .sync({ force: false, alter: true })
   .then(async () => {
-    //default user for test
+    //@@default user for test
     let user = await db.User.findOne({ where: { email: "test@test.com" } });
     if (!user) {
       user = await db.User.create({
@@ -158,8 +158,12 @@ db.sequelize
       ]);
     }
 
-    const testUser = await db.User.findOne({ where: { email: "chltjdrhd777@gmail.com" } });
-    const testPinpointer = await db.Pinpointer.findOne({ where: { UserId: 2 } });
+    const testUser = await db.User.findOne({
+      where: { email: "chltjdrhd777@gmail.com" },
+    });
+    const testPinpointer = await db.Pinpointer.findOne({
+      where: { UserId: 2 },
+    });
     if (testUser && !testPinpointer) {
       const future = String(Date.parse(new Date("2100/12/12")));
       const puppy = await testUser.getPuppy();

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import BaseCard from './BaseCard';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import {
   CardInputForm,
@@ -14,33 +14,10 @@ import useForm from 'hooks/useMypageForm';
 import { Spinner } from 'components/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { getPinpointerInfo } from 'redux/Async/getPinpointerInfo';
-import { logout } from 'redux/Slices/User';
+import PinDropDown from 'components/Dropdown/PinpointerDrop';
 
 function UserCard() {
   const { userData } = useSelector(selectUser);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [pinpointers, setPinpointers] = useState([]);
-  console.log(pinpointers);
-
-  // 2. get pinpointers
-  const getPins = async () => {
-    try {
-      const {
-        data: { pinpointers },
-      } = await dispatch(getPinpointerInfo(navigate)).unwrap();
-
-      setPinpointers(pinpointers);
-    } catch (err) {
-      navigate('/');
-      dispatch(logout());
-    }
-  };
-
-  useEffect(() => getPins(), []);
 
   const {
     values,
@@ -60,6 +37,7 @@ function UserCard() {
 
       <PinButton className="flex-center-R">
         <FontAwesomeIcon icon={faMapMarkerAlt} />
+        <PinDropDown />
       </PinButton>
 
       <UserInfoContainer className="flex-center-C">
@@ -147,9 +125,34 @@ const PinButton = styled.div`
     bottom: -15px;
     font-size: 1rem;
   }
-`;
 
-const pinDropDown = styled.div``;
+  &:hover .pinpointer-dropdownUl {
+    display:block;
+    opacity: 1;
+
+    & > li {
+      //@animation
+      @keyframes growDown {
+      0% {
+          visibility:hidden;
+          opacity:0;
+          transform: scaleY(0)
+      }
+      80% {
+          visibility:visible;
+          opacity:0.8
+          transform: scaleY(1.1)
+      }
+      100% {
+        visibility:visible;
+        opacity:1;
+          transform: scaleY(1)
+      }
+    }
+
+    animation:growDown 0.3s ease-in-out forwards;
+  }
+`;
 
 const UserInfoContainer = styled.article`
   width: 100%;

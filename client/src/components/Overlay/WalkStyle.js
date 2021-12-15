@@ -3,15 +3,15 @@ import { createGlobalStyle } from 'styled-components';
 
 export const ModalContainer = styled.div`
   width: 556px;
-  height: 340px;
+  height: 380px;
   @media screen and (max-width: 500px) {
     width: 480px;
-    height: 300px;
+    height: 330px;
     padding: 1rem;
   }
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 12px;
-  z-index: 1000;
+  z-index: 1500;
   padding: 1rem;
   position: fixed;
   top: 50%;
@@ -23,6 +23,21 @@ export const ModalContainer = styled.div`
   box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
   border: 0.05px solid #e87676;
 `;
+
+export const ModalBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  /* background-color: transparent; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+`;
+
+//styled(background)``
 
 export const InputContainer = styled.div`
   margin: 10px;

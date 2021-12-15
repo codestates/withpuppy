@@ -2,44 +2,77 @@ import 보브 from '../../assets/img/icons/보브.png';
 import 유나 from '../../assets/img/icons/유나.png';
 import 이코 from '../../assets/img/icons/이코.png';
 import 카덴 from '../../assets/img/icons/카덴.png';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import MapHeader from 'components/Header/Homeheader';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addMap } from 'redux/Slices/Map';
 import Example from './Example';
 import { faBlackTie, faUber } from '@fortawesome/free-brands-svg-icons';
-import UserInfo from './UserInfo';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
-import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
+import UserInfo from './UserInfo';
+import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-// import Icon2 from '../../assetsodal';
 import UserModal from './COMMENT/UserModal';
 import Reply from './COMMENT/Reply';
 import { Row } from 'components/Footer/FooterStyle';
-
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
+import CommentInput from './commentInput';
+import Comment from './Comment';
+import { useNavigate } from 'react-router-dom';
+import axios from 'redux/Async/axios';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
+  const [comments, setComments] = useState([
+    { id: 1, name: 'Minjoo Park', content: 'I like it!' },
+  ]);
+
+  const [like, setLike] = useState(0); //좋아요 버튼구현
+
+  const nextId = useRef(1);
+
+  const onInsert = useCallback(
+    (name, content) => {
+      const comment = {
+        id: nextId.current,
+        name,
+        content,
+      };
+      console.log(name);
+      console.log(content);
+      setComments((comments) => comments.concat(comment));
+      nextId.current += 1; //nextId 1씩 더하기
+    },
+    [comments],
+  );
+
   const mapRef = useRef(null);
   const { kakao } = window;
   const dispatch = useDispatch();
+
   const [CommentLists, setCommentLists] = useState([]);
   const updateComment = (newComment) => {
     setCommentLists(CommentLists.concat(newComment));
   };
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
-  const openWalkHandler = () => {
-    setIsWalkOpen(!isWalkOpen);
-  };
   const [inputText, setInputText] = useState('');
   const [place, setPlace] = useState('');
+  const [isMarkerSelected, setIsMarkerSelected] = useState(false);
+  const [coordinate, setCoordinate] = useState([]);
+  const [latlng, setLatlng] = useState([]);
+  const [pinpointers, setPinpointers] = useState([]);
+
+  const navigate = useNavigate();
+
+  const updateComment = (newComment) => {
+    setCommentLists(CommentLists.concat(newComment));
+  };
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -47,14 +80,127 @@ function Index() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPlace(inputText);
-    setInputText('');
+    // setPlace(inputText);
     console.log(inputText);
+
+    const ps = new kakao.maps.services.Places();
+    ps.keywordSearch(inputText, placesSearchCB);
+
+    setInputText('');
   };
 
-  const [isMarkerSelected, setIsMarkerSelected] = useState(false);
+  const mapClickHandler = (e) => {
+    if (isWalkOpen === false) {
+      setIsWalkOpen(true);
+    }
+    if (e.target.tagName === 'IMG') {
+      setIsWalkOpen(false);
+    }
+  };
 
-  const [coordinate, setCoordinate] = useState([]);
+  const getPins = async () => {
+    try {
+      const response = await axios.get('/map/allpins');
+      setPinpointers(response.data.pinpointers);
+      //console.log(pinpointers);
+    } catch (err) {
+      console.log('error!!!!!');
+    }
+  };
+
+  async function placesSearchCB(pin, status, pagination) {
+    if (status === kakao.maps.services.Status.OK) {
+      let bounds = new kakao.maps.LatLngBounds();
+
+      for (let i = 0; i < pin.length; i++) {
+        bounds.extend(new kakao.maps.LatLng(pin[i].y, pin[i].x));
+      }
+
+      window.map.setBounds(bounds);
+      // const newMap = map.setBounds(bounds);
+
+      try {
+        // const result = {
+        //   level: '',
+        //   x: '',
+        //   y: '',
+        // };
+        console.log(window.map.getLevel());
+        const response = await axios.get('/map/allpins');
+        for (let i = 0; i < response.data.pinpointers.length; i++) {
+          displayMarkerandOverlay(response.data.pinpointers[i], pin);
+        }
+      } catch (err) {
+        console.log('error!!!!!');
+      }
+    }
+  }
+
+  /*
+  1. 서버에서 필터링
+  2. 이미지 바꿔끼워보고
+  3. 깃북 수정.
+  */
+
+  const imageCandidates = [보브, 이코, 유나, 카덴];
+  const imageSrc =
+      imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
+    imageSize = new kakao.maps.Size(40, 40),
+    imageOption = { offset: new kakao.maps.Point(22, 69) };
+  const markerImage = new kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imageOption,
+  );
+
+  function displayMarkerandOverlay(data, pin) {
+    console.log(pin);
+    //const position = new kakao.maps.LatLng(data.y, data.x);
+    const position = new kakao.maps.LatLng(data.lat, data.lng);
+    // const position2 = new kakao.maps.LatLng(pin[0].y, pin[0].x);
+
+    console.log(data, position);
+
+    let marker = new kakao.maps.Marker({
+      map: window.map,
+      position: position,
+      image: markerImage,
+      clickable: true,
+    });
+
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = customOverlay;
+
+    let closeBtn = wrapper.firstChild.querySelector('.close-button');
+
+    closeBtn.addEventListener('click', function () {
+      console.log('hello world');
+      setIsMarkerSelected(false);
+      overlay.setMap(null);
+    });
+
+    let overlay = new kakao.maps.CustomOverlay({
+      content: wrapper.firstChild,
+      map: window.map,
+      position: marker.getPosition(),
+      xAnchor: 1,
+      yAnchor: 1,
+    });
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, 'click', function () {
+      setIsMarkerSelected(true);
+      overlay.setMap(window.map);
+    });
+
+    //장소가 바뀔 떄마다, 좌표들이 무한대로 늘어남을 방지하기 위해 비워준다.
+    // setCoordinate([]);
+    // setPinpointers([]);
+
+    marker.setMap(window.map);
+    //오버레이들이 화면에 한방에 안뜨게 아예 마커만 보이게 설정
+    overlay.setMap(null);
+  }
 
   useEffect(() => {
     const mapOptions = {
@@ -65,95 +211,43 @@ function Index() {
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
 
-      dispatch(addMap(map));
+      // dispatch(addMap(map));
+      window.map = map;
+      // setMap(map);
 
-      const ps = new kakao.maps.services.Places();
-      ps.keywordSearch(place, placesSearchCB);
-
-      const geocoder = new kakao.maps.services.Geocoder();
-
-      geocoder.addressSearch(place, placesSearchCB);
-
-      function placesSearchCB(data, status, pagination) {
-        if (status === kakao.maps.services.Status.OK) {
-          let bounds = new kakao.maps.LatLngBounds();
-
-          for (let i = 0; i < data.length; i++) {
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-            displayMarkerandOverlay(data[i]);
-            coordinate.push([data[i].y, data[i].x]);
-          }
-
-          map.setBounds(bounds);
-          console.log(coordinate);
-        }
-      }
-
-      const imageCandidates = [보브, 이코, 유나, 카덴];
-      const imageSrc =
-          imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
-        imageSize = new kakao.maps.Size(40, 40),
-        imageOption = { offset: new kakao.maps.Point(22, 69) };
-      const markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOption,
-      );
-
-      function displayMarkerandOverlay(place) {
-        const position = new kakao.maps.LatLng(place.y, place.x);
-        let marker = new kakao.maps.Marker({
-          map: map,
-          position: position,
-          image: markerImage,
-          clickable: true,
-        });
-
-        let wrapper = document.createElement('div');
-        wrapper.innerHTML = customOverlay;
-
-        let closeBtn = wrapper.firstChild.querySelector('.close-button');
-
-        closeBtn.addEventListener('click', function () {
-          console.log('hello world');
-          overlay.setMap(null);
-        });
-
-        let contactBtn = wrapper.firstChild.querySelector('.contact-btn');
-        contactBtn.addEventListener('click', function () {
-          console.log('you clicked this!');
-        });
-
-        let overlay = new kakao.maps.CustomOverlay({
-          content: wrapper.firstChild,
-          map: map,
-          position: marker.getPosition(),
-          xAnchor: 1,
-          yAnchor: 1,
-        });
-
-        kakao.maps.event.addListener(marker, 'click', function () {
-          setIsMarkerSelected(true);
-          overlay.setMap(map);
-        });
-
-        setCoordinate([]);
-
-        marker.setMap(map);
-        overlay.setMap(null);
-      }
+      // 클릭한 위도, 경도 정보를 가져와서 스테이트 변화.
+      kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        let latlng = mouseEvent.latLng;
+        let array = [latlng.getLat(), latlng.getLng()];
+        setLatlng(array);
+      });
     } catch (err) {
       console.log(err);
     }
-    return () => {};
-  }, [place]);
+  }, []);
 
   return (
     <>
       <MapHeader className="mapHeader" />
       <MapMain>
-        <MapContainer ref={mapRef} searchPlace={place} className="MapContainer">
-          <SearchContainer className="inputForm" onSubmit={handleSubmit}>
+        {isWalkOpen === true ? (
+          <Walk
+            setIsWalkOpen={setIsWalkOpen}
+            latlng={latlng}
+            pinpointers={pinpointers}
+          ></Walk>
+        ) : null}
+        <MapContainer
+          ref={mapRef}
+          searchPlace={place}
+          className="MapContainer"
+          onClick={mapClickHandler}
+        >
+          <SearchContainer
+            className="inputForm"
+            onSubmit={handleSubmit}
+            onClick={(e) => e.stopPropagation()}
+          >
             <SearchBar
               placeholder="장소 검색"
               onChange={onChange}
@@ -161,10 +255,6 @@ function Index() {
             ></SearchBar>
             <SearchBtn type="submit">검색</SearchBtn>
           </SearchContainer>
-          <Btn onClick={openWalkHandler}>산책등록</Btn>
-          {isWalkOpen === true ? (
-            <Walk setIsWalkOpen={setIsWalkOpen}></Walk>
-          ) : null}
         </MapContainer>
         <UserInfoContainer className="UserInfoContainer">
           <UserCard className="UserCard">
@@ -174,10 +264,22 @@ function Index() {
                   <UserInfoWrapper>
                     <UserInfo />
                   </UserInfoWrapper>
-                  <Reply>
-                    내꺼
-                    <ReplySection></ReplySection>
-                  </Reply>
+
+                  <ReplyCon>
+                    {/* <div style={{ marginBottom: '4rem' }}> */}
+                    {comments.map((comment) => {
+                      return (
+                        <Comment
+                          key={comment.id}
+                          id={comment.id}
+                          name={comment.name}
+                          content={comment.content}
+                        />
+                      );
+                    })}
+                    {/* </div>{' '} */}
+                    <CommentInput onInsert={onInsert} />
+                  </ReplyCon>
                 </>
               ) : (
                 <ContentTitle>
@@ -192,10 +294,22 @@ function Index() {
     </>
   );
 }
-const ReplySection = styled.div`
-  width: 80px;
-  height: 50px;
-  background-color: yellow;
+
+
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+  width: 100%;
+`;
+
+const ReplyCon = styled.div`
+  background-color: #f7f1ed;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ContentTitle = styled.div`
@@ -203,7 +317,9 @@ const ContentTitle = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-top: 30%;
+  width: 100%;
+  height: 100%;
+  background-color: #febeb0;
 `;
 
 const MainText = styled.div`
@@ -254,6 +370,42 @@ const MapContainer = styled.div`
 
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
+  background-color: white;
+`;
+
+const UserContainer = styled.div`
+  /* @media screen and (max-width: px) {
+  } */
+  align-items: center;
+  width: 30%;
+  height: 100%;
+  background: #febeb0;
+  position: fixed;
+  top: 10;
+  right: 0;
+  width: 35%;
+  @media screen and (max-width: 850px) {
+    display: none;
+  }
+  @media screen and (min-width: 1400px) {
+    width: 25%;
+  }
+`;
+
+const ContentTitle = styled.div`
+  text-align: center;
+  padding-top: 75%;
+  padding-bottom: 25%;
+`;
+
+const MainText = styled.div`
+  font-size: 2.3rem;
+  color: white;
+`;
+
+const MainImg = styled.img`
+  width: 70%;
+  height: 70%;
 `;
 
 //# When pin clicked
@@ -262,7 +414,9 @@ const UserCard = styled.section`
   flex-direction: column;
   height: 100%;
   min-height: 50rem;
+  padding: 3rem;
   background-color: white;
+
   & .UserInfo {
     background-color: white;
     flex: 0.3;
@@ -281,6 +435,26 @@ const UserContainer = styled.div`
   backg & .UserInfo {
     background-color: white;
     flex: 0.3;
+    
+//   box-sizing: border-box;
+//   word-break: keep-all;
+//   /* padding: 1.3rem; */
+//   align-items: center;
+//   /* width: 500px;  */
+//   /* background-color: white; */
+//   height: 100%;
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+
+//   & .UserInfo {
+//     background-color: white;
+//     flex: 0.3;
+//   }
+//   & .Reply {
+//     background-color: yellow;
+//     flex: 0.7;
+
   }
   & .Reply {
     background-color: yellow;
@@ -291,10 +465,5 @@ const UserInfoWrapper = styled.div`
   flex-direction: column;
   min-height: 20rem;
 `;
-
-// const Reply = styled.div``;
-
-//# Before pin clicked
-// const DogCard = styled.section``;
 
 export default Index;

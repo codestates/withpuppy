@@ -53,3 +53,4 @@ const LikeBtn = styled.button`
   transform: translate(-50%, -50%);
   box-shadow: 2px 8px 25px 0 rgba(0, 0, 0, 0.2);
 `;
+

@@ -51,7 +51,7 @@ module.exports = {
       // 1. find pinpointer and messages
       const targetUser = await User.findOne({ where: { email: user.email, social: user.social } });
       let pinpointers = await targetUser.getPinpointers({
-        attributes: ["iconType", "location"],
+        attributes: ["id", "iconType", "location"],
         include: [
           {
             model: Message,
@@ -59,7 +59,7 @@ module.exports = {
             include: [
               {
                 model: User,
-                attributes: ["nickname", "thumbImg"],
+                attributes: ["id", "nickname", "thumbImg"],
                 include: [
                   { model: Puppy, attributes: ["puppyName", "introduction"] },
                   {
@@ -78,13 +78,14 @@ module.exports = {
 
       pinpointers = pinpointers.map((pinpointer) => {
         let dataToSend = {};
+        console.log(pinpointer, pinpointer.Messages[0].User);
+        dataToSend.pinpointerId = pinpointer.id;
         dataToSend.iconType = pinpointer.iconType;
         dataToSend.location = pinpointer.location;
-        dataToSend.text = pinpointer.text;
         dataToSend.createdAt = pinpointer.createdAt;
         dataToSend.Messages = pinpointer.Messages.map((message) => {
           let messageData = {};
-
+          messageData.writerId = message.User.id;
           messageData.text = message.text;
           messageData.createdAt = message.createdAt;
           messageData.nickname = message.User.nickname;

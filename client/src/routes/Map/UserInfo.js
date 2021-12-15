@@ -59,6 +59,7 @@ export default function Index({
           <div
             className="introduction"
             style={{
+              width: '100%',
               height: '90px',
               boxSizing: 'border-box',
               border: 'none',
@@ -82,3 +83,4 @@ const UserInfo = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
 `;
+
