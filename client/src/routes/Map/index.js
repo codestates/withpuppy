@@ -15,7 +15,8 @@ import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-import Icon2 from '../../assets/img/icons/Icon.png';
+import UserModal from './COMMENT/UserModal';
+import Reply from './COMMENT/Reply';
 import { Row } from 'components/Footer/FooterStyle';
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
@@ -207,7 +208,6 @@ function Index() {
       level: 7,
     };
 
-    //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
 
@@ -264,6 +264,7 @@ function Index() {
                   <UserInfoWrapper>
                     <UserInfo />
                   </UserInfoWrapper>
+
                   <ReplyCon>
                     {/* <div style={{ marginBottom: '4rem' }}> */}
                     {comments.map((comment) => {
@@ -294,6 +295,7 @@ function Index() {
   );
 }
 
+
 const UserInfoWrapper = styled.div`
   flex-direction: column;
   min-height: 20rem;
@@ -315,7 +317,6 @@ const ContentTitle = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   width: 100%;
   height: 100%;
   background-color: #febeb0;
@@ -368,6 +369,7 @@ const MapContainer = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
+  background-color: ${({ theme }) => theme.colors.secondColor};
   background-color: white;
 `;
 
@@ -426,25 +428,42 @@ const UserCard = styled.section`
 `;
 
 const UserContainer = styled.div`
+  background: pink;
   box-sizing: border-box;
   word-break: keep-all;
-  /* padding: 1.3rem; */
-  align-items: center;
-  /* width: 500px;  */
-  /* background-color: white; */
   height: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-
-  & .UserInfo {
+  backg & .UserInfo {
     background-color: white;
     flex: 0.3;
+    
+//   box-sizing: border-box;
+//   word-break: keep-all;
+//   /* padding: 1.3rem; */
+//   align-items: center;
+//   /* width: 500px;  */
+//   /* background-color: white; */
+//   height: 100%;
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+
+//   & .UserInfo {
+//     background-color: white;
+//     flex: 0.3;
+//   }
+//   & .Reply {
+//     background-color: yellow;
+//     flex: 0.7;
+
   }
   & .Reply {
     background-color: yellow;
     flex: 0.7;
   }
+`;
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
 `;
 
 export default Index;

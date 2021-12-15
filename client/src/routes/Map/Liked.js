@@ -32,8 +32,8 @@ export default function Index() {
 
 const StarBox = styled.div`
   position: relative;
-  margin-top: 15px;`
-;
+  margin-top: 15px;
+`;
 
 const LikeBtn = styled.button`
   position: absolute;
@@ -51,5 +51,6 @@ const LikeBtn = styled.button`
   box-sizing: border-box;
   border: none;
   transform: translate(-50%, -50%);
-  box-shadow: 2px 8px 25px 0 rgba(0, 0, 0, 0.2);`
-;
+  box-shadow: 2px 8px 25px 0 rgba(0, 0, 0, 0.2);
+`;
+

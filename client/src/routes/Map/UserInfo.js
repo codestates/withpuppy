@@ -1,5 +1,5 @@
-// import femaleIcon from '../../assets/img/profile/pngwing/female.png';
-// import maleIcon from '../../assets/img/profile/pngwing/male.png';
+import femaleIcon from '../../assets/img/profile/pngwing/female.png';
+import maleIcon from '../../assets/img/profile/pngwing/male.png';
 import profile from '../../assets/img/profile/profile.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';
@@ -47,8 +47,8 @@ export default function Index({
         <div clasName="userNameInfo">{userName}</div>
         <div className="puppyAgeInfo">{puppyAge}살</div>
         <div className="genderIcon">
-          {/* <img src={femaleIcon} style={{ width: '15px', height: '15px' }}></img>
-          <img src={maleIcon} style={{ width: '15px', height: '15px' }}></img> */}
+          <img src={femaleIcon} style={{ width: '15px', height: '15px' }}></img>
+          <img src={maleIcon} style={{ width: '15px', height: '15px' }}></img>
         </div>
         <div
           className="introductionContainer"
@@ -83,3 +83,4 @@ const UserInfo = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
 `;
+
