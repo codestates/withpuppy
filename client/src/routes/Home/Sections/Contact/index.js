@@ -1,30 +1,33 @@
 import styled, { keyframes } from 'styled-components/macro';
 import Lan2 from 'assets/LandingPage/랜딩2.png';
+import Fade from 'react-reveal/Fade';
 
 const Contact = () => {
   return (
     <AboutSection className="flex-center-C">
-      <Main>
-        <Content>          
-          <Rocket>
-            <img src={Lan2} alt="" />
-          </Rocket>
-          <AboutText>
-            <Rectangle6>
-              <Text>퍼피매칭</Text>
-            </Rectangle6>
-            <Title>강아지 사회화의 중요성을 알고 계신가요 ?</Title>
-            <SubText>            
-           사회화는 강아지를 새로운 장소, 소리, 경험에 노출시키는 과정을 말합니다. 강아지가 이 세상에 익숙해지도록 돕고 새로운 상황을 자신감있게 대하도록 가르치는 것입니다.
-            </SubText>
-          </AboutText>
-
-        </Content>
-      </Main>
+      <Fade right>
+        <Main>
+          <Content>
+            <Rocket>
+              <img src={Lan2} alt="" />
+            </Rocket>
+            <AboutText>
+              <Rectangle6>
+                <Text>퍼피매칭</Text>
+              </Rectangle6>
+              <Title>강아지 사회화의 중요성을 알고 계신가요 ?</Title>
+              <SubText>
+                사회화는 강아지를 새로운 장소, 소리, 경험에 노출시키는 과정을
+                말합니다. 강아지가 이 세상에 익숙해지도록 돕고 새로운 상황을
+                자신감있게 대하도록 가르치는 것입니다.
+              </SubText>
+            </AboutText>
+          </Content>
+        </Main>{' '}
+      </Fade>
     </AboutSection>
   );
 };
-
 
 //애니메이션 무빙
 const move = keyframes`
@@ -39,6 +42,7 @@ const AboutSection = styled.section`
 `;
 
 const Main = styled.div`
+  margin-top: 10rem;
   margin: 15rem;
   align-items: center;
 `;
@@ -74,31 +78,31 @@ const Content = styled.div`
 
   flex-direction: row-reverse;
   @media screen and (max-width: 1300px) {
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    flex-direction:column;
-    }
+    flex-direction: column;
+  }
 `;
 
 const Rocket = styled.div`
- display: flex;
+  display: flex;
   width: 50%;
   padding-bottom: 5rem;
   animation: ${move} 2.5s ease infinite;
-  max-width:100%;
-  height:auto;
+  max-width: 100%;
+  height: auto;
   & img {
-   width: 100%;
-   min-width: 200px;
+    width: 100%;
+    min-width: 200px;
   }
   @media screen and (max-width: 1300px) {
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    flex-direction:column;
+    flex-direction: column;
     width: 500px;
-    }
+  }
 `;
 
 const SubText = styled.h5`
@@ -106,14 +110,14 @@ const SubText = styled.h5`
   line-height: 1.5;
   padding: 1rem 0;
   color: ${({ theme }) => theme.colors.pointColor2};
-  width:100%; 
+  width: 100%;
   word-break: keep-all;
 `;
 
 const AboutText = styled.div`
   width: 50%;
   position: relative;
-  margin-bottom: 50px; 
+  margin-bottom: 50px;
   width: 500px;
 `;
 

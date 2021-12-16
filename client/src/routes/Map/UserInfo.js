@@ -1,6 +1,6 @@
-import femaleIcon from '../../assets/img/profile/pngwing/female.png';
-import maleIcon from '../../assets/img/profile/pngwing/male.png';
-import profile from '../../assets/img/profile/profile.png';
+import femaleIcon from 'assets/img/profile/pngwing/pngwing1.png';
+import maleIcon from 'assets/img/profile/pngwing/pngwing2.png';
+import profile from 'assets/img/profile/profile.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';
 import { Column } from 'components/Footer/FooterStyle';
@@ -52,9 +52,9 @@ export default function Index({
         </div>
         <div
           className="introductionContainer"
-          style={{
-            paddingRight: '10px',
-          }}
+          // style={{
+          //   paddingRight: '10px',
+          // }}
         >
           <div
             className="introduction"
@@ -82,5 +82,5 @@ const UserInfo = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
+  padding: 2.5rem;
 `;
-
