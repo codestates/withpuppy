@@ -4,10 +4,7 @@ const sharp = require('sharp');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
 const resetProfile = require('../controllers/utils/resetBucketFolder');
-const ENV_PATH = require('path').resolve(__dirname, '../.env');
-const result = dotenv.config({ path: ENV_PATH });
-
-console.log(ENV_PATH, process.env);
+dotenv.config();
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.MULTER_ACCESS_KEY,

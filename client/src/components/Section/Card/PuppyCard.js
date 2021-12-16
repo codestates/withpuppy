@@ -11,8 +11,8 @@ import {
 import { BaseBtn } from 'components/Button';
 import Tumbnail from 'components/Icon/Tumbnail';
 import useForm from 'hooks/useMypageForm';
-import FemaleIcon from 'assets/img/profile/pngwing/pngwing1.png';
-import MaleIcon from 'assets/img/profile/pngwing/pngwing2.png';
+import FemaleIcon from 'assets/img/profile/pngwing/female.png';
+import MaleIcon from 'assets/img/profile/pngwing/male.png';
 
 function PuppyCard() {
   const { userData } = useSelector(selectUser);

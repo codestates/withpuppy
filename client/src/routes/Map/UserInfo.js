@@ -1,5 +1,5 @@
-import femaleIcon from 'assets/img/profile/pngwing/pngwing1.png';
-import maleIcon from 'assets/img/profile/pngwing/pngwing2.png';
+import femaleIcon from 'assets/img/profile/pngwing/female.png';
+import maleIcon from 'assets/img/profile/pngwing/male.png';
 import profile from 'assets/img/profile/profile.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';

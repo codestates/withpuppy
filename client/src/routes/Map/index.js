@@ -12,7 +12,6 @@ import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import { customOverlay } from './customOverlay';
-import { BaseIcon } from 'components/Icon';
 import { Row } from 'components/Footer/FooterStyle';
 import CommentInput from './commentInput';
 import Comment from './Comment';
@@ -24,8 +23,6 @@ import { genPinIconType } from 'utils/genPinIconType';
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
-  const { userData } = useSelector(selectUser);
-
   const [comments, setComments] = useState([
     { id: 1, name: '비숑숑', content: '강아지 너무 귀요워요 😍' },
     // { id: 2, name: '멍푸들', content: '감사합니다! 비숑숑님' },
@@ -311,12 +308,12 @@ const ReplyCon = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;
- overflow-y: scroll;
+  overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 10px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #E97676;
+    background-color: #e97676;
     border-radius: 20px;
     background-clip: padding-box;
     border: 2px solid transparent;
@@ -325,9 +322,7 @@ const ReplyCon = styled.div`
     background-color: transparent;
     border-radius: 20px;
     box-shadow: inset 0px 0px 5px white;
-    
   }
-}
 `;
 
 const ContentTitle = styled.div`
@@ -392,11 +387,6 @@ const UserInfoContainer = styled.div`
   background-color: white;
 `;
 
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
-  width: 100%;
-`
 // const ContentTitle = styled.div`
 //   text-align: center;
 //   padding-top: 75%;
