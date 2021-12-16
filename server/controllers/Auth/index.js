@@ -35,9 +35,11 @@ module.exports = {
 
         const accessToken = genAccess({
           email,
+          social: null,
         });
         const refreshToken = genRefresh({
           email,
+          social: null,
         });
 
         res.cookie("accessToken", accessToken, {

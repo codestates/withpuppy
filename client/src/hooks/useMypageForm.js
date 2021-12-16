@@ -38,11 +38,7 @@ function useMypageForm(initialValues) {
     //! type = user or puppy
 
     //0. if already clicked || empty => no action
-    if (
-      submitState.status === 'loading' ||
-      submitState.status === 'reject' ||
-      Object.values(values).includes('')
-    ) {
+    if (submitState.status === 'loading' || submitState.status === 'reject') {
       return;
     }
 
@@ -71,7 +67,15 @@ function useMypageForm(initialValues) {
 
     //3. if ok
     try {
-      const params = { type, ...values };
+      let dataToSend = { ...values };
+
+      Object.keys(dataToSend).forEach((key) => {
+        if (dataToSend[key] === '') {
+          delete dataToSend[key];
+        }
+      });
+
+      const params = { type, ...dataToSend };
 
       if (type === 'user') {
         params['userId'] = userData.id;

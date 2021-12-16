@@ -11,6 +11,8 @@ import {
 import { BaseBtn } from 'components/Button';
 import Tumbnail from 'components/Icon/Tumbnail';
 import useForm from 'hooks/useMypageForm';
+import FemaleIcon from 'assets/img/profile/pngwing/pngwing1.png';
+import MaleIcon from 'assets/img/profile/pngwing/pngwing2.png';
 
 function PuppyCard() {
   const { userData } = useSelector(selectUser);
@@ -58,16 +60,37 @@ function PuppyCard() {
           <CardInputContainer>
             <div className="title">강아지 성별</div>
             {infoChange ? (
-              <input
-                type="text"
-                value={values.gender}
-                className="card-input"
-                name="gender"
-                maxLength="5"
-                onChange={(e) => onHandleChange(e.target.name, e.target.value)}
-              />
+              <div type="text" className="card-input gender">
+                <div
+                  className={`image-wrapper flex-center-R ${
+                    values.gender === 'male' ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    onHandleChange('gender', 'male');
+                  }}
+                >
+                  <img src={MaleIcon} alt="male-icon" />
+                </div>
+
+                <div
+                  className={`image-wrapper flex-center-R ${
+                    values.gender === 'female' ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    onHandleChange('gender', 'female');
+                  }}
+                >
+                  <img src={FemaleIcon} alt="female-icon" />
+                </div>
+              </div>
             ) : (
-              <div className="value">{userData.puppy.gender}</div>
+              <div className="value">
+                {userData.puppy.gender === 'male' ? (
+                  <img src={MaleIcon} alt="male-icon" />
+                ) : (
+                  <img src={FemaleIcon} alt="female-icon" />
+                )}
+              </div>
             )}
           </CardInputContainer>
 

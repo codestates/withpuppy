@@ -3,7 +3,6 @@ import maleIcon from 'assets/img/profile/pngwing/pngwing2.png';
 import profile from 'assets/img/profile/profile.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';
-import { Column } from 'components/Footer/FooterStyle';
 
 export default function Index({
   profileImg,

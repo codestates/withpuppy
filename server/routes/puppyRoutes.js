@@ -4,6 +4,6 @@ const { changePuppyProfile } = require("../controllers/Puppy");
 const verifyAceess = require("../middleware/verifyAccessToken");
 const upload = require("../middleware/uploadImg");
 
-router.put("/puppyProfile", verifyAceess, upload.single("puppyImg"), changePuppyProfile);
+router.put("/puppyprofile", verifyAceess, upload.single("puppyImg"), changePuppyProfile);
 
 module.exports = router;

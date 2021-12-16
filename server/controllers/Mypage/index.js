@@ -38,11 +38,6 @@ module.exports = {
       console.log(err);
       return res.status(500).json({ message: 'update mypageInfo failed' });
     }
-
-    // const targetData = req.file.transforms.find((transform) => transform.id === "resized");
-    // console.log(req.body.puppyId);
-    // await Puppy.update({ puppyProfile: targetData.location }, { where: { id: req.body.puppyId } });
-    // res.status(200).json(targetData.location);
   },
   getPinpointInfo: async (req, res) => {
     try {
@@ -105,6 +100,42 @@ module.exports = {
       res.status(200).json({ pinpointers });
     } catch (err) {
       console.log(err);
+    }
+  },
+  updateMypinMessages: async (req, res) => {
+    const {
+      id: UserId,
+      nickname,
+      thumbImg,
+      Puppy: {
+        dataValues: { puppyName, introduction },
+      },
+      follower,
+    } = req.user;
+    const { pinpointerId: PinpointerId, text } = req.body;
+
+    try {
+      const newMessage = await Message.create({
+        text,
+        UserId,
+        PinpointerId,
+      });
+
+      const dataToSend = {
+        writerId: UserId,
+        nickname,
+        thumbImg,
+        text,
+        puppyName,
+        introduction,
+        createdAt: newMessage.dataValues.createdAt,
+        likes: follower.length,
+      };
+
+      return res.status(200).json(dataToSend);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'update message on database failed' });
     }
   },
 };

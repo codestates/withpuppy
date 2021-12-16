@@ -6,10 +6,10 @@ const upload = require("../middleware/uploadImg");
 const { editUserProfile } = require("../controllers/User");
 
 router
-  .route("/userInfo")
+  .route("/userinfo")
   .get(verifyAceess, getUserInfo)
   .put(verifyAceess, editUserInfo)
   .delete(verifyAceess, deleteUserInfo);
 
-router.put("/userProfile", verifyAceess, upload.single("userImg"), editUserProfile);
+router.put("/userprofile", verifyAceess, upload.single("userImg"), editUserProfile);
 module.exports = router;

@@ -48,9 +48,11 @@ module.exports = {
       //4. send data
       const accessToken = genAccess({
         email,
+        social,
       });
       const refreshToken = genRefresh({
         email,
+        social,
       });
       res.cookie("accessToken", accessToken, { httpOnly: true });
       res.cookie("refreshToken", refreshToken, { httpOnly: true });

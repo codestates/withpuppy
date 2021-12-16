@@ -49,9 +49,11 @@ module.exports = {
       //4. send data
       const accessToken = genAccess({
         email: kakao_account.email,
+        social,
       });
       const refreshToken = genRefresh({
         email: kakao_account.email,
+        social,
       });
 
       res.cookie("accessToken", accessToken, { httpOnly: true });
