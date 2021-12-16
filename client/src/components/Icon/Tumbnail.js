@@ -58,7 +58,7 @@ function Tumbnail({ imgUrl, type }) {
     formData.append(selectType.imageType, file);
 
     try {
-      const response = await axios.put(`/${type}/${type}Profile`, formData);
+      const response = await axios.put(`/${type}/${type}profile`, formData);
       // console.log(response);
       e.target.value = null;
 

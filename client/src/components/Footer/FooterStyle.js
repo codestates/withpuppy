@@ -28,6 +28,23 @@ export const Logo = styled.a`
   margin-left: 40px;
   margin-right: 40px;
   text-decoration: none;
+  @media screen and (max-width: 1000px) {
+    font-size: 24px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  @media screen and (max-width: 800px) {
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 `;
 
 export const BottomLogo = styled.a`

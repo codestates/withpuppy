@@ -6,7 +6,7 @@ export const signOut = createAsyncThunk(
   'auth/signOut',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/auth/signOut');
+      const response = await axios.get('/auth/signout');
 
       return {
         data: response.data,

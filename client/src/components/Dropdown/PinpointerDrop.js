@@ -26,22 +26,6 @@ function Index() {
             <div className="location">{pin.location}</div>
           </DropdownLi>
         ))}
-        <DropdownLi className="flex-center-R">
-          <img src={genPinIconType('히로')} alt="icon type" />
-          <div className="location">엄청나게 긴 주소이름 12-123232323</div>
-        </DropdownLi>
-        <DropdownLi className="flex-center-R">
-          <img src={genPinIconType('히로')} alt="icon type" />
-          <div className="location">엄청나게 긴 주소이름 12-123232323</div>
-        </DropdownLi>
-        <DropdownLi className="flex-center-R">
-          <img src={genPinIconType('히로')} alt="icon type" />
-          <div className="location">엄청나게 긴 주소이름 12-123232323</div>
-        </DropdownLi>
-        <DropdownLi className="flex-center-R">
-          <img src={genPinIconType('히로')} alt="icon type" />
-          <div className="location">엄청나게 긴 주소이름 12-123232323</div>
-        </DropdownLi>
       </DropdownUl>
     </>
   );
