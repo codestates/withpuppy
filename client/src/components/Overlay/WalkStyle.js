@@ -17,7 +17,7 @@ export const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0;
+  /* opacity: 0; */
   animation: ${({ theme }) => theme.animation.showDown} 0.5s forwards;
   outline-offset: -7px;
   box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);

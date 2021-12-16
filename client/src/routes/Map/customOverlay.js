@@ -2,9 +2,10 @@ import ReactDOMServer from 'react-dom/server';
 import styled from 'styled-components';
 import profile from '../../components/CustomOverlay/profile.png';
 import { createGlobalStyle } from 'styled-components';
+import CustomOverlayMap from '../../components/CustomOverlay/CustomOverlayMap';
 
 export const ModalContainer = styled.div`
-  width: 282px;
+  width: 290px;
   height: 187px;
   background-color: white;
   border-radius: 12px;
@@ -71,31 +72,38 @@ export const CloseIcon = styled.button`
   float: right;
 `;
 
-export const customOverlay = ReactDOMServer.renderToStaticMarkup(
-  <>
-    <ModalContainer>
-      <CloseIcon className="close-button">X</CloseIcon>
-      <ModalContent>
-        <ImgSpan>
-          <img src={profile} alt="puppy-profile" />
-        </ImgSpan>
-        <SectionSpan>
-          <Info>주인 이름</Info>
-          <Info>강아지 이름</Info>
-          <Info>견종</Info>
-          <Info>소개글</Info>
-        </SectionSpan>
-        <SectionSpan>
-          <Info>나이</Info>
-          <Info>성별</Info>
-        </SectionSpan>
-      </ModalContent>
-      {/* <ReqBtn className="flex-center-C">
+export const Img = styled.img`
+  width: 79px;
+  height: 112px;
+  border-radius: 4px;
+`;
+
+export const customOverlay = (data, pin) =>
+  ReactDOMServer.renderToStaticMarkup(
+    <>
+      <ModalContainer>
+        <CloseIcon className="close-button">X</CloseIcon>
+        <ModalContent>
+          <ImgSpan>
+            <Img src={pin.puppyProfile} alt="puppy-profile" />
+          </ImgSpan>
+          <SectionSpan>
+            <Info>{pin.nickname}</Info>
+            <Info>{pin.puppyName}</Info>
+            <Info>{pin.breed}</Info>
+            <Info>{pin.introduction}</Info>
+          </SectionSpan>
+          <SectionSpan>
+            <Info>{pin.age}</Info>
+            <Info>{pin.gender}</Info>
+          </SectionSpan>
+        </ModalContent>
+        {/* <ReqBtn className="flex-center-C">
         로그인해서 상대의 연락처를 보세요!
       </ReqBtn> */}
-      <ContactBtn className="flex-center-C contact-btn">
-        사용자 카카오톡/연락처로 연락하기
-      </ContactBtn>
-    </ModalContainer>
-  </>,
-);
+        <ContactBtn className="flex-center-C contact-btn">
+          사용자 카카오톡/연락처로 연락하기
+        </ContactBtn>
+      </ModalContainer>
+    </>,
+  );
