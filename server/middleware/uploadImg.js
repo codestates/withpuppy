@@ -1,10 +1,13 @@
-const multer = require("multer");
-const multerS3 = require("multer-s3-transform");
-const sharp = require("sharp");
-const AWS = require("aws-sdk");
-const dotenv = require("dotenv");
-const resetProfile = require("../controllers/utils/resetBucketFolder");
-dotenv.config();
+const multer = require('multer');
+const multerS3 = require('multer-s3-transform');
+const sharp = require('sharp');
+const AWS = require('aws-sdk');
+const dotenv = require('dotenv');
+const resetProfile = require('../controllers/utils/resetBucketFolder');
+const ENV_PATH = require('path').resolve(__dirname, '../.env');
+const result = dotenv.config({ path: ENV_PATH });
+
+console.log(ENV_PATH, process.env);
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.MULTER_ACCESS_KEY,
@@ -16,18 +19,18 @@ const storage = multerS3({
   s3,
   bucket: process.env.MULTER_S3_URL,
   contentType: multerS3.AUTO_CONTENT_TYPE,
-  acl: "public-read-write",
+  acl: 'public-read-write',
   shouldTransform: true,
   transforms: [
     {
-      id: "resized",
+      id: 'resized',
       key: function (req, file, cb) {
         const { puppyId, userId } = req.body;
 
         if (puppyId) {
-          resetProfile("puppyId", puppyId, s3, cb, file);
+          resetProfile('puppyId', puppyId, s3, cb, file);
         } else if (userId) {
-          resetProfile("userId", userId, s3, cb, file);
+          resetProfile('userId', userId, s3, cb, file);
         }
       },
       transform: function (req, file, cb) {

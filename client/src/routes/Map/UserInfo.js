@@ -44,7 +44,7 @@ export default function Index({
         }}
       >
         <div className="puppyNameInfo">{puppyName}</div>
-        <div clasName="userNameInfo">{userName}</div>
+        <div className="userNameInfo">{userName}</div>
         <div className="puppyAgeInfo">{puppyAge}살</div>
         <div className="genderIcon">
           <img src={femaleIcon} style={{ width: '15px', height: '15px' }}></img>

@@ -26,6 +26,8 @@ function Walk({ setIsWalkOpen, latlng, pinpointers }) {
   // console.log(latlng);
   const { userData } = useSelector(selectUser);
 
+  console.debug('UserData on Walk', userData);
+
   const [popup, setPopup] = useState(false);
   const openPopupHandler = () => {
     setPopup(!popup);

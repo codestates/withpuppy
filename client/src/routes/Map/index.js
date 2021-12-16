@@ -12,12 +12,9 @@ import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-import UserModal from './COMMENT/UserModal';
-import Reply from './COMMENT/Reply';
-import { Row } from 'components/Footer/FooterStyle';
+
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
 import CommentInput from './commentInput';
@@ -69,10 +66,6 @@ function Index() {
   const [pinpointers, setPinpointers] = useState([]);
 
   const navigate = useNavigate();
-
-  const updateComment = (newComment) => {
-    setCommentLists(CommentLists.concat(newComment));
-  };
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -264,9 +257,7 @@ function Index() {
                   <UserInfoWrapper>
                     <UserInfo />
                   </UserInfoWrapper>
-
                   <ReplyCon>
-                    {/* <div style={{ marginBottom: '4rem' }}> */}
                     {comments.map((comment) => {
                       return (
                         <Comment
@@ -277,7 +268,6 @@ function Index() {
                         />
                       );
                     })}
-                    {/* </div>{' '} */}
                     <CommentInput onInsert={onInsert} />
                   </ReplyCon>
                 </>
@@ -294,14 +284,6 @@ function Index() {
     </>
   );
 }
-
-
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
-  width: 100%;
-`;
-
 const ReplyCon = styled.div`
   background-color: #f7f1ed;
   width: 100%;
@@ -317,8 +299,8 @@ const ContentTitle = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   background-color: #febeb0;
 `;
 
@@ -373,39 +355,10 @@ const UserInfoContainer = styled.div`
   background-color: white;
 `;
 
-const UserContainer = styled.div`
-  /* @media screen and (max-width: px) {
-  } */
-  align-items: center;
-  width: 30%;
-  height: 100%;
-  background: #febeb0;
-  position: fixed;
-  top: 10;
-  right: 0;
-  width: 35%;
-  @media screen and (max-width: 850px) {
-    display: none;
-  }
-  @media screen and (min-width: 1400px) {
-    width: 25%;
-  }
-`;
-
-const ContentTitle = styled.div`
-  text-align: center;
-  padding-top: 75%;
-  padding-bottom: 25%;
-`;
-
-const MainText = styled.div`
-  font-size: 2.3rem;
-  color: white;
-`;
-
-const MainImg = styled.img`
-  width: 70%;
-  height: 70%;
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+  width: 100%;
 `;
 
 //# When pin clicked
@@ -435,35 +388,11 @@ const UserContainer = styled.div`
   backg & .UserInfo {
     background-color: white;
     flex: 0.3;
-    
-//   box-sizing: border-box;
-//   word-break: keep-all;
-//   /* padding: 1.3rem; */
-//   align-items: center;
-//   /* width: 500px;  */
-//   /* background-color: white; */
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
-
-//   & .UserInfo {
-//     background-color: white;
-//     flex: 0.3;
-//   }
-//   & .Reply {
-//     background-color: yellow;
-//     flex: 0.7;
-
   }
   & .Reply {
     background-color: yellow;
     flex: 0.7;
   }
-`;
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
 `;
 
 export default Index;
