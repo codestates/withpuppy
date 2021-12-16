@@ -1,7 +1,7 @@
-const getKakaoToken = require("./helpers/getToken");
-const getKakaoUserInfo = require("./helpers/getUserInfo");
-const { User, Puppy } = require("../../../models");
-const { genAccess, genRefresh } = require("../../utils/token");
+const getKakaoToken = require('./helpers/getToken');
+const getKakaoUserInfo = require('./helpers/getUserInfo');
+const { User, Puppy } = require('../../../models');
+const { genAccess, genRefresh } = require('../../utils/token');
 
 module.exports = {
   signIn: async (req, res) => {
@@ -33,13 +33,13 @@ module.exports = {
 
       if (!puppy) {
         const createDefaultPuppy = await Puppy.create({
-          puppyName: "wang",
+          puppyName: 'wang',
           age: 1,
-          gender: "female",
-          breed: "푸들",
-          introduction: "왕왕!",
+          gender: 'female',
+          breed: '푸들',
+          introduction: '왕왕!',
           puppyProfile:
-            "https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg",
+            'https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg',
         });
 
         await user.setPuppy(createDefaultPuppy);
@@ -56,8 +56,16 @@ module.exports = {
         social,
       });
 
-      res.cookie("accessToken", accessToken, { httpOnly: true });
-      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
       res.status(200).json({
         id: user.dataValues.id,
         social,
@@ -70,7 +78,7 @@ module.exports = {
       });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ message: "kakao oauth failed" });
+      return res.status(500).json({ message: 'kakao oauth failed' });
     }
   },
 };
