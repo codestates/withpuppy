@@ -9,6 +9,7 @@ import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
+import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import { customOverlay } from './customOverlay';
 import { BaseIcon } from 'components/Icon';
@@ -336,7 +337,6 @@ const ContentTitle = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-
   background-color: #febeb0;
 `;
 
@@ -392,21 +392,26 @@ const UserInfoContainer = styled.div`
   background-color: white;
 `;
 
-const ContentTitle = styled.div`
-  text-align: center;
-  padding-top: 75%;
-  padding-bottom: 25%;
-`;
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+  width: 100%;
+`
+// const ContentTitle = styled.div`
+//   text-align: center;
+//   padding-top: 75%;
+//   padding-bottom: 25%;
+// `;
 
-const MainText = styled.div`
-  font-size: 2.3rem;
-  color: white;
-`;
+// const MainText = styled.div`
+//   font-size: 2.3rem;
+//   color: white;
+// `;
 
-const MainImg = styled.img`
-  width: 70%;
-  height: 70%;
-`;
+// const MainImg = styled.img`
+//   width: 70%;
+//   height: 70%;
+// `;
 
 //# When pin clicked
 const UserCard = styled.section`
@@ -441,7 +446,6 @@ const UserContainer = styled.div`
   & .UserInfo {
     background-color: white;
     flex: 0.3;
-
   }
   & .Reply {
     background-color: yellow;

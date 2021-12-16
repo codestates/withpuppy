@@ -21,22 +21,12 @@ export default function Index({
         className="profileInfo"
         style={{ paddingLeft: '2rem', width: '100%', boxSizing: 'border-box' }}
       >
-        <div style={{ fontSize: '20px' }}>{puppyName}</div>
-        <div style={{ fontSize: '20px' }}>{userName}</div>
-        <div style={{ fontSize: '20px' }}>{puppyAge}살</div>
-        <div style={{ fontSize: '20px' }}>
-          <span className="gender">
-            <img
-              src={femaleIcon}
-              alt=""
-              style={{ width: '20px', height: '20px' }}
-            ></img>
-            <img
-              src={maleIcon}
-              alt=""
-              style={{ width: '20px', height: '20px' }}
-            ></img>
-          </span>
+        <div className="puppyNameInfo">{puppyName}</div>
+        <div className="userNameInfo">{userName}</div>
+        <div className="puppyAgeInfo">{puppyAge}살</div>
+        <div className="genderIcon">
+          <img src={femaleIcon} style={{ width: '15px', height: '15px' }}></img>
+          <img src={maleIcon} style={{ width: '15px', height: '15px' }}></img>
         </div>
         <div
           className="introductionContainer"

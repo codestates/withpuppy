@@ -17,13 +17,7 @@ export default function Index() {
 
   return (
     <StarBox>
-      <LikeBtn
-        style={{
-          boxSizing: 'borderBox',
-        }}
-        className="flex-center-R"
-        onClick={Toggle}
-      >
+      <LikeBtn className="flex-center-R" onClick={Toggle}>
         ⭐️ {counter}
       </LikeBtn>
     </StarBox>
@@ -53,4 +47,3 @@ const LikeBtn = styled.button`
   transform: translate(-50%, -50%);
   box-shadow: 2px 8px 25px 0 rgba(0, 0, 0, 0.2);
 `;
-
