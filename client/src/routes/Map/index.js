@@ -4,22 +4,13 @@ import 이코 from '../../assets/img/icons/이코.png';
 import 카덴 from '../../assets/img/icons/카덴.png';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import MapHeader from 'components/Header/Homeheader';
-import { useDispatch, useSelector } from 'react-redux';
-import { addMap } from 'redux/Slices/Map';
-import Example from './Example';
-import { faBlackTie, faUber } from '@fortawesome/free-brands-svg-icons';
+import { useDispatch } from 'react-redux';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import WriteReply from './COMMENT/WriteReply';
-import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-import UserModal from './COMMENT/UserModal';
-import Reply from './COMMENT/Reply';
-import { Row } from 'components/Footer/FooterStyle';
 import { customOverlay } from './customOverlay';
-import ReactDOMServer from 'react-dom/server';
 import CommentInput from './commentInput';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
@@ -70,9 +61,9 @@ function Index() {
 
   const navigate = useNavigate();
 
-  const updateComment = (newComment) => {
-    setCommentLists(CommentLists.concat(newComment));
-  };
+  // const updateComment = (newComment) => {
+  //   setCommentLists(CommentLists.concat(newComment));
+  // };
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -295,13 +286,6 @@ function Index() {
   );
 }
 
-
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
-  width: 100%;
-`;
-
 const ReplyCon = styled.div`
   background-color: #f7f1ed;
   width: 100%;
@@ -312,27 +296,6 @@ const ReplyCon = styled.div`
   flex-direction: column;
 `;
 
-const ContentTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background-color: #febeb0;
-`;
-
-const MainText = styled.div`
-  text-align: center;
-  color: white;
-`;
-
-const MainImg = styled.img`
-  width: 70%;
-  height: 70%;
-  margin-left: 15px;
-  justify-content: center;
-`;
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);
@@ -371,25 +334,6 @@ const MapContainer = styled.div`
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
   background-color: white;
-`;
-
-const UserContainer = styled.div`
-  /* @media screen and (max-width: px) {
-  } */
-  align-items: center;
-  width: 30%;
-  height: 100%;
-  background: #febeb0;
-  position: fixed;
-  top: 10;
-  right: 0;
-  width: 35%;
-  @media screen and (max-width: 850px) {
-    display: none;
-  }
-  @media screen and (min-width: 1400px) {
-    width: 25%;
-  }
 `;
 
 const ContentTitle = styled.div`
@@ -435,26 +379,25 @@ const UserContainer = styled.div`
   backg & .UserInfo {
     background-color: white;
     flex: 0.3;
-    
-//   box-sizing: border-box;
-//   word-break: keep-all;
-//   /* padding: 1.3rem; */
-//   align-items: center;
-//   /* width: 500px;  */
-//   /* background-color: white; */
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
 
-//   & .UserInfo {
-//     background-color: white;
-//     flex: 0.3;
-//   }
-//   & .Reply {
-//     background-color: yellow;
-//     flex: 0.7;
+    //   box-sizing: border-box;
+    //   word-break: keep-all;
+    //   /* padding: 1.3rem; */
+    //   align-items: center;
+    //   /* width: 500px;  */
+    //   /* background-color: white; */
+    //   height: 100%;
+    //   display: flex;
+    //   justify-content: center;
+    //   flex-direction: column;
 
+    //   & .UserInfo {
+    //     background-color: white;
+    //     flex: 0.3;
+    //   }
+    //   & .Reply {
+    //     background-color: yellow;
+    //     flex: 0.7;
   }
   & .Reply {
     background-color: yellow;

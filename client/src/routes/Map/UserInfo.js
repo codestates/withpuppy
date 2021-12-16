@@ -1,9 +1,8 @@
-import femaleIcon from '../../assets/img/profile/pngwing/female.png';
-import maleIcon from '../../assets/img/profile/pngwing/male.png';
-import profile from '../../assets/img/profile/profile.png';
+import femaleIcon from 'assets/img/profile/pngwing/pngwing1.png';
+import maleIcon from 'assets/img/profile/pngwing/pngwing2.png';
+import profile from 'assets/img/profile/profile.png';
 import styled from 'styled-components/macro';
 import Liked from './Liked';
-import { Column } from 'components/Footer/FooterStyle';
 
 Index.defaultProps = {
   puppyName: '멍멍이',
@@ -83,4 +82,3 @@ const UserInfo = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
 `;
-

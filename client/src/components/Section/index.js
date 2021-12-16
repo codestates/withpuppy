@@ -124,10 +124,53 @@ export const CardInputContainer = styled.div`
 
   & .card-input {
     flex: 0.6;
-    /* font-size: 75%; */
     width: 80%;
     border: none;
     text-align: center;
+
+    &.gender {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      & .image-wrapper {
+        cursor: pointer;
+        background-color: ${({ theme }) => theme.colors.mainColor};
+        padding: 0.7rem 1rem;
+        border-radius: 50%;
+        border: 1px solid lightgray;
+        & img {
+          width: 2.5rem;
+        }
+
+        &.active {
+          @keyframes active {
+            0% {
+              background-color: #fdffcd;
+            }
+            25% {
+              background-color: #ffebbb;
+            }
+            50% {
+              background-color: #fdffcd;
+            }
+            75% {
+              background-color: #ffebbb;
+            }
+            100% {
+              background-color: #fdffcd;
+            }
+          }
+
+          animation: active 0.5s forwards;
+        }
+      }
+
+      & .image-wrapper:nth-child(2) {
+        margin-left: 3rem;
+      }
+    }
 
     @media screen and (min-width: 1400px) {
       font-size: 3rem;
