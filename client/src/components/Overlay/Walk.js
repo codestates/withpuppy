@@ -212,6 +212,7 @@ function Walk({ setIsWalkOpen, latlng, pinpointers }) {
               <EnrollBtn onClick={reqHandler}>등록하기</EnrollBtn>
             </div>
           </ModalContainer>
+
           <ModalBackground />
         </>
       ) : null}

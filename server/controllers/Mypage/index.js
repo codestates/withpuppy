@@ -1,10 +1,10 @@
-const { User, Puppy, Message, Pinpointer } = require("../../models");
+const { User, Puppy, Message, Pinpointer } = require('../../models');
 module.exports = {
   changeMypageInfo: async (req, res) => {
     try {
       const { type } = req.body;
 
-      if (type === "user") {
+      if (type === 'user') {
         const id = req.body.userId;
 
         const formData = { ...req.body };
@@ -18,7 +18,7 @@ module.exports = {
         return res.status(200).json({ ...updatedUser.dataValues, puppy });
       }
 
-      if (type === "puppy") {
+      if (type === 'puppy') {
         const userId = req.body.userId;
         const id = req.body.puppyId;
 
@@ -36,7 +36,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ message: "update mypageInfo failed" });
+      return res.status(500).json({ message: 'update mypageInfo failed' });
     }
 
     // const targetData = req.file.transforms.find((transform) => transform.id === "resized");
@@ -49,23 +49,25 @@ module.exports = {
       const { user } = req;
 
       // 1. find pinpointer and messages
-      const targetUser = await User.findOne({ where: { email: user.email, social: user.social } });
+      const targetUser = await User.findOne({
+        where: { email: user.email, social: user.social },
+      });
       let pinpointers = await targetUser.getPinpointers({
-        attributes: ["id", "iconType", "location"],
+        attributes: ['id', 'iconType', 'location'],
         include: [
           {
             model: Message,
-            attributes: ["text", "createdAt"],
+            attributes: ['text', 'createdAt'],
             include: [
               {
                 model: User,
-                attributes: ["id", "nickname", "thumbImg"],
+                attributes: ['id', 'nickname', 'thumbImg'],
                 include: [
-                  { model: Puppy, attributes: ["puppyName", "introduction"] },
+                  { model: Puppy, attributes: ['puppyName', 'introduction'] },
                   {
                     model: User,
-                    as: "follower",
-                    attributes: ["id"],
+                    as: 'follower',
+                    attributes: ['id'],
                   },
                 ],
               },
@@ -74,11 +76,12 @@ module.exports = {
         ],
       });
 
-      pinpointers = pinpointers.map((pinpointer) => pinpointer.get({ plain: true }));
+      pinpointers = pinpointers.map((pinpointer) =>
+        pinpointer.get({ plain: true }),
+      );
 
       pinpointers = pinpointers.map((pinpointer) => {
         let dataToSend = {};
-        console.log(pinpointer, pinpointer.Messages[0].User);
         dataToSend.pinpointerId = pinpointer.id;
         dataToSend.iconType = pinpointer.iconType;
         dataToSend.location = pinpointer.location;

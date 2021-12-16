@@ -12,11 +12,8 @@ import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import WriteReply from './COMMENT/WriteReply';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
-import UserModal from './COMMENT/UserModal';
-import Reply from './COMMENT/Reply';
 import { Row } from 'components/Footer/FooterStyle';
 import { customOverlay } from './customOverlay';
 import ReactDOMServer from 'react-dom/server';
@@ -24,10 +21,14 @@ import CommentInput from './commentInput';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
 import axios from 'redux/Async/axios';
+import { selectUser } from 'redux/store';
+import { genPinIconType } from 'utils/genPinIconType';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
+  const { userData } = useSelector(selectUser);
+
   const [comments, setComments] = useState([
     { id: 1, name: 'Minjoo Park', content: 'I like it!' },
   ]);
@@ -67,12 +68,10 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
+  // const [allPins, setAllPins] = useState([]);
+  let allPins = [];
 
   const navigate = useNavigate();
-
-  const updateComment = (newComment) => {
-    setCommentLists(CommentLists.concat(newComment));
-  };
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -80,7 +79,6 @@ function Index() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setPlace(inputText);
     console.log(inputText);
 
     const ps = new kakao.maps.services.Places();
@@ -98,17 +96,8 @@ function Index() {
     }
   };
 
-  const getPins = async () => {
-    try {
-      const response = await axios.get('/map/allpins');
-      setPinpointers(response.data.pinpointers);
-      //console.log(pinpointers);
-    } catch (err) {
-      console.log('error!!!!!');
-    }
-  };
-
   async function placesSearchCB(pin, status, pagination) {
+    console.log(pin);
     if (status === kakao.maps.services.Status.OK) {
       let bounds = new kakao.maps.LatLngBounds();
 
@@ -117,18 +106,29 @@ function Index() {
       }
 
       window.map.setBounds(bounds);
-      // const newMap = map.setBounds(bounds);
 
       try {
-        // const result = {
-        //   level: '',
-        //   x: '',
-        //   y: '',
-        // };
-        console.log(window.map.getLevel());
-        const response = await axios.get('/map/allpins');
+        //Latitude is the Y axis, longitude is the X axis.
+        const result = {
+          level: window.map.getLevel(),
+          centerLng: Number.parseFloat(pin[0].x),
+          centerLat: Number.parseFloat(pin[0].y),
+        };
+
+        const response = await axios.post('/map/allpins', result);
+        console.log(response.data);
+        // setAllPins([response.data.data]);
+        // console.log(allPins);
+        allPins = response.data.data;
+        // console.log(allPins);
+
+        // console.log(response.data.pinpointers);
+
         for (let i = 0; i < response.data.pinpointers.length; i++) {
-          displayMarkerandOverlay(response.data.pinpointers[i], pin);
+          displayMarkerandOverlay(
+            response.data.pinpointers[i],
+            response.data.data[i],
+          );
         }
       } catch (err) {
         console.log('error!!!!!');
@@ -136,30 +136,28 @@ function Index() {
     }
   }
 
-  /*
-  1. 서버에서 필터링
-  2. 이미지 바꿔끼워보고
-  3. 깃북 수정.
-  */
-
-  const imageCandidates = [보브, 이코, 유나, 카덴];
-  const imageSrc =
-      imageCandidates[Math.floor(Math.random() * imageCandidates.length)],
-    imageSize = new kakao.maps.Size(40, 40),
-    imageOption = { offset: new kakao.maps.Point(22, 69) };
-  const markerImage = new kakao.maps.MarkerImage(
-    imageSrc,
-    imageSize,
-    imageOption,
-  );
+  // const imageCandidates = [보브, 이코, 유나, 카덴];
+  // const imageSrc =
+  //   imageCandidates[Math.floor(Math.random() * imageCandidates.length)];
+  // const imageSize = new kakao.maps.Size(40, 40);
+  // const imageOption = { offset: new kakao.maps.Point(22, 69) };
+  // const markerImage = new kakao.maps.MarkerImage(
+  //   imageSrc,
+  //   imageSize,
+  //   imageOption,
+  // );
 
   function displayMarkerandOverlay(data, pin) {
-    console.log(pin);
-    //const position = new kakao.maps.LatLng(data.y, data.x);
     const position = new kakao.maps.LatLng(data.lat, data.lng);
-    // const position2 = new kakao.maps.LatLng(pin[0].y, pin[0].x);
 
-    console.log(data, position);
+    const iconSelect = genPinIconType(data.iconType);
+    const imageSize = new kakao.maps.Size(40, 40);
+    const imageOption = { offset: new kakao.maps.Point(22, 69) };
+    const markerImage = new kakao.maps.MarkerImage(
+      iconSelect,
+      imageSize,
+      imageOption,
+    );
 
     let marker = new kakao.maps.Marker({
       map: window.map,
@@ -169,7 +167,7 @@ function Index() {
     });
 
     let wrapper = document.createElement('div');
-    wrapper.innerHTML = customOverlay;
+    wrapper.innerHTML = customOverlay(data, pin);
 
     let closeBtn = wrapper.firstChild.querySelector('.close-button');
 
@@ -188,14 +186,10 @@ function Index() {
     });
 
     // 마커에 클릭이벤트를 등록합니다
-    kakao.maps.event.addListener(marker, 'click', function () {
+    kakao.maps.event.addListener(marker, 'click', async () => {
       setIsMarkerSelected(true);
       overlay.setMap(window.map);
     });
-
-    //장소가 바뀔 떄마다, 좌표들이 무한대로 늘어남을 방지하기 위해 비워준다.
-    // setCoordinate([]);
-    // setPinpointers([]);
 
     marker.setMap(window.map);
     //오버레이들이 화면에 한방에 안뜨게 아예 마커만 보이게 설정
@@ -295,13 +289,6 @@ function Index() {
   );
 }
 
-
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
-  width: 100%;
-`;
-
 const ReplyCon = styled.div`
   background-color: #f7f1ed;
   width: 100%;
@@ -312,27 +299,6 @@ const ReplyCon = styled.div`
   flex-direction: column;
 `;
 
-const ContentTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background-color: #febeb0;
-`;
-
-const MainText = styled.div`
-  text-align: center;
-  color: white;
-`;
-
-const MainImg = styled.img`
-  width: 70%;
-  height: 70%;
-  margin-left: 15px;
-  justify-content: center;
-`;
 const MapMain = styled.main`
   display: flex;
   height: calc(100vh - 7rem);
@@ -371,25 +337,6 @@ const MapContainer = styled.div`
 const UserInfoContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondColor};
   background-color: white;
-`;
-
-const UserContainer = styled.div`
-  /* @media screen and (max-width: px) {
-  } */
-  align-items: center;
-  width: 30%;
-  height: 100%;
-  background: #febeb0;
-  position: fixed;
-  top: 10;
-  right: 0;
-  width: 35%;
-  @media screen and (max-width: 850px) {
-    display: none;
-  }
-  @media screen and (min-width: 1400px) {
-    width: 25%;
-  }
 `;
 
 const ContentTitle = styled.div`
@@ -435,26 +382,25 @@ const UserContainer = styled.div`
   backg & .UserInfo {
     background-color: white;
     flex: 0.3;
-    
-//   box-sizing: border-box;
-//   word-break: keep-all;
-//   /* padding: 1.3rem; */
-//   align-items: center;
-//   /* width: 500px;  */
-//   /* background-color: white; */
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
 
-//   & .UserInfo {
-//     background-color: white;
-//     flex: 0.3;
-//   }
-//   & .Reply {
-//     background-color: yellow;
-//     flex: 0.7;
+    //   box-sizing: border-box;
+    //   word-break: keep-all;
+    //   /* padding: 1.3rem; */
+    //   align-items: center;
+    //   /* width: 500px;  */
+    //   /* background-color: white; */
+    //   height: 100%;
+    //   display: flex;
+    //   justify-content: center;
+    //   flex-direction: column;
 
+    //   & .UserInfo {
+    //     background-color: white;
+    //     flex: 0.3;
+    //   }
+    //   & .Reply {
+    //     background-color: yellow;
+    //     flex: 0.7;
   }
   & .Reply {
     background-color: yellow;
