@@ -127,30 +127,31 @@ const PinButton = styled.div`
   }
 
   &:hover .pinpointer-dropdownUl {
-    display:block;
+    display: block;
     opacity: 1;
 
     & > li {
       //@animation
       @keyframes growDown {
-      0% {
-          visibility:hidden;
-          opacity:0;
-          transform: scaleY(0)
-      }
-      80% {
-          visibility:visible;
-          opacity:0.8
-          transform: scaleY(1.1)
-      }
-      100% {
-        visibility:visible;
-        opacity:1;
-          transform: scaleY(1)
+        0% {
+          visibility: hidden;
+          opacity: 0;
+          transform: scaleY(0);
+        }
+        80% {
+          visibility: visible;
+          opacity: 0.8;
+          transform: scaleY(1.1);
+        }
+        100% {
+          visibility: visible;
+          opacity: 1;
+          transform: scaleY(1);
+        }
       }
     }
 
-    animation:growDown 0.3s ease-in-out forwards;
+    animation: growDown 0.3s ease-in-out forwards;
   }
 `;
 

@@ -7,7 +7,7 @@ export const googleSignIn = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     const { code, social } = data;
     try {
-      const response = await axios.post('/google/signIn', {
+      const response = await axios.post('/google/signin', {
         code,
         social,
       });

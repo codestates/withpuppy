@@ -16,14 +16,13 @@ const GlobalStyles = createGlobalStyle`
 
   body {
       font-size : 3rem;
-      height: 100%;
+      height: 100vh;
       background-color:${({ theme }) => theme.colors.secondColor};
       user-select: none;
-      -webkit-user-select: none;  /* Chrome all / Safari all */
-      -moz-user-select: none;     /* Firefox all */
-      -ms-user-select: none;      /* IE 10+ */
+      -webkit-user-select: none; 
+      -moz-user-select: none;   
+      -ms-user-select: none;     
       -o-user-select: none;
-      /* overflow-y:scroll; */
   }
   
 

@@ -8,5 +8,10 @@ export default styled.main`
   &.mypageMain {
     padding: 2rem;
     transform: translateY(0);
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   }
 `;

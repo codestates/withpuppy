@@ -7,7 +7,7 @@ export const kakaoSignIn = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     const { code, social } = data;
     try {
-      const response = await axios.post('/kakao/signIn', {
+      const response = await axios.post('/kakao/signin', {
         code,
         social,
       });
