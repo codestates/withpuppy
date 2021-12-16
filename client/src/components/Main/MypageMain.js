@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState, createContext, useRef } from 'react';
 import MypageMain from './';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { genPinIconType } from 'utils/genPinIconType';
 import SendIcon from 'assets/img/icons/Send.png';
 import { selectUser } from 'redux/store';
 import { parseDate } from 'utils/parseDate';
+import { updateMypinMessages } from 'redux/Async/updateMypinMessages';
 
 export const PinContext = createContext(null);
 
@@ -23,17 +24,17 @@ function Index() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userData } = useSelector(selectUser);
+  const chatRef = useRef(null);
 
-  //@ state
+  //@ state //////////////////////////////////
   const [pinpointers, setPinpointers] = useState({
     state: 'loading',
     pins: [],
     clickedPin: {},
   });
 
-  console.log(pinpointers, parseDate());
+  const [chatInput, setChatInput] = useState('');
 
-  //! 2. get pinpointers
   const getPins = async () => {
     try {
       const {
@@ -48,19 +49,60 @@ function Index() {
         });
       }, 1000);
     } catch (err) {
-      navigate('/');
-      dispatch(logout());
+      navigate('/mypage/reject');
     }
   };
 
   useEffect(() => getPins(), []);
 
-  //# 3. messages
+  //@ handlers //////////////////////////////
   const onHandleResetMessages = () => {
     setPinpointers({
       ...pinpointers,
       clickedPin: {},
     });
+  };
+
+  const onHandleChatSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!chatInput.length) {
+      return;
+    }
+
+    try {
+      const response = await dispatch(
+        updateMypinMessages({
+          pinpointerId: pinpointers.clickedPin.pinpointerId,
+          text: chatInput,
+        }),
+      ).unwrap();
+
+      const clikcedPinMessageList = [
+        response,
+        ...pinpointers.clickedPin.Messages,
+      ];
+
+      setPinpointers({
+        ...pinpointers,
+        clickedPin: {
+          ...pinpointers.clickedPin,
+          Messages: clikcedPinMessageList,
+        },
+      });
+
+      setChatInput('');
+    } catch (err) {
+      navigate('/mypage/reject');
+
+      setPinpointers({
+        state: 'loading',
+        pins: [],
+        clickedPin: {},
+      });
+
+      setChatInput('');
+    }
   };
 
   return (
@@ -80,43 +122,33 @@ function Index() {
                 </span>
               </ChatTitle>
 
-              <ChatsArticle>
+              <ChatsArticle ref={chatRef}>
                 {pinpointers.clickedPin.Messages.map((message) => (
                   <MessageContainer
                     className={
                       message.writerId !== userData.id ? 'incomming' : ''
                     }
+                    time={parseDate(message.createdAt)}
                   >
                     <p>{message.text}</p>
+
                     {message.writerId !== userData.id && (
-                      <img src={message.thumbImg} alt="writer thumb img" />
+                      <div>
+                        <img src={message.thumbImg} alt="writer thumb img" />
+                      </div>
                     )}
                   </MessageContainer>
                 ))}
-
-                <MessageContainer className="chat outgoing">
-                  <p>
-                    this is really long and logn and long chat. 이것은 아주 길고
-                    길고 길고 긴 채팅입니다
-                  </p>
-                </MessageContainer>
-                <MessageContainer className="chat outgoing">
-                  <p>
-                    this is really long and logn and long chat. 이것은 아주 길고
-                    길고 길고 긴 채팅입니다
-                  </p>
-                </MessageContainer>
-                <MessageContainer className="chat outgoing">
-                  <p>
-                    this is really long and logn and long chat. 이것은 아주 길고
-                    길고 길고 긴 채팅입니다
-                  </p>
-                </MessageContainer>
               </ChatsArticle>
 
-              <ChatInputContainer>
-                <input type="text" />
-                <button>
+              <ChatInputContainer onSubmit={onHandleChatSubmit}>
+                <input
+                  type="text"
+                  className="chatInput"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                />
+                <button type="submit">
                   <img src={SendIcon} alt="sendIcon" />
                 </button>
               </ChatInputContainer>
@@ -174,6 +206,7 @@ function Index() {
   );
 }
 
+//! loading part
 const MyPageLoading = styled.main`
   background-color: white;
   height: 100vh;
@@ -200,6 +233,7 @@ const MyPageLoading = styled.main`
   }
 `;
 
+//! chat modal
 const ChatModalContainer = styled(ModalContainer)`
   height: 80%;
   min-height: 70rem;
@@ -253,6 +287,7 @@ const ChatsArticle = styled.article`
   border: 1px solid ${({ theme }) => theme.colors.secondColor};
   padding: 3.5rem 2.5rem 2rem;
   overflow-y: auto;
+  scrollbar-color: red green;
 
   & > *:not(:first-of-type) {
     margin-top: 5rem;
@@ -262,6 +297,7 @@ const ChatsArticle = styled.article`
 const MessageContainer = styled.div`
   //! common
   font-size: 1.25rem;
+  display: flex;
 
   & p {
     background-color: ${({ theme }) => theme.colors.secondColor};
@@ -273,16 +309,16 @@ const MessageContainer = styled.div`
     position: relative;
 
     &:after {
-      content: '3초전';
+      content: '${({ time }) => time}';
       position: absolute;
-      top: -15px;
+      top: -17px;
       left: 5%;
       color: ${({ theme }) => theme.colors.grayThree};
       font-size: 1rem;
 
       @media screen and (min-width: 1300px) {
         font-size: 1.7rem;
-        top: -20px;
+        top: -23px;
       }
     }
 
@@ -345,7 +381,7 @@ const MessageContainer = styled.div`
   }
 `;
 
-const ChatInputContainer = styled.div`
+const ChatInputContainer = styled.form`
   margin: 1rem 0 2rem;
   background-color: #f6f6f6;
   display: flex;

@@ -2,11 +2,13 @@ import styled, { keyframes } from 'styled-components';
 import Lan3 from 'assets/LandingPage/랜딩3.png';
 import PuppyLogo from 'assets/img/logo/puppyLogo.png';
 import { BaseBtn } from 'components/Button';
+import Bounce from 'react-reveal/Bounce';
 
 const Services = () => {
   return (
     <AboutSection className="flex-center-C" >
       <Main>
+        <Bounce bottom>
        <Content>
           <Logo>
             <img src={PuppyLogo} />
@@ -26,6 +28,7 @@ const Services = () => {
             </Rectangle28>
           </Group2>
         </Content>
+        </Bounce>
       </Main>
     </AboutSection>
   );
@@ -68,7 +71,7 @@ const AboutSection = styled.section`
 
 const Main = styled.div`
   display: inline;
-
+  margin-top: 10rem;
 `;
 
 const Title = styled.h1`
