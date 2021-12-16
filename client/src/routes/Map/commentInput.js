@@ -56,7 +56,8 @@ const CommentInput = ({ onInsert }) => {
                 onChange={onChangeContent}
             /></InputTexts>
       <Button type="submit">
-          보내기
+          <img src={Icon2} alt={''} 
+          />
       </Button>
     
      </CommentInsert>
@@ -65,6 +66,10 @@ const CommentInput = ({ onInsert }) => {
 }
 const Button = styled.button`
     cursor: pointer;
+    padding: 0;
+border: none;
+background: none;
+
 `
 
 const CommentInsert =styled.form`
@@ -77,7 +82,7 @@ const CommentInsert =styled.form`
     padding: 10px 12px;
     /* margin : 2rem;
     margin-bottom: 3rem; */
-    background-color: red;
+    background-color: white;
     
     bottom: 0px;
     display: flex;
@@ -99,5 +104,6 @@ const CommentInsert =styled.form`
 
 const InputTexts = styled.div`
 background: white;
+width: 100%;
 `
 export default CommentInput;

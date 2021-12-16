@@ -9,10 +9,10 @@ import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
 import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import { BaseIcon } from 'components/Icon';
-import { Row } from 'components/Footer/FooterStyle';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import { customOverlay } from './customOverlay';
+import { BaseIcon } from 'components/Icon';
+import { Row } from 'components/Footer/FooterStyle';
 import CommentInput from './commentInput';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
@@ -26,10 +26,9 @@ function Index() {
   const { userData } = useSelector(selectUser);
 
   const [comments, setComments] = useState([
-    { id: 1, name: 'Minjoo Park', content: 'I like it!' },
+    { id: 1, name: '비숑숑', content: '강아지 너무 귀요워요 😍' },
+    // { id: 2, name: '멍푸들', content: '감사합니다! 비숑숑님' },
   ]);
-
-  const [like, setLike] = useState(0); //좋아요 버튼구현
 
   const nextId = useRef(1);
 
@@ -198,6 +197,7 @@ function Index() {
       level: 7,
     };
 
+    //장소 검색시, 이를 좌표화.
     try {
       const map = new kakao.maps.Map(mapRef.current, mapOptions);
 
@@ -254,22 +254,25 @@ function Index() {
                   <UserInfoWrapper>
                     <UserInfo />
                   </UserInfoWrapper>
+                  <Replys>
+                    <ReplyCon>
+                      {/* <div style={{ marginBottom: '4rem' }}> */}
+                      {comments.map((comment) => {
+                        return (
+                          <>
+                            <Comment
+                              key={comment.id}
+                              id={comment.id}
+                              name={comment.name}
+                              content={comment.content}
+                            />
+                          </>
+                        );
+                      })}
 
-                  <ReplyCon>
-                    {/* <div style={{ marginBottom: '4rem' }}> */}
-                    {comments.map((comment) => {
-                      return (
-                        <Comment
-                          key={comment.id}
-                          id={comment.id}
-                          name={comment.name}
-                          content={comment.content}
-                        />
-                      );
-                    })}
-                    {/* </div>{' '} */}
-                    <CommentInput onInsert={onInsert} />
-                  </ReplyCon>
+                      <CommentInput onInsert={onInsert} />
+                    </ReplyCon>
+                  </Replys>
                 </>
               ) : (
                 <ContentTitle>
@@ -285,6 +288,20 @@ function Index() {
   );
 }
 
+const Replys = styled.div`
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+`;
+
+const UserInfoWrapper = styled.div`
+  flex-direction: column;
+  min-height: 20rem;
+  width: 100%;
+`;
+
 const ReplyCon = styled.div`
   background-color: #f7f1ed;
   width: 100%;
@@ -293,6 +310,46 @@ const ReplyCon = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;
+ overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #E97676;
+    border-radius: 20px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 20px;
+    box-shadow: inset 0px 0px 5px white;
+    
+  }
+}
+`;
+
+const ContentTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  background-color: #febeb0;
+`;
+
+const MainText = styled.div`
+  text-align: center;
+  color: white;
+`;
+
+const MainImg = styled.img`
+  width: 70%;
+  height: 49%;
+  margin-left: 15px;
+  justify-content: center;
 `;
 
 const MapMain = styled.main`
@@ -331,7 +388,7 @@ const MapContainer = styled.div`
 `;
 
 const UserInfoContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondColor};
+  /* padding: 3rem; */
   background-color: white;
 `;
 
@@ -357,9 +414,8 @@ const UserCard = styled.section`
   flex-direction: column;
   height: 100%;
   min-height: 50rem;
-  padding: 3rem;
-  background-color: white;
 
+  background-color: white;
   & .UserInfo {
     background-color: white;
     flex: 0.3;
@@ -371,41 +427,26 @@ const UserCard = styled.section`
 `;
 
 const UserContainer = styled.div`
-  background: pink;
   box-sizing: border-box;
   word-break: keep-all;
+
+  /* padding: 1.3rem; */
+  /* align-items: center; */
+  /* width: 500px;  */
+  /* background-color: white; */
   height: 100%;
-  backg & .UserInfo {
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+  & .UserInfo {
     background-color: white;
     flex: 0.3;
 
-    //   box-sizing: border-box;
-    //   word-break: keep-all;
-    //   /* padding: 1.3rem; */
-    //   align-items: center;
-    //   /* width: 500px;  */
-    //   /* background-color: white; */
-    //   height: 100%;
-    //   display: flex;
-    //   justify-content: center;
-    //   flex-direction: column;
-
-    //   & .UserInfo {
-    //     background-color: white;
-    //     flex: 0.3;
-    //   }
-    //   & .Reply {
-    //     background-color: yellow;
-    //     flex: 0.7;
   }
   & .Reply {
     background-color: yellow;
     flex: 0.7;
   }
-`;
-const UserInfoWrapper = styled.div`
-  flex-direction: column;
-  min-height: 20rem;
 `;
 
 export default Index;

@@ -39,6 +39,7 @@ export default function Index({
           </span>
         </div>
         <div
+          className="introductionContainer"
           style={{
             paddingRight: '20px',
             paddingBottom: '30px',
@@ -71,4 +72,5 @@ const UserInfo = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
+  padding: 2.5rem;
 `;
