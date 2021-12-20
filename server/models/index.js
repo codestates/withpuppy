@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
+// const env = process.env.NODE_ENV || "development";
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
@@ -28,22 +29,20 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //! Relation
-const { User, KakaoSocial } = db;
-User.hasMany(KakaoSocial, { onDelete: "CASCADE" }); //userId가 Social 테이블에 등록(foreign key 옵션으로 변경가능)
-KakaoSocial.belongsTo(User);
+const { User, Puppy, Message, Pinpointer } = db;
 
-// const Customer_Product = sequelize.define(
-//   "customer_product",
-//   {
-//     customerProductId: {
-//       type: Sequelize.DataTypes.INTEGER,
-//       primaryKey: true,
-//       autoIncrement: true,
-//     },
-//   },
-//   { timestamps: false }
-// );
-// Customer.belongsToMany(Product, { through: Customer_Product });
-// Product.belongsToMany(Customer, { through: Customer_Product });
+//@ 1:1
+User.hasOne(Puppy, { onDelete: "CASCADE" });
+Puppy.hasOne(Pinpointer);
+
+//# 1:N
+User.hasMany(Message, { onDelete: "CASCADE" });
+Message.belongsTo(User);
+User.hasMany(Pinpointer, { onDelete: "CASCADE" });
+Pinpointer.hasMany(Message, { onDelete: "CASCADE" });
+Message.belongsTo(Pinpointer);
+
+//% N:M
+User.belongsToMany(User, { as: "follower", through: "user_follower" });
 
 module.exports = db;

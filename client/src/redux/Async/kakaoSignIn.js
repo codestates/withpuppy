@@ -2,17 +2,17 @@ import axios from './axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 //! access token / refresh token
-export const kakaoSignUp = createAsyncThunk(
-  'auth/kakao',
-  async (code, { rejectWithValue }) => {
+export const kakaoSignIn = createAsyncThunk(
+  'auth/kakaoSignIn',
+  async (data, { rejectWithValue }) => {
+    const { code, social } = data;
     try {
-      const response = await axios.post('/kakao/signup', {
+      const response = await axios.post('/kakao/signin', {
         code,
-        socialType: 'kakao',
+        social,
       });
 
       return {
-        status: response.status,
         data: response.data,
       };
     } catch (err) {
@@ -21,15 +21,16 @@ export const kakaoSignUp = createAsyncThunk(
   },
 );
 
-export const afterKakoSignUp = (builder) => {
-  builder.addCase(kakaoSignUp.pending, (state, action) => {
+export const afterKakoSignIn = (builder) => {
+  builder.addCase(kakaoSignIn.pending, (state, action) => {
     console.log('pending dispatched');
   });
-  builder.addCase(kakaoSignUp.fulfilled, (state, action) => {
-    console.log('fullfilled addressed from thunk process', action.payload);
+  builder.addCase(kakaoSignIn.fulfilled, (state, action) => {
+    state.loginState = true;
+    state.userData = action.payload.data;
   });
   // <thunk 처리과정 중에 reject를 처리하여 바로 redux state에 반영하고 싶을 때
-  builder.addCase(kakaoSignUp.rejected, (state, action) => {
+  builder.addCase(kakaoSignIn.rejected, (state, action) => {
     console.log('reject addressed from thunk process', action.payload);
   });
 };

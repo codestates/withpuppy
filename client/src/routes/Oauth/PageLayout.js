@@ -6,12 +6,14 @@ const Main = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 const Container = styled.section`
   width: 50%;
   min-width: 50rem;
   height: 50%;
+  min-height: 40rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,97 +1,85 @@
-const getKakaoToken = require("./helpers/getToken");
-const getKakaoUserInfo = require("./helpers/getUserInfo");
-const { User, KakaoSocial } = require("../../../models");
-const { genAccess, genRefresh, verifyAccess, verifyRefresh } = require("../../utils/token");
-const { hash, decode } = require("../../utils/bycript");
+const getKakaoToken = require('./helpers/getToken');
+const getKakaoUserInfo = require('./helpers/getUserInfo');
+const { User, Puppy } = require('../../../models');
+const { genAccess, genRefresh } = require('../../utils/token');
 
 module.exports = {
-  login: (req, res) => {},
-  logout: (req, res) => {},
-  signup: async (req, res) => {
-    const { code, socialType } = req.body;
+  signIn: async (req, res) => {
+    const { code, social } = req.body;
 
     try {
       //1. get token from kakao
       const { data: tokens } = await getKakaoToken(code);
+      console.log(tokens);
 
       //2. get user info from kakao token
       const {
         data: { kakao_account },
       } = await getKakaoUserInfo(tokens.access_token);
 
-      //3. before save
-      const checkUser = await User.findOne({ where: { email: kakao_account.email, socialType } });
-      if (checkUser) {
-        return res.status(409).json({ message: "already exist user" });
+      //3. check user
+      let user = await User.findOne({ where: { email: kakao_account.email } });
+
+      if (!user) {
+        user = await User.create({
+          social,
+          email: kakao_account.email,
+          nickname: kakao_account.profile.nickname,
+          thumbImg: kakao_account.profile.thumbnail_image_url,
+          profileImg: kakao_account.profile.profile_image_url,
+        });
       }
 
-      //4. save
-      const baseSocialData = {
-        nickname: kakao_account.profile.nickname,
-        thumbImg: kakao_account.profile.thumbnail_image_url,
-        profileImg: kakao_account.profile.profile_image_url,
-      };
-      const dataToSand = { email: kakao_account.email, socialType };
+      let puppy = await user.getPuppy();
 
-      const saveUser = await User.create({ email: kakao_account.email, socialType });
-      const saveKaKao = await KakaoSocial.create({
-        ...baseSocialData,
-        refreshToken: tokens.refresh_token,
+      if (!puppy) {
+        const createDefaultPuppy = await Puppy.create({
+          puppyName: 'wang',
+          age: 1,
+          gender: 'female',
+          breed: '푸들',
+          introduction: '왕왕!',
+          puppyProfile:
+            'https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/puppy.jpeg',
+        });
+
+        await user.setPuppy(createDefaultPuppy);
+        puppy = await user.getPuppy();
+      }
+
+      //4. send data
+      const accessToken = genAccess({
+        email: kakao_account.email,
+        social,
       });
-      saveKaKao.setUser(saveUser);
+      const refreshToken = genRefresh({
+        email: kakao_account.email,
+        social,
+      });
 
-      //5. send data to client
-      const newAccessToken = genAccess(dataToSand);
-      const newRefreshToken = genRefresh(dataToSand);
-      res.cookie("accessToken", newAccessToken);
-      res.cookie("refreshToken", newRefreshToken);
-      res.status(201).json({ data: { ...baseSocialData, ...dataToSand } });
+      const cookieOption = process.env.HTTPS_PORT
+        ? {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          }
+        : {};
 
-      // save
-      // hash(tokens.refresh_token, async (err, hashedRefreshToken) => {
-      //   if (err) return res.status(500).json({ message: "refresh token hashng failed" });
-
-      //   const baseSocialData = {
-      //     nickname: kakao_account.profile.nickname,
-      //     thumbImg: kakao_account.profile.thumbnail_image_url,
-      //     profileImg: kakao_account.profile.profile_image_url,
-      //   };
-
-      //   const saveUser = await User.create({ email: kakao_account.email, socialType });
-      //   const saveKaKao = await KakaoSocial.create({
-      //     ...baseSocialData,
-      //     refreshToken: hashedRefreshToken,
-      //   });
-      //   await saveUser.addKakaoSocials(saveKaKao);
-
-      //   const dataToSand = { ...baseSocialData, email: kakao_account.email, socialType };
-      //   const newAccessToken = genAccess(dataToSand);
-      //   const newRefreshToken = genRefresh(dataToSand);
-      //   res.cookie("accessToken", newAccessToken);
-      //   res.cookie("refreshToken", newRefreshToken);
-      //   res.status(201).json({ data: dataToSand });
-      // });
-
-      // //         //4. save
-      // // const baseSocialData = {
-      // //   nickname: kakao_account.profile.nickname,
-      // //   thumbImg: kakao_account.profile.thumbnail_image_url,
-      // //   profileImg: kakao_account.profile.profile_image_url,
-      // // };
-      // // const saveUser = await User.create({ email: kakao_account.email, socialType });
-      // // const saveKaKao = await KakaoSocial.create(baseSocialData);
-      // // saveKaKao.setUser(saveUser);
-
-      // //5. send data to client
-      // const dataToSand = { ...baseSocialData, email: kakao_account.email, socialType };
-      // const newAccessToken = genAccess(dataToSand);
-      // const newRefreshToken = genRefresh(dataToSand);
-      // res.cookie("accessToken", newAccessToken);
-      // res.cookie("refreshToken", newRefreshToken);
-      // res.status(201).json({ data: dataToSand });
+      res.cookie('accessToken', accessToken, cookieOption);
+      res.cookie('refreshToken', refreshToken, cookieOption);
+      res.status(200).json({
+        id: user.dataValues.id,
+        social,
+        email: kakao_account.email,
+        nickname: kakao_account.profile.nickname,
+        thumbImg: user.dataValues.thumbImg,
+        profileImg: kakao_account.profile.profile_image_url,
+        phone: user.dataValues.phone,
+        puppy,
+      });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ message: "kakao auth failed" });
+      return res.status(500).json({ message: 'kakao oauth failed' });
     }
   },
 };

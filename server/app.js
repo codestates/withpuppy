@@ -1,111 +1,246 @@
-require("dotenv").config();
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const express = require("express");
-const db = require("./models");
-const fs = require("fs");
-const https = require("https");
-const path = require("path");
+require('dotenv').config();
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const db = require('./models');
+const Op = db.Sequelize.Op;
+const schedule = require('node-schedule');
+const webSocket = require('./socket.io');
 
 //1. initial setting
 const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      'http://localhost:3000',
+      'http://withpuppy.s3-website.ap-northeast-2.amazonaws.com',
+      'http://final-client.s3-website.ap-northeast-2.amazonaws.com',
+      'https://dmu8og75yrjcf.cloudfront.net',
+    ],
     credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-  })
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  }),
 );
 
 //2. routes
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const kakaoRoutes = require("./routes/kakaoRoutes");
+const userRoutes = require('./routes/userRoutes');
+const puppyRoutes = require('./routes/puppyRoutes');
+const mypageRoutes = require('./routes/mypageRoutes');
+const pinRoutes = require('./routes/pinRoutes');
 
-app.use("/user", userRoutes);
-app.use("/auth", authRoutes);
-app.use("/kakao", kakaoRoutes);
+const authRoutes = require('./routes/authRoutes');
+const kakaoRoutes = require('./routes/kakaoRoutes');
+const googleRoutes = require('./routes/googleRoutes');
+
+const likeRoutes = require('./routes/likeRoutes');
+
+app.use('/user', userRoutes);
+app.use('/puppy', puppyRoutes);
+app.use('/mypage', mypageRoutes);
+app.use('/map', pinRoutes);
+
+app.use('/auth', authRoutes);
+app.use('/kakao', kakaoRoutes);
+app.use('/google', googleRoutes);
+
+app.use('/like', likeRoutes);
+
+app.use('/', (req, res) => {
+  res.send('hellow world');
+});
 
 app.use((req, res, next) => {
   res.status(404).json({
     data: null,
-    message: "not found",
+    message: 'not found',
   });
 });
 app.use((err, req, res, next) => {
   console.log(err.stack);
   res.status(500).json({
     data: null,
-    message: "something wrong",
+    message: 'something wrong',
   });
 });
 
 //3. connection
-const PORT = process.env.HTTPS_PORT || 5000;
+const PORT = process.env.HTTPS_PORT || 80;
 
-if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
-  const options = {
-    key: fs.readFileSync(path.resolve("key.pem"), "utf8"),
-    cert: fs.readFileSync(path.resolve("cert.pem"), "utf8"),
-  };
-  https.createServer(options, app).listen(PORT, () => console.log(`now listening port ${PORT}`));
-} else {
-  app.listen(PORT, () => {
-    console.log(`now listening port : ${PORT}`);
-  });
-}
+const server = app.listen(PORT, () => {
+  console.log(`now listening port : ${PORT}`);
+});
+
+webSocket(server, app);
 
 db.sequelize
   .sync({ force: false, alter: true })
   .then(async () => {
-    // await db.User.bulkCreate([{}, {}, {}]);
-    // await db.KakaoSocial.bulkCreate([
-    //   { email: "test1@c.a", nickname: "test1" },
-    //   { email: "test2@c.a", nickname: "test2" },
-    //   { email: "test3@c.a", nickname: "test3" },
-    // ]);
+    //@@default user for test
+    let user = await db.User.findOne({ where: { email: 'test@test.com' } });
+    if (!user) {
+      user = await db.User.create({
+        social: 'kakao',
+        email: 'test@test.com',
+        nickname: 'test',
+        thumbImg:
+          'http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg',
+        phone: '010-1111-3123',
+      });
+    }
 
-    //const targetUser = await db.User.findOne({ where: { id: 2 } });
-    //console.log(await targetUser.getKakaoSocials({ where: { id: 1 } }));
-    //const allSocial = await targetUser.countKakaoSocials();
-    //await targetUser.addKakaoSocials(allSocial);
-    // const targetSocial = await db.KakaoSocial.findOne({ where: { id: 1 } });
-    // await targetUser.removeKakaoSocials(targetSocial);
-    // db.User.destroy({ where: { id: 1 } });
-    // const targetSocial = await db.KakaoSocial.findOne();
-    // await targetUser.setKakaoSocial(targetSocial);
+    const puppy = await user.getPuppy();
+    if (!puppy) {
+      const createDefaultPuppy = await db.Puppy.create({
+        puppyName: 'mung',
+        age: 1,
+        gender: 'male',
+        breed: 'dog',
+        introcution: 'hello this puppy is really cute',
+        puppyProfile:
+          'https://raw.githubusercontent.com/chltjdrhd777/chltjdrhd777-final-prototype-imgs/main/outdoor-puppy-thumbnail.jpeg',
+      });
+      await user.setPuppy(createDefaultPuppy);
+    }
 
-    //! for N:M practice
-    // await db.Customer.bulkCreate([
-    //   { customerName: "anderson1" },
-    //   { customerName: "anderson2" },
-    //   { customerName: "anderson3" },
-    // ]);
-    // await db.Product.bulkCreate([
-    //   { productName: "product1" },
-    //   { productName: "product2" },
-    //   { productName: "product3" },
-    // ]);
+    const pinPointers = await user.getPinpointers();
+    if (!pinPointers.length) {
+      const future = String(Date.parse(new Date('2100/12/12')));
+      await db.Pinpointer.bulkCreate([
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 + 0.01,
+          lng: 126.96470201104091 + 0.01,
+          iconType: '히로',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 + 0.02,
+          lng: 126.96470201104091 + 0.01,
+          iconType: '유나',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 + 0.01,
+          lng: 126.96470201104091 + 0.02,
+          iconType: '카덴',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 - 0.01,
+          lng: 126.96470201104091 + 0.02,
+          iconType: '펠릭스',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 - 0.011,
+          lng: 126.96470201104091 - 0.013,
+          iconType: '펠릭스',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+        {
+          location: '서울 용산구',
+          lat: 37.529789809685475 - 0.021,
+          lng: 126.96470201104091 + 0.011,
+          iconType: '펠릭스',
+          expire: future,
+          PuppyId: 1,
+          UserId: 1,
+        },
+      ]);
+    }
 
-    // const targetCustomer = await db.Customer.findOne({ where: { customerName: "anderson1" } });
-    // const targetProduct = await db.Product.findAll();
-    // await targetCustomer.addProducts(targetProduct);
+    const testUser = await db.User.findOne({
+      where: { email: 'chltjdrhd777@gmail.com' },
+    });
+    const testPinpointer = await db.Pinpointer.findOne({
+      where: { UserId: 2 },
+    });
+    if (testUser && !testPinpointer) {
+      const future = String(Date.parse(new Date('2100/12/12')));
+      const puppy = await testUser.getPuppy();
 
-    // const targetProduct = await db.Product.findOne({ where: { productName: "product2" } });
-    // const targetUser = await db.Customer.findAll();
-    // await targetProduct.addCustomers(targetUser);
+      const pinpointer = await db.Pinpointer.create({
+        location: '서울 용산구',
+        lat: 37.529789809685475 + 0.01,
+        lng: 126.96470201104091 + 0.01,
+        iconType: '히로',
+        expire: future,
+        PuppyId: puppy.id,
+        UserId: testUser.id,
+      });
 
-    console.log("successfully initialized sequelize");
+      await db.Message.bulkCreate([
+        {
+          text: 'hello',
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: 'hi',
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: "what's up",
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: 'hey',
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: 'buddy?',
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+        {
+          text: '...?',
+          UserId: 1,
+          PinpointerId: pinpointer.dataValues.id,
+        },
+      ]);
+    }
+
+    // db.Pinpointer.create({
+    //   location: "테스트",
+    //   lat: 37.529789809685475 - 0.021,
+    //   lng: 126.96470201104091 + 0.011,
+    //   iconType: "펠릭스",
+    //   expire: 300,
+    //   PuppyId: 1,
+    //   UserId: 1,
+    // });
   })
   .catch((err) => console.log(err));
 
-// db.User.bulkCreate([{}, {}, {}]);
-// db.Social.bulkCreate([
-//   { socialType: "kakao", email: "test1@c.a", nickname: "test1" },
-//   { socialType: "kakao", email: "test2@c.a", nickname: "test2" },
-//   { socialType: "kakao", email: "test3@c.a", nickname: "test3" },
-// ]);
-// return db.User.findOne({ where: { id: 1 } });
+//# schedule
+//Cron 문법 (운영체제 시간 타이밍)
+const job = schedule.scheduleJob('00 09 * * 0-6', function () {
+  db.Pinpointer.destroy({
+    where: {
+      expire: {
+        [Op.lte]: Date.now(),
+      },
+    },
+  });
+});

@@ -1,6 +1,5 @@
 const axios = require("axios");
-const { KAKAO_CLIENT_ID, KAKAO_CLIENT_SECRET, KAKAO_REDIRECT_URL, KAKAO_ACCESS_TOKEN_URL } =
-  process.env;
+const { KAKAO_CLIENT_ID, KAKAO_CLIENT_SECRET, KAKAO_REDIRECT_URL } = process.env;
 
 module.exports = async (code) => {
   const data = {
