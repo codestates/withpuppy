@@ -20,7 +20,7 @@ module.exports = {
       };
       await Pinpointer.create(newPin);
       return res
-        .status(200)
+        .status(201)
         .json({ message: 'enroll walking info success!', data: newPin });
     } catch (err) {
       console.log('wrong!');
@@ -94,7 +94,9 @@ module.exports = {
           return totalObj;
         }),
       ).then((data) => {
-        return res.status(200).json({ message: 'done!', pinpointers, data });
+        return res
+          .status(200)
+          .json({ message: 'all clear!', pinpointers, data });
       });
     } catch (err) {
       console.log(err);

@@ -49,7 +49,7 @@ function PuppyCard() {
                 value={values.puppyName}
                 className="card-input"
                 name="puppyName"
-                maxLength="12"
+                maxLength="10"
                 onChange={(e) => onHandleChange(e.target.name, e.target.value)}
               />
             ) : (

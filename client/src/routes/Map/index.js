@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
-import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
+import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import { BaseIcon } from 'components/Icon';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import { customOverlay } from './customOverlay';
@@ -20,13 +20,13 @@ import axios from 'redux/Async/axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import { genPinIconType } from 'utils/genPinIconType';
+import { useSelector } from 'react-redux';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
 function Index() {
   const [comments, setComments] = useState([
-    { id: 1, name: '비숑숑', content: '강아지 너무 귀요워요 😍' },
-    // { id: 2, name: '멍푸들', content: '감사합니다! 비숑숑님' },
+    { id: 1, name: '비숑숑', content: '강아지 너무 귀여워요 😍' },
   ]);
 
   const nextId = useRef(1);
@@ -62,6 +62,7 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
+  const [targetUserInfo, setTargetUserInfo] = useState({});
   const [allPins, setAllPins] = useState([]);
 
   const navigate = useNavigate();
@@ -108,6 +109,7 @@ function Index() {
         };
 
         const response = await axios.post('/map/allpins', result);
+
         setAllPins(response.data.data);
 
         for (let i = 0; i < response.data.pinpointers.length; i++) {
@@ -121,8 +123,6 @@ function Index() {
       }
     }
   }
-
-  const [targetUserInfo, setTargetUserInfo] = useState({});
 
   function displayMarkerandOverlay(data, pin) {
     const position = new kakao.maps.LatLng(data.lat, data.lng);
@@ -205,6 +205,8 @@ function Index() {
       console.log(err);
     }
   }, []);
+  const { loginState } = useSelector(selectUser);
+
 
   return (
     <>
@@ -260,7 +262,13 @@ function Index() {
                         );
                       })}
 
-                      <CommentInput onInsert={onInsert} />
+                      <CommentInput onInsert={onInsert}>
+                        {/* {loginState ? (
+                        ''
+                        ) : (
+                          <Btn onClick={alert('로그인 후 이용해주세요')}></Btn>
+                        )} */}
+                      </CommentInput>
                     </ReplyCon>
                   </Replys>
                 </>

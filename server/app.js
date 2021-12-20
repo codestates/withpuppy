@@ -5,9 +5,11 @@ const express = require('express');
 const db = require('./models');
 const Op = db.Sequelize.Op;
 const schedule = require('node-schedule');
+const webSocket = require('./socket.io');
 
 //1. initial setting
 const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
@@ -17,6 +19,7 @@ app.use(
       'http://localhost:3000',
       'http://withpuppy.s3-website.ap-northeast-2.amazonaws.com',
       'http://final-client.s3-website.ap-northeast-2.amazonaws.com',
+      'https://dmu8og75yrjcf.cloudfront.net',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
@@ -67,9 +70,11 @@ app.use((err, req, res, next) => {
 //3. connection
 const PORT = process.env.HTTPS_PORT || 80;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`now listening port : ${PORT}`);
 });
+
+webSocket(server, app);
 
 db.sequelize
   .sync({ force: false, alter: true })
@@ -225,7 +230,6 @@ db.sequelize
     //   PuppyId: 1,
     //   UserId: 1,
     // });
-    console.log('successfully initialized sequelize');
   })
   .catch((err) => console.log(err));
 

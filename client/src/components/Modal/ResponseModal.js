@@ -5,10 +5,12 @@ import {
 } from '.';
 import styled from 'styled-components';
 
-function Index({ children }) {
+function Index({ children, className }) {
   return (
     <>
-      <ModalContainer className="flex-center-C">{children}</ModalContainer>
+      <ModalContainer className={`flex-center-C ${className ? className : ''}`}>
+        {children}
+      </ModalContainer>
       <ModalBackground />
     </>
   );
@@ -25,6 +27,11 @@ export const ModalContainer = styled(BaseContainer)`
 
   & img {
     width: 100%;
+  }
+
+  &.loading img {
+    width: 30rem;
+    max-height: 30rem;
   }
 
   & img.errorImg {

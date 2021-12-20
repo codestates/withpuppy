@@ -6,6 +6,7 @@ const {
 } = require('../utils/token');
 const { User, Puppy } = require('../../models');
 const { hash, decode } = require('../utils/bycript');
+require('dotenv').config();
 
 module.exports = {
   signIn: async (req, res) => {
@@ -49,16 +50,16 @@ module.exports = {
           social: null,
         });
 
-        res.cookie('accessToken', accessToken, {
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        });
-        res.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        });
+        const cookieOption = process.env.HTTPS_PORT
+          ? {
+              httpOnly: true,
+              sameSite: 'none',
+              secure: true,
+            }
+          : {};
+
+        res.cookie('accessToken', accessToken, cookieOption);
+        res.cookie('refreshToken', refreshToken, cookieOption);
 
         // delete user.dataValues.id;
         delete user.dataValues.password;
