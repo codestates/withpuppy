@@ -148,19 +148,19 @@ const ThumbnailContainer = styled.div`
     color: ${({ theme }) => theme.colors.thirdColor};
     width: 200%;
     position: absolute;
-    top: -25%;
-    left: -40%;
+    top: -25px;
+    left: -30px;
     font-size: 1.5rem;
   }
 
   @media screen and (min-width: 1200px) {
     & > label {
-      width: 12rem;
-      height: 12rem;
+      width: 11rem;
+      height: 11rem;
     }
     & > input {
-      width: 12rem;
-      height: 12rem;
+      width: 11rem;
+      height: 11rem;
     }
   }
 

@@ -16,6 +16,7 @@ export const CardSection = styled.section`
   box-shadow: 2px 4px 20px 0 rgba(0, 0, 0, 0.2);
   margin: 0 2rem 2rem 2rem;
   position: relative;
+  padding: 3rem 0;
 
   & > span {
     position: absolute;

@@ -59,16 +59,17 @@ module.exports = {
         email,
         social,
       });
-      res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      });
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      });
+
+      const cookieOption = process.env.HTTPS_PORT
+        ? {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          }
+        : {};
+
+      res.cookie('accessToken', accessToken, cookieOption);
+      res.cookie('refreshToken', refreshToken, cookieOption);
       res.status(200).json({
         id: user.dataValues.id,
         social,
