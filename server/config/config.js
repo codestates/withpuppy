@@ -6,8 +6,8 @@ module.exports = {
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: 'finalProject',
-    host: 'taesubyunawsdb.cifwf4d5tvxk.ap-northeast-2.rds.amazonaws.com',
-    port: 13306,
+    host: '127.0.0.1',
+    port: 3306,
     dialect: 'mysql',
   },
   production: {

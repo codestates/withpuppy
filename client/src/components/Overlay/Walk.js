@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import axios from 'redux/Async/axios';
 
-function Walk({ setIsWalkOpen, latlng, pinpointers }) {
+function Walk({ setIsWalkOpen, latlng, pinpointers, allPins, setAllPins }) {
   // console.log(latlng);
   const { userData } = useSelector(selectUser);
 
@@ -142,7 +142,8 @@ function Walk({ setIsWalkOpen, latlng, pinpointers }) {
       }
       // pinpointers.push(userInfo)
       const response = await axios.post('/map/enroll', userInfo);
-      console.log(response.data.data);
+      console.log(response.data.data, 'from walk!!!!!!!!!!!!!!!!!!!!!!!!!');
+      // setAllPins([...allPins, response.data.data]);
       pinpointers.push(response.data.data);
       console.log(userInfo);
     } catch (err) {

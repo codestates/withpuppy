@@ -20,7 +20,6 @@ import axios from 'redux/Async/axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import { genPinIconType } from 'utils/genPinIconType';
-import { useSelector } from 'react-redux';
 
 const SEOUL_COORDINATION = [37.529789809685475, 126.96470201104091];
 
@@ -207,7 +206,6 @@ function Index() {
   }, []);
   const { loginState } = useSelector(selectUser);
 
-
   return (
     <>
       <MapHeader className="mapHeader" />
@@ -217,6 +215,8 @@ function Index() {
             setIsWalkOpen={setIsWalkOpen}
             latlng={latlng}
             pinpointers={pinpointers}
+            allPins={allPins}
+            setAllPins={setAllPins}
           ></Walk>
         ) : null}
         <MapContainer

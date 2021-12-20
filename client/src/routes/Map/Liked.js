@@ -1,4 +1,3 @@
-import lightStar from '../../assets/img/icons/lightStar.png';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import axios from 'redux/Async/axios';
@@ -7,7 +6,7 @@ export default function Index({ userName }) {
   const [isLiked, setIsLiked] = useState(false);
   const [counter, setCounter] = useState(0);
 
-  useEffect(async () => {
+  async function likeInfo() {
     if (userName) {
       const likeInfo = await axios.get('/like/?username=' + userName);
 
@@ -16,7 +15,9 @@ export default function Index({ userName }) {
       setIsLiked(likeInfo.data.isLiked);
       setCounter(likeInfo.data.likesCount);
     }
-  }, [userName]);
+  }
+
+  useEffect(() => likeInfo(), [userName]);
 
   const Toggle = () => {
     setIsLiked((curIsLiked) => !curIsLiked);
