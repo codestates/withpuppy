@@ -74,10 +74,10 @@ module.exports = {
           let message = await Message.findAll({
             where: { UserId: el.dataValues.UserId },
           });
-
           let like = await user.getFollower();
 
           let totalObj = {
+            pinpointerId: el.id,
             puppyName: puppy.dataValues.puppyName,
             puppyProfile: puppy.dataValues.puppyProfile,
             breed: puppy.dataValues.breed,
