@@ -1,14 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { PinContext } from 'components/Main/MypageMain';
 import { genPinIconType } from 'utils/genPinIconType';
 import SmilePuppy from 'assets/img/icons/smilePuppy.png';
+import { selectUser } from 'redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUpdatedMessage } from 'redux/Slices/User';
 
 function Index() {
+  const dispatch = useDispatch();
+  const { updatedMessages } = useSelector(selectUser);
   const { pinpointers, setPinpointers } = useContext(PinContext);
 
   const onHandlePinClick = (pin) => {
     setPinpointers({ ...pinpointers, clickedPin: pin });
+  };
+
+  const updateChecker = (PinpointerId) => {
+    return updatedMessages.findIndex(
+      (messages) => messages.PinpointerId === PinpointerId,
+    );
   };
 
   return (
@@ -20,9 +31,18 @@ function Index() {
         {pinpointers.pins.map((pin) => (
           <DropdownLi
             className="flex-center-R"
-            onClick={() => onHandlePinClick(pin)}
+            onClick={() => {
+              onHandlePinClick(pin);
+              dispatch(deleteUpdatedMessage(pin.pinpointerId));
+            }}
           >
-            <img src={genPinIconType(pin.iconType)} alt="icon type" />
+            <div
+              className={`iconContainer ${
+                updateChecker(pin.pinpointerId) !== -1 ? 'updated' : ''
+              }`}
+            >
+              <img src={genPinIconType(pin.iconType)} alt="icon type" />
+            </div>
             <div className="location">{pin.location}</div>
           </DropdownLi>
         ))}
@@ -48,8 +68,20 @@ const DropdownUl = styled.ul`
   opacity: 0;
   border: 1px solid gray;
 
-  & img[alt~='icon'] {
+  & .iconContainer {
+    display: flex;
     width: 20%;
+    min-width: 4rem;
+    border-radius: 50%;
+    padding: 5px;
+
+    & img[alt~='icon'] {
+      width: 100%;
+    }
+
+    &.updated {
+      border: 2px solid ${({ theme }) => theme.colors.thirdColor};
+    }
   }
 
   & li:not(:first-of-type) {
