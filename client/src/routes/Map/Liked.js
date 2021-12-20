@@ -1,17 +1,39 @@
 import lightStar from '../../assets/img/icons/lightStar.png';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import axios from 'redux/Async/axios';
 
-export default function Index() {
-  const [isLiked, setIsLiked] = useState(true);
+export default function Index({ userName }) {
+  const [isLiked, setIsLiked] = useState(false);
   const [counter, setCounter] = useState(0);
+
+  useEffect(async () => {
+    if (userName) {
+      const likeInfo = await axios.get('/like/?username=' + userName);
+
+      console.log('!@#', likeInfo);
+
+      setIsLiked(likeInfo.data.isLiked);
+      setCounter(likeInfo.data.likesCount);
+    }
+  }, [userName]);
 
   const Toggle = () => {
     setIsLiked((curIsLiked) => !curIsLiked);
     if (isLiked === true) {
-      setCounter((curCounter) => curCounter + 1);
-    } else {
+      const likeCancelReq = async () => {
+        await axios.post('/like/cancel', { username: userName });
+      };
+      likeCancelReq();
+
       setCounter((curCounter) => curCounter - 1);
+    } else {
+      const likeReq = async () => {
+        await axios.post('/like/', { username: userName });
+      };
+      likeReq();
+
+      setCounter((curCounter) => curCounter + 1);
     }
   };
 

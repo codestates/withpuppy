@@ -17,6 +17,7 @@ import CommentInput from './commentInput';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
 import axios from 'redux/Async/axios';
+import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import { genPinIconType } from 'utils/genPinIconType';
 
@@ -61,8 +62,7 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
-  // const [allPins, setAllPins] = useState([]);
-  let allPins = [];
+  const [allPins, setAllPins] = useState([]);
 
   const navigate = useNavigate();
 
@@ -90,7 +90,6 @@ function Index() {
   };
 
   async function placesSearchCB(pin, status, pagination) {
-    console.log(pin);
     if (status === kakao.maps.services.Status.OK) {
       let bounds = new kakao.maps.LatLngBounds();
 
@@ -109,13 +108,7 @@ function Index() {
         };
 
         const response = await axios.post('/map/allpins', result);
-        console.log(response.data);
-        // setAllPins([response.data.data]);
-        // console.log(allPins);
-        allPins = response.data.data;
-        // console.log(allPins);
-
-        // console.log(response.data.pinpointers);
+        setAllPins(response.data.data);
 
         for (let i = 0; i < response.data.pinpointers.length; i++) {
           displayMarkerandOverlay(
@@ -129,16 +122,7 @@ function Index() {
     }
   }
 
-  // const imageCandidates = [보브, 이코, 유나, 카덴];
-  // const imageSrc =
-  //   imageCandidates[Math.floor(Math.random() * imageCandidates.length)];
-  // const imageSize = new kakao.maps.Size(40, 40);
-  // const imageOption = { offset: new kakao.maps.Point(22, 69) };
-  // const markerImage = new kakao.maps.MarkerImage(
-  //   imageSrc,
-  //   imageSize,
-  //   imageOption,
-  // );
+  const [targetUserInfo, setTargetUserInfo] = useState({});
 
   function displayMarkerandOverlay(data, pin) {
     const position = new kakao.maps.LatLng(data.lat, data.lng);
@@ -182,6 +166,14 @@ function Index() {
     kakao.maps.event.addListener(marker, 'click', async () => {
       setIsMarkerSelected(true);
       overlay.setMap(window.map);
+
+      setTargetUserInfo({
+        profileImg: pin.thumbImg,
+        userName: pin.nickname,
+        puppyName: pin.puppyName,
+        introduceTo: pin.introduction,
+        puppyAge: pin.age,
+      });
     });
 
     marker.setMap(window.map);
@@ -250,7 +242,7 @@ function Index() {
               {isMarkerSelected ? (
                 <>
                   <UserInfoWrapper>
-                    <UserInfo />
+                    <UserInfo {...targetUserInfo} />
                   </UserInfoWrapper>
                   <Replys>
                     <ReplyCon>

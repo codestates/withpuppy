@@ -15,7 +15,7 @@ export default function Index({
     <UserInfo className="UserInfo">
       <div className="imgContainer">
         <img src={profileImg} alt="" style={{ width: '90px' }}></img>
-        <Liked />
+        <Liked userName={userName} />
       </div>
       <div
         className="profileInfo"
