@@ -45,10 +45,6 @@
 
 import { useState } from 'react';
 import styled from 'styled-components';
-import Liked from "./Liked";
-import je from 'assets/img/profile/예수님.png';
-
-
 
 export const ModalBackdrop = styled.div`
   position: fixed;
@@ -150,23 +146,7 @@ export const Modal = () => {
             <div className='desc'>
             <ModalContent>
          
-            <UserImg>
-              <img src={je} alt='' width="80px"/>
-            </UserImg>
-            <Liked></Liked>
-           
-            <UserCard className="flex-center-C" >
-            <Text>닉네임</Text>
-            <Text>강아지 이름</Text>
-            <Text>강아지 소개글</Text>
-           
-            </UserCard>
-            {/* <Text>로그인 후 이용해주세요!</Text>
-            <Button onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = '/';
-                  }} >login
-                      </Button> */}
+            
           </ModalContent></div>
           </ModalView>
         </ModalBackdrop> : null}
