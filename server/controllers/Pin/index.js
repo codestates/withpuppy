@@ -20,7 +20,7 @@ module.exports = {
       };
       await Pinpointer.create(newPin);
       return res
-        .status(200)
+        .status(201)
         .json({ message: 'enroll walking info success!', data: newPin });
     } catch (err) {
       console.log('wrong!');
@@ -74,10 +74,10 @@ module.exports = {
           let message = await Message.findAll({
             where: { UserId: el.dataValues.UserId },
           });
-          console.log(user.getfollowers);
-          // let follow = await user.getfollower();
+          let like = await user.getFollower();
 
           let totalObj = {
+            pinpointerId: el.id,
             puppyName: puppy.dataValues.puppyName,
             puppyProfile: puppy.dataValues.puppyProfile,
             breed: puppy.dataValues.breed,
@@ -87,13 +87,15 @@ module.exports = {
             nickname: user.dataValues.nickname,
             phone: user.dataValues.phone,
             thumbImg: user.dataValues.thumbImg,
-            likeCount: 0,
+            likeCount: like.length,
             messages: message,
           };
           return totalObj;
         }),
       ).then((data) => {
-        return res.status(200).json({ message: 'done!', pinpointers, data });
+        return res
+          .status(200)
+          .json({ message: 'all clear!', pinpointers, data });
       });
     } catch (err) {
       console.log(err);
