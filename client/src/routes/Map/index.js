@@ -63,7 +63,6 @@ function Index() {
   const [pinpointers, setPinpointers] = useState([]);
 
   const [allPins, setAllPins] = useState([]);
-  console.log(allPins);
 
   const navigate = useNavigate();
 
@@ -109,6 +108,7 @@ function Index() {
         };
 
         const response = await axios.post('/map/allpins', result);
+        
         setAllPins(response.data.data);
 
         for (let i = 0; i < response.data.pinpointers.length; i++) {
@@ -122,17 +122,6 @@ function Index() {
       }
     }
   }
-
-  // const imageCandidates = [보브, 이코, 유나, 카덴];
-  // const imageSrc =
-  //   imageCandidates[Math.floor(Math.random() * imageCandidates.length)];
-  // const imageSize = new kakao.maps.Size(40, 40);
-  // const imageOption = { offset: new kakao.maps.Point(22, 69) };
-  // const markerImage = new kakao.maps.MarkerImage(
-  //   imageSrc,
-  //   imageSize,
-  //   imageOption,
-  // );
 
   function displayMarkerandOverlay(data, pin) {
     const position = new kakao.maps.LatLng(data.lat, data.lng);
