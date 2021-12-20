@@ -17,6 +17,7 @@ import CommentInput from './commentInput';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
 import axios from 'redux/Async/axios';
+import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import { genPinIconType } from 'utils/genPinIconType';
 import { useSelector } from 'react-redux';
@@ -61,7 +62,7 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
-
+  const [targetUserInfo, setTargetUserInfo] = useState({});
   const [allPins, setAllPins] = useState([]);
 
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ function Index() {
         };
 
         const response = await axios.post('/map/allpins', result);
-        
+
         setAllPins(response.data.data);
 
         for (let i = 0; i < response.data.pinpointers.length; i++) {
@@ -165,6 +166,14 @@ function Index() {
     kakao.maps.event.addListener(marker, 'click', async () => {
       setIsMarkerSelected(true);
       overlay.setMap(window.map);
+
+      setTargetUserInfo({
+        profileImg: pin.thumbImg,
+        userName: pin.nickname,
+        puppyName: pin.puppyName,
+        introduceTo: pin.introduction,
+        puppyAge: pin.age,
+      });
     });
 
     marker.setMap(window.map);
@@ -235,7 +244,7 @@ function Index() {
               {isMarkerSelected ? (
                 <>
                   <UserInfoWrapper>
-                    <UserInfo />
+                    <UserInfo {...targetUserInfo} />
                   </UserInfoWrapper>
                   <Replys>
                     <ReplyCon>

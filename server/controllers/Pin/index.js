@@ -74,6 +74,7 @@ module.exports = {
           let message = await Message.findAll({
             where: { UserId: el.dataValues.UserId },
           });
+
           let like = await user.getFollower();
 
           let totalObj = {

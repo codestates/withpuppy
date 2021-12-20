@@ -36,6 +36,8 @@ const authRoutes = require('./routes/authRoutes');
 const kakaoRoutes = require('./routes/kakaoRoutes');
 const googleRoutes = require('./routes/googleRoutes');
 
+const likeRoutes = require('./routes/likeRoutes');
+
 app.use('/user', userRoutes);
 app.use('/puppy', puppyRoutes);
 app.use('/mypage', mypageRoutes);
@@ -44,6 +46,8 @@ app.use('/map', pinRoutes);
 app.use('/auth', authRoutes);
 app.use('/kakao', kakaoRoutes);
 app.use('/google', googleRoutes);
+
+app.use('/like', likeRoutes);
 
 app.use('/', (req, res) => {
   res.send('hellow world');
