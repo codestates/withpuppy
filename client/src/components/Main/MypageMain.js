@@ -8,7 +8,6 @@ import WhiteDog from 'assets/img/icons/whiteDog.png';
 import UserCard from 'components/Section/Card/UserCard';
 import PuppyCard from 'components/Section/Card/PuppyCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from 'redux/Slices/User';
 import { getPinpointerInfo } from 'redux/Async/getPinpointerInfo';
 import StrollDog from 'assets/LandingPage/산책중멍멍.gif';
 import { ModalContainer, ModalBackground } from 'components/Modal';
@@ -17,6 +16,7 @@ import SendIcon from 'assets/img/icons/Send.png';
 import { selectUser } from 'redux/store';
 import { parseDate } from 'utils/parseDate';
 import { updateMypinMessages } from 'redux/Async/updateMypinMessages';
+import ChatInfoCard from 'components/Section/Card/ChatInfoCard';
 
 export const PinContext = createContext(null);
 
@@ -32,8 +32,8 @@ function Index() {
     pins: [],
     clickedPin: {},
   });
-
   const [chatInput, setChatInput] = useState('');
+  const [mouseOverThumbInfo, setMouseOverThumbInfo] = useState({});
 
   const getPins = async () => {
     try {
@@ -78,18 +78,15 @@ function Index() {
         }),
       ).unwrap();
 
-      const clikcedPinMessageList = [
-        response,
-        ...pinpointers.clickedPin.Messages,
-      ];
+      const pinsCopy = { ...pinpointers };
+      const targetPin = pinsCopy.pins.findIndex(
+        (pin) => pin.pinpointerId === pinsCopy.clickedPin.pinpointerId,
+      );
+      const updatedMessageList = [response, ...pinsCopy.clickedPin.Messages];
+      pinsCopy.pins[targetPin].Messages = updatedMessageList;
+      pinsCopy.clickedPin.Messages = updatedMessageList;
 
-      setPinpointers({
-        ...pinpointers,
-        clickedPin: {
-          ...pinpointers.clickedPin,
-          Messages: clikcedPinMessageList,
-        },
-      });
+      setPinpointers(pinsCopy);
 
       setChatInput('');
     } catch (err) {
@@ -105,12 +102,29 @@ function Index() {
     }
   };
 
+  const onHandleMouseEnter = (e, message) => {
+    const rect = e.target.getBoundingClientRect();
+
+    setMouseOverThumbInfo({
+      top: Math.trunc(rect.top),
+      left: Math.trunc(rect.left),
+      message,
+    });
+  };
+
+  const onHandleMouseLeave = () => {
+    setMouseOverThumbInfo({});
+  };
+
   return (
     <>
       {/* chat modal part */}
+
       {Object.keys(pinpointers.clickedPin).length > 0 && (
         <>
           <ChatModalContainer>
+            <ChatInfoCard mouseOverThumbInfo={mouseOverThumbInfo} />
+
             <ChatSection>
               <ChatTitle className="flex-center-R">
                 <img
@@ -123,7 +137,9 @@ function Index() {
               </ChatTitle>
 
               <ChatsArticle ref={chatRef}>
-                {pinpointers.clickedPin.Messages.map((message) => (
+                {pinpointers.clickedPin.Messages.sort(
+                  (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+                ).map((message) => (
                   <MessageContainer
                     className={
                       message.writerId !== userData.id ? 'incomming' : ''
@@ -133,9 +149,12 @@ function Index() {
                     <p>{message.text}</p>
 
                     {message.writerId !== userData.id && (
-                      <div>
-                        <img src={message.thumbImg} alt="writer thumb img" />
-                      </div>
+                      <img
+                        src={message.thumbImg}
+                        alt="writer thumb img"
+                        onMouseEnter={(e) => onHandleMouseEnter(e, message)}
+                        onMouseLeave={() => onHandleMouseLeave()}
+                      />
                     )}
                   </MessageContainer>
                 ))}
@@ -167,6 +186,8 @@ function Index() {
         <MypageMain className="mypageMain">
           <MypageHeader>
             <img src={MypageLogo} alt="" />
+
+            {/* <WithdrawalBtn>회원탈퇴</WithdrawalBtn> */}
           </MypageHeader>
 
           <CardContainer className="flex-center-R">
@@ -214,7 +235,7 @@ const MyPageLoading = styled.main`
   & img {
     width: 50%;
     height: 70%;
-    min-height: 50rem;
+    min-height: 30rem;
 
     @media screen and (max-width: 900px) {
       width: 70%;
@@ -228,7 +249,7 @@ const MyPageLoading = styled.main`
 
     @media screen and (max-width: 550px) {
       height: 40%;
-      min-height: 40rem;
+      min-height: 15rem;
     }
   }
 `;
@@ -287,7 +308,6 @@ const ChatsArticle = styled.article`
   border: 1px solid ${({ theme }) => theme.colors.secondColor};
   padding: 3.5rem 2.5rem 2rem;
   overflow-y: auto;
-  scrollbar-color: red green;
 
   & > *:not(:first-of-type) {
     margin-top: 5rem;
@@ -358,7 +378,6 @@ const MessageContainer = styled.div`
       border-radius: 50%;
       margin-left: 0.5rem;
       transform: translateY(3rem);
-
       @media screen and (min-width: 1300px) {
         width: 5rem;
         height: 5rem;
@@ -420,6 +439,7 @@ const ChatInputContainer = styled.form`
 const MypageHeader = styled.header`
   text-align: center;
   margin-bottom: 5.5rem;
+  position: relative;
 
   & img {
     width: 30rem;
@@ -497,6 +517,23 @@ const MypageBottom = styled.section`
         font-size: 2rem;
       }
     }
+  }
+`;
+
+const WithdrawalBtn = styled.button`
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: transform 0.3s ease-in;
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(2px);
   }
 `;
 

@@ -61,8 +61,9 @@ function Index() {
   const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
-  // const [allPins, setAllPins] = useState([]);
-  let allPins = [];
+
+  const [allPins, setAllPins] = useState([]);
+  console.log(allPins);
 
   const navigate = useNavigate();
 
@@ -90,7 +91,6 @@ function Index() {
   };
 
   async function placesSearchCB(pin, status, pagination) {
-    console.log(pin);
     if (status === kakao.maps.services.Status.OK) {
       let bounds = new kakao.maps.LatLngBounds();
 
@@ -109,13 +109,7 @@ function Index() {
         };
 
         const response = await axios.post('/map/allpins', result);
-        console.log(response.data);
-        // setAllPins([response.data.data]);
-        // console.log(allPins);
-        allPins = response.data.data;
-        // console.log(allPins);
-
-        // console.log(response.data.pinpointers);
+        setAllPins(response.data.data);
 
         for (let i = 0; i < response.data.pinpointers.length; i++) {
           displayMarkerandOverlay(

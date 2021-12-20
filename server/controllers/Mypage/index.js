@@ -1,4 +1,5 @@
 const { User, Puppy, Message, Pinpointer } = require('../../models');
+
 module.exports = {
   changeMypageInfo: async (req, res) => {
     try {
@@ -131,6 +132,29 @@ module.exports = {
         createdAt: newMessage.dataValues.createdAt,
         likes: follower.length,
       };
+
+      //@ websocket///
+      const pinpointer = await Pinpointer.findOne({
+        where: { id: PinpointerId },
+        raw: true,
+      });
+      const pinpointerOwner = pinpointer.UserId;
+
+      req.app
+        .get('io')
+        .of('/loggedUser')
+        .to(pinpointerOwner)
+        .emit('chatUpdated', { PinpointerId });
+
+      // if (pinpointerOwner !== UserId) {
+      //   req.app
+      //     .get('io')
+      //     .of('/loggedUser')
+      //     .to(pinpointerOwner)
+      //     .emit('chatUpdated', { PinpointerId, writerId: UserId });
+      // }
+
+      //@ ////////////
 
       return res.status(200).json(dataToSend);
     } catch (err) {

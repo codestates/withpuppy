@@ -10,6 +10,7 @@ export const userSlice = createSlice({
   initialState: {
     loginState: false,
     userData: {},
+    updatedMessages: [],
   },
   reducers: {
     changeProfile: (state, { payload: { type, newUrl } }) => {
@@ -23,6 +24,14 @@ export const userSlice = createSlice({
       state.loginState = false;
       state.userData = {};
     },
+    addUpdatedMessage: (state, action) => {
+      state.updatedMessages.push(action.payload);
+    },
+    deleteUpdatedMessage: (state, action) => {
+      state.updatedMessages = state.updatedMessages.filter(
+        (message) => message.PinpointerId !== action.payload,
+      );
+    },
   },
   extraReducers: (builder) => {
     afterKakoSignIn(builder);
@@ -33,5 +42,10 @@ export const userSlice = createSlice({
   },
 });
 
-export const { changeProfile, logout } = userSlice.actions;
+export const {
+  changeProfile,
+  logout,
+  addUpdatedMessage,
+  deleteUpdatedMessage,
+} = userSlice.actions;
 export default userSlice.reducer;

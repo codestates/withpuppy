@@ -4,10 +4,9 @@ import RunningDog from 'assets/img/icons/runningDog.gif';
 
 export default function Index() {
   return (
-    <ResponseModal>
+    <ResponseModal className="loading">
       <span>잠시만 기다려주세요</span>
       <img src={RunningDog} alt="" />
     </ResponseModal>
   );
 }
-
