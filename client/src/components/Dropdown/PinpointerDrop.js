@@ -5,7 +5,7 @@ import { genPinIconType } from 'utils/genPinIconType';
 import SmilePuppy from 'assets/img/icons/smilePuppy.png';
 import { selectUser } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteUpdatedMessage } from 'redux/Slices/User';
+import { deleteUpdatedPin } from 'redux/Slices/User';
 
 function Index() {
   const dispatch = useDispatch();
@@ -30,10 +30,11 @@ function Index() {
       >
         {pinpointers.pins.map((pin) => (
           <DropdownLi
+            key={pin.pinpointerId}
             className="flex-center-R"
             onClick={() => {
               onHandlePinClick(pin);
-              dispatch(deleteUpdatedMessage(pin.pinpointerId));
+              dispatch(deleteUpdatedPin(pin.pinpointerId));
             }}
           >
             <div
@@ -43,6 +44,7 @@ function Index() {
             >
               <img src={genPinIconType(pin.iconType)} alt="icon type" />
             </div>
+
             <div className="location">{pin.location}</div>
           </DropdownLi>
         ))}
@@ -67,6 +69,18 @@ const DropdownUl = styled.ul`
   display: none;
   opacity: 0;
   border: 1px solid gray;
+
+  &::-webkit-scrollbar {
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    opacity: 0.5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.secondColor};
+    border-radius: 12px;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+  }
 
   & .iconContainer {
     display: flex;
@@ -130,6 +144,7 @@ const DropdownLi = styled.li`
     flex: 1;
     text-align: center;
     font-size: 1.6rem;
+    word-break: keep-all;
 
     @media screen and (max-width: 550px) {
       font-size: 1.5rem;

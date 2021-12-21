@@ -13,7 +13,6 @@ function Index({ label, type, validator }) {
 
   useEffect(() => {
     validatorMemo(() => {
-      console.log('이제는 렉시컬 환경을 기억하고 있습니다');
       const validateResult = validator(values[label], values.password);
       setValid(validateResult);
     });

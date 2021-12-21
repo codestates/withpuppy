@@ -105,7 +105,7 @@ module.exports = {
   },
   updateMypinMessages: async (req, res) => {
     const {
-      id: UserId,
+      id: writerId,
       nickname,
       thumbImg,
       Puppy: {
@@ -113,17 +113,18 @@ module.exports = {
       },
       follower,
     } = req.user;
+
     const { pinpointerId: PinpointerId, text } = req.body;
 
     try {
       const newMessage = await Message.create({
         text,
-        UserId,
+        UserId: writerId,
         PinpointerId,
       });
 
       const dataToSend = {
-        writerId: UserId,
+        writerId,
         nickname,
         thumbImg,
         text,
@@ -140,19 +141,13 @@ module.exports = {
       });
       const pinpointerOwner = pinpointer.UserId;
 
-      req.app
-        .get('io')
-        .of('/loggedUser')
-        .to(pinpointerOwner)
-        .emit('chatUpdated', { PinpointerId });
-
-      // if (pinpointerOwner !== UserId) {
-      //   req.app
-      //     .get('io')
-      //     .of('/loggedUser')
-      //     .to(pinpointerOwner)
-      //     .emit('chatUpdated', { PinpointerId, writerId: UserId });
-      // }
+      if (pinpointerOwner !== writerId) {
+        req.app
+          .get('io')
+          .of('/loggedUser')
+          .to(pinpointerOwner)
+          .emit('chatUpdated', { PinpointerId });
+      }
 
       //@ ////////////
 

@@ -24,10 +24,17 @@ export const userSlice = createSlice({
       state.loginState = false;
       state.userData = {};
     },
-    addUpdatedMessage: (state, action) => {
-      state.updatedMessages.push(action.payload);
+    addUpdatedPin: (state, action) => {
+      const checker = state.updatedMessages.findIndex(
+        (updatedMessage) =>
+          updatedMessage.PinpointerId === action.payload.PinpointerId,
+      );
+
+      if (checker === -1) {
+        state.updatedMessages.push(action.payload);
+      }
     },
-    deleteUpdatedMessage: (state, action) => {
+    deleteUpdatedPin: (state, action) => {
       state.updatedMessages = state.updatedMessages.filter(
         (message) => message.PinpointerId !== action.payload,
       );
@@ -42,10 +49,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {
-  changeProfile,
-  logout,
-  addUpdatedMessage,
-  deleteUpdatedMessage,
-} = userSlice.actions;
+export const { changeProfile, logout, addUpdatedPin, deleteUpdatedPin } =
+  userSlice.actions;
 export default userSlice.reducer;

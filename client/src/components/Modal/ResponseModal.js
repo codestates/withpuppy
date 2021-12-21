@@ -11,7 +11,7 @@ function Index({ children, className }) {
       <ModalContainer className={`flex-center-C ${className ? className : ''}`}>
         {children}
       </ModalContainer>
-      <ModalBackground />
+      <ModalBackground className={className} />
     </>
   );
 }
@@ -44,6 +44,11 @@ const ModalBackground = styled(BaseModalBackground)`
   width: 110%;
   height: 110%;
   overflow: hidden;
+
+  &.loading {
+    backdrop-filter: blur(4px);
+    background-color: transparent;
+  }
 `;
 
 export default Index;
