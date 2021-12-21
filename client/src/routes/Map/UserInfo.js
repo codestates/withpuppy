@@ -5,6 +5,7 @@ import styled from 'styled-components/macro';
 import Liked from './Liked';
 
 export default function Index({
+  pinpointerId,
   profileImg,
   puppyName,
   userName,
@@ -15,7 +16,7 @@ export default function Index({
     <UserInfo className="UserInfo">
       <div className="imgContainer">
         <img src={profileImg} alt="" style={{ width: '90px' }}></img>
-        <Liked userName={userName} />
+        <Liked userName={userName} pinpointerId={pinpointerId} />
       </div>
       <div
         className="profileInfo"
@@ -49,7 +50,7 @@ export default function Index({
                 backgroundColor: '#f7f1ed',
               }}
             >
-              {introduceTo}
+              {introduceTo || '왕왕!'}
             </div>
           </div>
         </div>

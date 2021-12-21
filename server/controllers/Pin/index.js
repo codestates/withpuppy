@@ -31,6 +31,7 @@ module.exports = {
   getAllPins: async (req, res) => {
     try {
       let pinpointers = await Pinpointer.findAll();
+
       for (let i = 0; i < pinpointers.length; i++) {
         if (req.body.level <= 4) {
           pinpointers = pinpointers.filter((el) => {
@@ -62,6 +63,7 @@ module.exports = {
         }
       }
       let data = pinpointers.slice();
+
       let dataToSend = Promise.all(
         data.map(async (el, idx) => {
           let puppy = await Puppy.findOne({
@@ -72,7 +74,7 @@ module.exports = {
           });
           //이거 null 값이라 나중에 교체해야함.
           let message = await Message.findAll({
-            where: { UserId: el.dataValues.UserId },
+            where: { PinpointerId: el.dataValues.id },
           });
 
           let like = await user.getFollower();

@@ -8,7 +8,7 @@ import MypageReject from 'routes/Mypage/Reject';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import io from 'socket.io-client';
-import { addUpdatedMessage } from 'redux/Slices/User';
+import { addUpdatedPin } from 'redux/Slices/User';
 import { useDispatch } from 'react-redux';
 
 function App() {
@@ -33,13 +33,7 @@ function App() {
 
       //@ whenever received chat update
       socket.on('chatUpdated', (updatedPinInfo) => {
-        const pinCheck = updatedMessages.findIndex(
-          (pin) => pin.PinpointerId === updatedPinInfo.PinpointerId,
-        );
-
-        if (pinCheck === -1) {
-          dispatch(addUpdatedMessage(updatedPinInfo));
-        }
+        dispatch(addUpdatedPin(updatedPinInfo));
       });
     }
   });

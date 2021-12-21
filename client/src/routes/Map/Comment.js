@@ -13,63 +13,49 @@ function Comment(props) {
   const openModalHandler = () => {
     setIsOpen(!isOpen);
   };
-  const { id, name, content } = props;
-  const { loginState } = useSelector(selectUser);
-
-
-//   const loginCheck = () => {
-//     const {
-//       login, _toggleModal
-//     } = this.props;
-  
-//   if(!login) {
-//     alert('please login');
-//     _toggleModal(true)
-
-//     return false;
-//   }
-//   return true;
-// }
-// const {_loginCheck} = this;
-
+  const { id, name, content, message } = props;
+  const { loginState, userData } = useSelector(selectUser);
+  const writer = message.UserId === userData.id;
 
   return (
-    <>
-      <Container>
-        <ModalBtn onClick={openModalHandler}>
-          {
-            isOpen === false ? (
-              <Content>{content}</Content>
-            ) : (
-              <Content>{content}</Content>
-            )
-            // '닫아주세요'
-          }
-        </ModalBtn>
-        {isOpen === true ? (
-          <ModalBackdrop onClick={openModalHandler}>
-            <ModalView onClick={(e) => e.stopPropagation()}>
-              <span onClick={openModalHandler} className="close-btn">
-                &times;
-              </span>
-              <div className="desc">
-                <ModalContent>
-                  <UserImg>
-                    <img src={je} alt="" width="80px" />
-                  </UserImg>
-                  <Liked></Liked>
+    <Container key={id}>
+      <ModalBtn
+        onClick={openModalHandler}
+        className={!writer ? 'incomming' : ''}
+      >
+        {
+          isOpen === false ? (
+            <Content>{message.text}</Content>
+          ) : (
+            <Content>{message.text}</Content>
+          )
+          // '닫아주세요'
+        }
+      </ModalBtn>
+      {isOpen === true ? (
+        <ModalBackdrop onClick={openModalHandler}>
+          <ModalView onClick={(e) => e.stopPropagation()}>
+            <span onClick={openModalHandler} className="close-btn">
+              &times;
+            </span>
+            <div className="desc">
+              <ModalContent>
+                <UserImg>
+                  <img src={je} alt="" width="80px" />
+                </UserImg>
+                <Liked></Liked>
 
-                  <UserCard className="flex-center-C">
-                    <Text>닉네임</Text>
-                    <Text>강아지 이름</Text>
-                    <Text>강아지 소개글</Text>
-                  </UserCard>
-                </ModalContent>
-              </div>
-            </ModalView>
-          </ModalBackdrop>
-        ) : null}
-        {/*     
+                <UserCard className="flex-center-C">
+                  <Text>닉네임</Text>
+                  <Text>강아지 이름</Text>
+                  <Text>강아지 소개글</Text>
+                </UserCard>
+              </ModalContent>
+            </div>
+          </ModalView>
+        </ModalBackdrop>
+      ) : null}
+      {/*     
         <Chat1>
           <Frame >
             <Name>{name}</Name>   
@@ -77,7 +63,7 @@ function Comment(props) {
      
           </Frame>
         </Chat1> */}
-        {/* <Chat2>
+      {/* <Chat2>
         <Frame1 >
           <Name1>
             {name}
@@ -87,9 +73,8 @@ function Comment(props) {
            </Content> 
         </Frame1>
         </Chat2> */}
-        {/* <button onClick={UserModal}>hi</button> */}
-      </Container>
-    </>
+      {/* <button onClick={UserModal}>hi</button> */}
+    </Container>
   );
 }
 const Chating = styled.div`
@@ -180,6 +165,7 @@ export const ModalContainer = styled.div`
 
 export const ModalBtn = styled.button`
   background-color: #febeb0;
+
   text-decoration: none;
   border: none;
   padding: 20px;
@@ -198,6 +184,18 @@ export const ModalBtn = styled.button`
   &:hover {
     color: ${({ theme }) => theme.colors.mainColor};
     background-color: ${({ theme }) => theme.colors.thirdColor};
+  }
+
+  &.incomming {
+    color: ${({ theme }) => theme.colors.pointColor1};
+    border: 1px solid gray;
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    float: left;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.mainColor};
+      background-color: ${({ theme }) => theme.colors.thirdColor};
+    }
   }
 `;
 

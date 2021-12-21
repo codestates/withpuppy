@@ -116,7 +116,7 @@ const UpdateAlarmContainer = styled.div`
 
   &:before {
     ${({ updatedMessages }) =>
-      updatedMessages.length &&
+      updatedMessages?.length &&
       css`
         content: '${({ updatedMessages }) => updatedMessages.length}';
       `}

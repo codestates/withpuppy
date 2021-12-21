@@ -22,11 +22,17 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
 import axios from 'redux/Async/axios';
 
-function Walk({ setIsWalkOpen, latlng, pinpointers, allPins, setAllPins }) {
+function Walk({
+  setIsWalkOpen,
+  latlng,
+  pinpointers,
+  setAllPins,
+  searchResult,
+}) {
   // console.log(latlng);
   const { userData } = useSelector(selectUser);
 
-  console.debug('UserData on Walk', userData);
+  // console.debug('UserData on Walk', userData);
 
   const [popup, setPopup] = useState(false);
   const openPopupHandler = () => {
@@ -130,9 +136,7 @@ function Walk({ setIsWalkOpen, latlng, pinpointers, allPins, setAllPins }) {
     }
   };
 
-  useEffect(() => {
-    console.log('new pin!');
-  }, [pinpointers]);
+  useEffect(() => {}, [pinpointers]);
 
   const reqHandler = async () => {
     try {
@@ -140,12 +144,16 @@ function Walk({ setIsWalkOpen, latlng, pinpointers, allPins, setAllPins }) {
       if (isOpen === false) {
         setIsWalkOpen(false);
       }
-      // pinpointers.push(userInfo)
-      const response = await axios.post('/map/enroll', userInfo);
-      console.log(response.data.data, 'from walk!!!!!!!!!!!!!!!!!!!!!!!!!');
-      // setAllPins([...allPins, response.data.data]);
+
+      await axios.post('/map/enroll', userInfo);
+
+      const response = await axios.post('/map/allpins', searchResult);
+
+      setAllPins({
+        data: response.data.data,
+        pinpointers: response.data.pinpointers,
+      });
       pinpointers.push(response.data.data);
-      console.log(userInfo);
     } catch (err) {
       console.log(err);
     }

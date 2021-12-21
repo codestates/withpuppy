@@ -1,21 +1,13 @@
-import 보브 from '../../assets/img/icons/보브.png';
-import 유나 from '../../assets/img/icons/유나.png';
-import 이코 from '../../assets/img/icons/이코.png';
-import 카덴 from '../../assets/img/icons/카덴.png';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import MapHeader from 'components/Header/Homeheader';
-import { useDispatch } from 'react-redux';
 import Walk from 'components/Overlay/Walk';
 import styled from 'styled-components';
 import UserInfo from './UserInfo';
-import { Btn, SearchBar, SearchBtn, SearchContainer } from './MapStyle';
-import { BaseIcon } from 'components/Icon';
+import { SearchBar, SearchBtn, SearchContainer } from './MapStyle';
 import petchingPuppyImg from '../../assets/img/profile/petchingPuppyImg.png';
 import { customOverlay } from './customOverlay';
-import { Row } from 'components/Footer/FooterStyle';
 import CommentInput from './commentInput';
 import Comment from './Comment';
-import { useNavigate } from 'react-router-dom';
 import axios from 'redux/Async/axios';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/store';
@@ -47,24 +39,22 @@ function Index() {
 
   const mapRef = useRef(null);
   const { kakao } = window;
-  const dispatch = useDispatch();
-
-  const [CommentLists, setCommentLists] = useState([]);
-  const updateComment = (newComment) => {
-    setCommentLists(CommentLists.concat(newComment));
-  };
 
   const [isWalkOpen, setIsWalkOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [place, setPlace] = useState('');
   const [isMarkerSelected, setIsMarkerSelected] = useState(false);
-  const [coordinate, setCoordinate] = useState([]);
   const [latlng, setLatlng] = useState([]);
   const [pinpointers, setPinpointers] = useState([]);
   const [targetUserInfo, setTargetUserInfo] = useState({});
-  const [allPins, setAllPins] = useState([]);
+  const [allPins, setAllPins] = useState({});
+  const [searchResult, setSearchResult] = useState({});
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    for (let i = 0; i < allPins.data?.length; i++) {
+      displayMarkerandOverlay(allPins.pinpointers[i], allPins.data[i]);
+    }
+  }, [allPins]);
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -72,7 +62,6 @@ function Index() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(inputText);
 
     const ps = new kakao.maps.services.Places();
     ps.keywordSearch(inputText, placesSearchCB);
@@ -81,15 +70,10 @@ function Index() {
   };
 
   const mapClickHandler = (e) => {
-    if (isWalkOpen === false) {
-      setIsWalkOpen(true);
-    }
-    if (e.target.tagName === 'IMG') {
-      setIsWalkOpen(false);
-    }
+    setIsWalkOpen((prev) => !prev);
   };
 
-  async function placesSearchCB(pin, status, pagination) {
+  async function placesSearchCB(pin, status) {
     if (status === kakao.maps.services.Status.OK) {
       let bounds = new kakao.maps.LatLngBounds();
 
@@ -106,17 +90,14 @@ function Index() {
           centerLng: Number.parseFloat(pin[0].x),
           centerLat: Number.parseFloat(pin[0].y),
         };
+        setSearchResult(result);
 
         const response = await axios.post('/map/allpins', result);
 
-        setAllPins(response.data.data);
-
-        for (let i = 0; i < response.data.pinpointers.length; i++) {
-          displayMarkerandOverlay(
-            response.data.pinpointers[i],
-            response.data.data[i],
-          );
-        }
+        setAllPins({
+          data: response.data.data,
+          pinpointers: response.data.pinpointers,
+        });
       } catch (err) {
         console.log('error!!!!!');
       }
@@ -147,8 +128,8 @@ function Index() {
 
     let closeBtn = wrapper.firstChild.querySelector('.close-button');
 
-    closeBtn.addEventListener('click', function () {
-      console.log('hello world');
+    closeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
       setIsMarkerSelected(false);
       overlay.setMap(null);
     });
@@ -159,14 +140,18 @@ function Index() {
       position: marker.getPosition(),
       xAnchor: 1,
       yAnchor: 1,
+      clickable: true,
     });
 
     // 마커에 클릭이벤트를 등록합니다
     kakao.maps.event.addListener(marker, 'click', async () => {
       setIsMarkerSelected(true);
+      overlay.setMap(null);
       overlay.setMap(window.map);
 
       setTargetUserInfo({
+        pinpointerId: pin.pinpointerId,
+        pin,
         profileImg: pin.thumbImg,
         userName: pin.nickname,
         puppyName: pin.puppyName,
@@ -199,6 +184,7 @@ function Index() {
         let latlng = mouseEvent.latLng;
         let array = [latlng.getLat(), latlng.getLng()];
         setLatlng(array);
+        mapClickHandler();
       });
     } catch (err) {
       console.log(err);
@@ -210,20 +196,21 @@ function Index() {
     <>
       <MapHeader className="mapHeader" />
       <MapMain>
-        {isWalkOpen === true ? (
+        {loginState && isWalkOpen === true ? (
           <Walk
             setIsWalkOpen={setIsWalkOpen}
             latlng={latlng}
             pinpointers={pinpointers}
             allPins={allPins}
             setAllPins={setAllPins}
+            searchResult={searchResult}
           ></Walk>
         ) : null}
         <MapContainer
           ref={mapRef}
           searchPlace={place}
           className="MapContainer"
-          onClick={mapClickHandler}
+          // onClick={mapClickHandler}
         >
           <SearchContainer
             className="inputForm"
@@ -248,27 +235,25 @@ function Index() {
                   </UserInfoWrapper>
                   <Replys>
                     <ReplyCon>
-                      {/* <div style={{ marginBottom: '4rem' }}> */}
-                      {comments.map((comment) => {
+                      {targetUserInfo.pin?.messages?.map((message) => {
                         return (
                           <>
                             <Comment
-                              key={comment.id}
-                              id={comment.id}
-                              name={comment.name}
-                              content={comment.content}
+                              message={message}
+                              id={message.id}
+                              name={message.name}
+                              content={message.content}
                             />
                           </>
                         );
                       })}
 
-                      <CommentInput onInsert={onInsert}>
-                        {/* {loginState ? (
-                        ''
-                        ) : (
-                          <Btn onClick={alert('로그인 후 이용해주세요')}></Btn>
-                        )} */}
-                      </CommentInput>
+                      <CommentInput
+                        onInsert={onInsert}
+                        pinpointerId={targetUserInfo?.pin?.pinpointerId}
+                        allPins={allPins}
+                        setAllPins={setAllPins}
+                      ></CommentInput>
                     </ReplyCon>
                   </Replys>
                 </>
