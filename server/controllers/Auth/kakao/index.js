@@ -18,7 +18,9 @@ module.exports = {
       } = await getKakaoUserInfo(tokens.access_token);
 
       //3. check user
-      let user = await User.findOne({ where: { email: kakao_account.email } });
+      let user = await User.findOne({
+        where: { email: kakao_account.email, social },
+      });
 
       if (!user) {
         user = await User.create({
@@ -65,13 +67,15 @@ module.exports = {
           }
         : {};
 
+      console.log(user);
+
       res.cookie('accessToken', accessToken, cookieOption);
       res.cookie('refreshToken', refreshToken, cookieOption);
       res.status(200).json({
         id: user.dataValues.id,
         social,
-        email: kakao_account.email,
-        nickname: kakao_account.profile.nickname,
+        email: user.dataValues.email,
+        nickname: user.dataValues.nickname,
         thumbImg: user.dataValues.thumbImg,
         profileImg: kakao_account.profile.profile_image_url,
         phone: user.dataValues.phone,

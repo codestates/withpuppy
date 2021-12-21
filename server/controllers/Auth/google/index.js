@@ -72,12 +72,12 @@ module.exports = {
       res.cookie('refreshToken', refreshToken, cookieOption);
       res.status(200).json({
         id: user.dataValues.id,
-        social,
-        email,
-        nickname,
-        thumbImg,
+        social: user.dataValues.social,
+        email: user.dataValues.email,
+        nickname: user.dataValues.nickname,
+        thumbImg: user.dataValues.thumbImg,
         puppy,
-        phone: user.phone,
+        phone: user.dataValues.phone,
       });
     } catch (err) {
       console.log(err);
