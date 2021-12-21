@@ -9,7 +9,7 @@ export const ModalContainer = styled.div`
   height: 187px;
   background-color: white;
   border-radius: 12px;
-  z-index: 100;
+  z-index: 200000;
   padding: 1rem;
   position: fixed;
   box-shadow: 0 2.5rem 2rem -2rem hsl(200 50% 20% / 40%);
@@ -81,7 +81,7 @@ export const Img = styled.img`
 export const customOverlay = (data, pin) =>
   ReactDOMServer.renderToStaticMarkup(
     <>
-      <ModalContainer>
+      <ModalContainer key={data.lat}>
         <CloseIcon className="close-button">X</CloseIcon>
         <ModalContent>
           <ImgSpan>

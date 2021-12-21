@@ -312,6 +312,18 @@ const ChatsArticle = styled.article`
   & > *:not(:first-of-type) {
     margin-top: 5rem;
   }
+
+  &::-webkit-scrollbar {
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    opacity: 0.5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.secondColor};
+    border-radius: 12px;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+  }
 `;
 
 const MessageContainer = styled.div`

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import axios from 'redux/Async/axios';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/store';
 
-export default function Index({ userName }) {
+export default function Index({ userName, pinpointerId }) {
   const [isLiked, setIsLiked] = useState(false);
   const [counter, setCounter] = useState(0);
+  const { loginState, userData } = useSelector(selectUser);
 
   async function likeInfo() {
     if (userName) {
-      const likeInfo = await axios.get('/like/?username=' + userName);
-
-      console.log('!@#', likeInfo);
+      const likeInfo = await axios.get(`/like?pinpointerId=${pinpointerId}`);
 
       setIsLiked(likeInfo.data.isLiked);
       setCounter(likeInfo.data.likesCount);
@@ -20,21 +21,32 @@ export default function Index({ userName }) {
   useEffect(() => likeInfo(), [userName]);
 
   const Toggle = () => {
-    setIsLiked((curIsLiked) => !curIsLiked);
-    if (isLiked === true) {
-      const likeCancelReq = async () => {
-        await axios.post('/like/cancel', { username: userName });
-      };
-      likeCancelReq();
+    if (loginState) {
+      console.log('logged');
+      setIsLiked((curIsLiked) => !curIsLiked);
+      if (isLiked === true) {
+        const likeCancelReq = async () => {
+          await axios.post('/like/cancel', {
+            username: userName,
+            pinpointerId,
+            followerId: userData.id,
+          });
+        };
+        likeCancelReq();
 
-      setCounter((curCounter) => curCounter - 1);
-    } else {
-      const likeReq = async () => {
-        await axios.post('/like/', { username: userName });
-      };
-      likeReq();
+        setCounter((curCounter) => curCounter - 1);
+      } else {
+        const likeReq = async () => {
+          await axios.post('/like', {
+            username: userName,
+            pinpointerId,
+            followerId: userData.id,
+          });
+        };
+        likeReq();
 
-      setCounter((curCounter) => curCounter + 1);
+        setCounter((curCounter) => curCounter + 1);
+      }
     }
   };
 
